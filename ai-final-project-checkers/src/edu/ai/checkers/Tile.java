@@ -17,6 +17,8 @@ public class Tile {
 
     public Tile getNeighborAt(DiagonalDirection direction) {
         // TODO
+		// return null if the neighbor does not exist
+		// i.e. if it is off the edge on the board
         return null;
     }
 

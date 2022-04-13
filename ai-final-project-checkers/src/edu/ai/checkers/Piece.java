@@ -16,13 +16,17 @@ public class Piece {
         this.tile.setPiece(null);
         this.tile = tile;
         this.tile.setPiece(this);
-        // TODO do more stuff here?
-        // e.g. only allow valid moves?
-        // complete all consequences of a move, such as removing other pieces or being kinged
-        // but this method might get too big if we add too much to it
+        // Validation of moves, etc is in the Move class
     }
-
+	
+	public void remove() {
+		this.tile.setPiece(null);
+		this.tile = null;
+	}
+	
     // simple getters/setters
     public boolean isKing() { return king; }
+	public void king() { king = true; }
     public PlayerType getPlayer() { return playerType; }
+	public Tile getTile() { return tile; }
 }
