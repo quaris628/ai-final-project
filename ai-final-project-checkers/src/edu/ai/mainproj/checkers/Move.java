@@ -1,4 +1,4 @@
-
+package edu.ai.mainproj.checkers;
 
 public abstract class Move {
 	
@@ -16,7 +16,7 @@ public abstract class Move {
 		if (isValid()) {
 			executeChild();
 		}
-		if (piece.getTile().isKingerFor(piece.getPlayer())) {
+		if (piece.getTile().doesKing(piece.getPlayer())) {
 			piece.king();
 		}
 	}

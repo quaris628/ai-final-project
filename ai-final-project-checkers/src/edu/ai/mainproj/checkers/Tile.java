@@ -1,4 +1,4 @@
-package edu.ai.checkers;
+package edu.ai.mainproj.checkers;
 
 public class Tile {
 
@@ -22,8 +22,8 @@ public class Tile {
         return null;
     }
 
-    public boolean isKingerFor(PlayerType player) {
-        // TODO return if player's pieces should be kinged on this tile
+    public boolean doesKing(PlayerType player) {
+        // TODO return if player's pieces are kinged on this tile
         return false;
     }
 

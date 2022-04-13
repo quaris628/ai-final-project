@@ -1,4 +1,4 @@
-
+package edu.ai.mainproj.checkers;
 
 public class JumpMove extends Move {
 	
@@ -21,7 +21,7 @@ public class JumpMove extends Move {
 		return this.getDestination() != null
 			&& this.getDestination().getPiece() == null
 			&& this.jumpedTile.getPiece() != null
-			&& this.jumpedTile.getPiece().getPlayer().isOpposite(piece.getPlayer());
+			&& this.jumpedTile.getPiece().getPlayer().isOpposite(getPiece().getPlayer());
 	}
 	
 	@Override

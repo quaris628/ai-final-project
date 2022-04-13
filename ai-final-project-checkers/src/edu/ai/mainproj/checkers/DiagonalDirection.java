@@ -1,4 +1,4 @@
-package edu.ai.checkers;
+package edu.ai.mainproj.checkers;
 
 public enum DiagonalDirection {
     FORWARD_LEFT,

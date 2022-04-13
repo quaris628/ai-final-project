@@ -1,4 +1,4 @@
-package edu.ai.main;
+package edu.ai.mainproj.main;
 
 public class Main {
 

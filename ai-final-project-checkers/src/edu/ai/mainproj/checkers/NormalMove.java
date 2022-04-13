@@ -1,4 +1,4 @@
-
+package edu.ai.mainproj.checkers;
 
 public class NormalMove extends Move {
 	
