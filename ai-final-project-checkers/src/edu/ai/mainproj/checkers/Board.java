@@ -34,7 +34,7 @@ public class Board {
         board = new Tile[size][size / 2];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size / 2; j++) {
-                board[i][j] = new Tile(this);
+                board[i][j] = new Tile(this, i, 2 * j + (1 - i % 2));
             }
         }
     }
@@ -46,7 +46,7 @@ public class Board {
         board = new Tile[size][size / 2];
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size / 2; j++) {
-                board[i][j] = new Tile(this);
+                board[i][j] = new Tile(this, i, 2 * j + (1 - i % 2));
             }
         }
     }
