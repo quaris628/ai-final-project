@@ -16,8 +16,8 @@ class BoardTests {
 
     @BeforeEach
     void setUp() {
-        initialBoard = Board.CreateInitialBoard();
-        blankBoard = Board.CreateBlankBoard();
+        initialBoard = Board.CreateCheckersInitialBoard();
+        blankBoard = Board.CreateBlankBoard(6);
     }
 
     //--------------------------------
@@ -27,24 +27,24 @@ class BoardTests {
     @Test
     void testInitialBoard_NullTilePositions() {
         // tiles that should be null are null
-        for (int i = 0; i < Board.SIZE; i += 2) {
-            for (int j = 0; j < Board.SIZE; j += 2) {
+        for (int i = 0; i < initialBoard.getSize(); i += 2) {
+            for (int j = 0; j < initialBoard.getSize(); j += 2) {
                 assertNull(initialBoard.getTile(i,j));
             }
         }
-        for (int i = 1; i < Board.SIZE; i += 2) {
-            for (int j = 1; j < Board.SIZE; j += 2) {
+        for (int i = 1; i < initialBoard.getSize(); i += 2) {
+            for (int j = 1; j < initialBoard.getSize(); j += 2) {
                 assertNull(initialBoard.getTile(i,j));
             }
         }
         // tiles that should not be null are not null
-        for (int i = 1; i < Board.SIZE; i += 2) {
-            for (int j = 0; j < Board.SIZE; j += 2) {
+        for (int i = 1; i < initialBoard.getSize(); i += 2) {
+            for (int j = 0; j < initialBoard.getSize(); j += 2) {
                 assertNotNull(initialBoard.getTile(i,j));
             }
         }
-        for (int i = 0; i < Board.SIZE; i += 2) {
-            for (int j = 1; j < Board.SIZE; j += 2) {
+        for (int i = 0; i < initialBoard.getSize(); i += 2) {
+            for (int j = 1; j < initialBoard.getSize(); j += 2) {
                 assertNotNull(initialBoard.getTile(i,j));
             }
         }
@@ -52,7 +52,7 @@ class BoardTests {
 
     @Test
     void testInitialBoard_BlankTilePositions() {
-        for (int j = 0; j < Board.SIZE; j += 2) {
+        for (int j = 0; j < initialBoard.getSize(); j += 2) {
             // first 3 rows are not blank
             assertFalse(initialBoard.getTile(0, j + 1).isBlank());
             assertFalse(initialBoard.getTile(1, j).isBlank());
@@ -71,7 +71,7 @@ class BoardTests {
 
     @Test
     void testInitialBoard_RedPieces() {
-        for (int j = 0; j < Board.SIZE; j += 2) {
+        for (int j = 0; j < initialBoard.getSize(); j += 2) {
             assertEquals(PlayerType.RED, initialBoard.getTile(0, j + 1).getPiece().getPlayer());
             assertEquals(PlayerType.RED, initialBoard.getTile(1, j).getPiece().getPlayer());
             assertEquals(PlayerType.RED, initialBoard.getTile(2, j + 1).getPiece().getPlayer());
@@ -81,7 +81,7 @@ class BoardTests {
 
     @Test
     void testInitialBoard_BlackPieces() {
-        for (int j = 0; j < Board.SIZE; j += 2) {
+        for (int j = 0; j < initialBoard.getSize(); j += 2) {
             assertEquals(PlayerType.BLACK, initialBoard.getTile(5, j).getPiece().getPlayer());
             assertEquals(PlayerType.BLACK, initialBoard.getTile(6, j + 1).getPiece().getPlayer());
             assertEquals(PlayerType.BLACK, initialBoard.getTile(7, j).getPiece().getPlayer());
@@ -95,24 +95,24 @@ class BoardTests {
     @Test
     void testBlankBoard_NullTilePositions() {
         // tiles that should be null are null
-        for (int i = 0; i < Board.SIZE; i += 2) {
-            for (int j = 0; j < Board.SIZE; j += 2) {
+        for (int i = 0; i < blankBoard.getSize(); i += 2) {
+            for (int j = 0; j < blankBoard.getSize(); j += 2) {
                 assertNull(blankBoard.getTile(i,j));
             }
         }
-        for (int i = 1; i < Board.SIZE; i += 2) {
-            for (int j = 1; j < Board.SIZE; j += 2) {
+        for (int i = 1; i < blankBoard.getSize(); i += 2) {
+            for (int j = 1; j < blankBoard.getSize(); j += 2) {
                 assertNull(blankBoard.getTile(i,j));
             }
         }
         // tiles that should not be null are not null
-        for (int i = 1; i < Board.SIZE; i += 2) {
-            for (int j = 0; j < Board.SIZE; j += 2) {
+        for (int i = 1; i < blankBoard.getSize(); i += 2) {
+            for (int j = 0; j < blankBoard.getSize(); j += 2) {
                 assertNotNull(blankBoard.getTile(i,j));
             }
         }
-        for (int i = 0; i < Board.SIZE; i += 2) {
-            for (int j = 1; j < Board.SIZE; j += 2) {
+        for (int i = 0; i < blankBoard.getSize(); i += 2) {
+            for (int j = 1; j < blankBoard.getSize(); j += 2) {
                 assertNotNull(blankBoard.getTile(i,j));
             }
         }
@@ -120,13 +120,13 @@ class BoardTests {
 
     @Test
     void testBlankBoard_BlankTilePositions() {
-        for (int i = 1; i < Board.SIZE; i += 2) {
-            for (int j = 0; j < Board.SIZE; j += 2) {
+        for (int i = 1; i < blankBoard.getSize(); i += 2) {
+            for (int j = 0; j < blankBoard.getSize(); j += 2) {
                 assertTrue(blankBoard.getTile(i, j).isBlank());
             }
         }
-        for (int i = 0; i < Board.SIZE; i += 2) {
-            for (int j = 1; j < Board.SIZE; j += 2) {
+        for (int i = 0; i < blankBoard.getSize(); i += 2) {
+            for (int j = 1; j < blankBoard.getSize(); j += 2) {
                 assertTrue(blankBoard.getTile(i, j).isBlank());
             }
         }
@@ -180,7 +180,7 @@ class BoardTests {
 
     @Test
     void testGetTilesInColumns() {
-        for (int i = 0; i < Board.SIZE; i++) {
+        for (int i = 0; i < initialBoard.getSize(); i++) {
             testGetTilesInColumn(i);
         }
     }
@@ -194,10 +194,36 @@ class BoardTests {
 
         // Assert
         Iterator<Tile> iter = tilesInColumn.iterator();
-        for (int i = 1 - column % 2; i < Board.SIZE; i += 2) {
+        for (int i = 1 - column % 2; i < initialBoard.getSize(); i += 2) {
             assertEquals(board.getTile(i, column), iter.next());
         }
         assertFalse(iter.hasNext());
+    }
+
+    //--------------------------------
+    // GETTING ALL TILES
+    // --------------------------------
+
+    @Test
+    void testGetAllTiles() {
+        Iterable<Tile> allTiles = initialBoard.getAllTiles();
+        int blankCount = 0;
+        int redCount = 0;
+        int blackCount = 0;
+        for (Tile tile : allTiles) {
+            if (tile.isBlank()) {
+                blankCount++;
+            } else if (tile.getPiece().getPlayer() == PlayerType.RED) {
+                redCount++;
+            } else if (tile.getPiece().getPlayer() == PlayerType.BLACK) {
+                blackCount++;
+            } else {
+                fail();
+            }
+        }
+        assertEquals(8, blankCount);
+        assertEquals(12, blackCount);
+        assertEquals(12, redCount);
     }
 
     @AfterEach
