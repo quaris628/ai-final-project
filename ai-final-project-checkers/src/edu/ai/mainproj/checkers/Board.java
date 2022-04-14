@@ -5,6 +5,8 @@ public class Board {
     public final static int SIZE = 8;
 
     private Tile[][] board;
+    // The 0,0 tile should not be in play
+    // 0,1 and 1,0 should be playable tiles
 
     private Board() {
         board = new Tile[SIZE][SIZE / 2];
@@ -29,7 +31,7 @@ public class Board {
     }
 
     public Iterable<Tile> getAllTiles() {
-
+        // TODO
         return null;
     }
 

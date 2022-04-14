@@ -8,6 +8,8 @@ public class NormalMove extends Move {
 	
 	@Override
 	public boolean isValid() {
+		// TODO should not move backward if not king
+		// TODO create another subclass for king moves
 		return this.getDestination() != null
 			&& this.getDestination().getPiece() == null;
 	}
