@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import edu.ai.mainproj.checkers.*;
 
+import java.util.Iterator;
+
 class BoardTests {
 
     Board initialBoard;
@@ -19,7 +21,7 @@ class BoardTests {
     }
 
     //--------------------------------
-    // TEST INITIAL BOARD
+    // INITIAL BOARD
     // --------------------------------
 
     @Test
@@ -87,7 +89,7 @@ class BoardTests {
     }
 
     //--------------------------------
-    // TEST BLANK BOARD
+    // BLANK BOARD
     // --------------------------------
 
     @Test
@@ -130,9 +132,76 @@ class BoardTests {
         }
     }
 
+    // --------------------------------
+    // GETTING ROWS
+    // --------------------------------
+
+    @Test
+    void testGetTilesInRow1() {
+        int row = 1;
+
+        // Arrange
+        Board board = Board.CreateBlankBoard();
+
+        // Act
+        Iterable<Tile> tilesInRow = board.getTilesInRow(row);
+
+        // Assert
+        Iterator<Tile> iter = tilesInRow.iterator();
+        assertEquals(board.getTile(row, 1 - row % 2), iter.next());
+        assertEquals(board.getTile(row, 2 + 1 - row % 2), iter.next());
+        assertEquals(board.getTile(row, 4 + 1 - row % 2), iter.next());
+        assertEquals(board.getTile(row, 6 + 1 - row % 2), iter.next());
+        assertFalse(iter.hasNext());
+    }
+
+    @Test
+    void testGetTilesInRow5() {
+        int row = 5;
+
+        // Arrange
+        Board board = Board.CreateBlankBoard();
+
+        // Act
+        Iterable<Tile> tilesInRow = board.getTilesInRow(row);
+
+        // Assert
+        Iterator<Tile> iter = tilesInRow.iterator();
+        assertEquals(board.getTile(row, 1 - row % 2), iter.next());
+        assertEquals(board.getTile(row, 2 + 1 - row % 2), iter.next());
+        assertEquals(board.getTile(row, 4 + 1 - row % 2), iter.next());
+        assertEquals(board.getTile(row, 6 + 1 - row % 2), iter.next());
+        assertFalse(iter.hasNext());
+    }
+
+    // --------------------------------
+    // GETTING COLUMNS
+    // --------------------------------
+
+    @Test
+    void testGetTilesInColumns() {
+        for (int i = 0; i < Board.SIZE; i++) {
+            testGetTilesInColumn(i);
+        }
+    }
+
+    void testGetTilesInColumn(int column) {
+        // Arrange
+        Board board = Board.CreateBlankBoard();
+
+        // Act
+        Iterable<Tile> tilesInColumn = board.getTilesInColumn(column);
+
+        // Assert
+        Iterator<Tile> iter = tilesInColumn.iterator();
+        for (int i = 1 - column % 2; i < Board.SIZE; i += 2) {
+            assertEquals(board.getTile(i, column), iter.next());
+        }
+        assertFalse(iter.hasNext());
+    }
 
     @AfterEach
     void tearDown() {
-        // not a to-do, use only if needed
+        // if needed
     }
 }

@@ -74,7 +74,7 @@ public class Board {
     // untested
     public Iterable<Tile> getTilesInColumn(int column) {
         List<Tile> columnTiles = new LinkedList<Tile>();
-        for (int i = 0; i < SIZE; i+=2) {
+        for (int i = 1 - column % 2; i < SIZE; i+=2) {
             columnTiles.add(getTile(i, column));
         }
         return columnTiles;
