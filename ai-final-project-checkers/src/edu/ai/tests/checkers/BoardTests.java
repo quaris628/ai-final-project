@@ -7,7 +7,25 @@ import java.util.Iterator;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-
+/**
+ * Unit Tests for Board class
+ *
+ * Tests instantiation methods (constructor is private):
+ *  - CreateCheckersInitialBoard
+ *  - CreateBlankBoard
+ * Tests methods:
+ *  - getTilesInRow
+ *  - getTilesInColumn
+ *  - getAllTiles
+ * Tests indirectly / assumes functional:
+ *  - getTile
+ *  - getSize
+ * Does not test:
+ *  - toString()
+ *  - toString(rowDelimiter)
+ *
+ * @author Nathan Swartz
+ */
 public class BoardTests {
 
     private static final Board initialBoard = Board.CreateCheckersInitialBoard();

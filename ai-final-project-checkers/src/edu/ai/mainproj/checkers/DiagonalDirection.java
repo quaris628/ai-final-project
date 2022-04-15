@@ -1,11 +1,17 @@
 package edu.ai.mainproj.checkers;
 
+/**
+ * Enum for 4 basic diagonal directions
+ * @author Nathan Swartz
+ */
 public enum DiagonalDirection {
     FORWARD_LEFT(-1, -1),
     FORWARD_RIGHT(-1, 1),
     BACKWARD_LEFT(1, -1),
     BACKWARD_RIGHT(1, 1);
 
+    // amounts and directions that the rows/columns
+    //     should change if going one unit in this direction
     public final int rowDelta;
     public final int columnDelta;
 

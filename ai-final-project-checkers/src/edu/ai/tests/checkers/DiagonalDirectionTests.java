@@ -4,7 +4,19 @@ import edu.ai.mainproj.checkers.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-
+/**
+ * Unit Tests for DiagonalDirection enum
+ *
+ * Tests fields:
+ *  - rowDetla
+ *  - columnDelta
+ * Tests methods:
+ *  - isForwardsFor
+ * Tests indirectly / assumes functional:
+ *  - Constructor
+ *
+ * @author Nathan Swartz
+ */
 public class DiagonalDirectionTests {
 
     public DiagonalDirectionTests() {}

@@ -6,7 +6,21 @@ import java.util.HashSet;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-
+/**
+ * Unit Tests for Tile class
+ *
+ * Tests methods:
+ *  - isBlank
+ *  - doesKing
+ *  - getNeighbors
+ *  - setPiece
+ * Tests indirectly / assumes functional:
+ *  - Constructor
+ *  - getPiece
+ *  - removePiece
+ *
+ * @author Nathan Swartz
+ */
 public class TileTests {
 
     private static final Board initialBoard = Board.CreateCheckersInitialBoard();
@@ -138,6 +152,64 @@ public class TileTests {
         assertTrue(tiles.contains(initialBoard.getTile(2, 7)));
         assertTrue(tiles.contains(initialBoard.getTile(4, 7)));
         assertEquals(tiles.size(), 4);
+    }
+
+    // --------------------------------
+    // SET PIECE
+    // --------------------------------
+
+    @Test
+    public void testSetPiece_01Black_Kings() {
+        Tile tile01 = initialBoard.getTile(0, 1);
+        tile01.setPiece(new Piece(PlayerType.BLACK, tile01));
+
+        assertFalse(tile01.isBlank());
+        assertTrue(tile01.getPiece().isKing());
+    }
+
+    @Test
+    public void testSetPiece_01Red_NotKings() {
+        Tile tile01 = initialBoard.getTile(0, 1);
+        tile01.setPiece(new Piece(PlayerType.RED, tile01));
+
+        assertFalse(tile01.isBlank());
+        assertFalse(tile01.getPiece().isKing());
+    }
+
+    @Test
+    public void testSetPiece_70Black_NotKings() {
+        Tile tile70 = initialBoard.getTile(7, 0);
+        tile70.setPiece(new Piece(PlayerType.BLACK, tile70));
+
+        assertFalse(tile70.isBlank());
+        assertFalse(tile70.getPiece().isKing());
+    }
+
+    @Test
+    public void testSetPiece_70Red_Kings() {
+        Tile tile70 = initialBoard.getTile(7, 0);
+        tile70.setPiece(new Piece(PlayerType.RED, tile70));
+
+        assertFalse(tile70.isBlank());
+        assertTrue(tile70.getPiece().isKing());
+    }
+
+    @Test
+    public void testSetPiece_54Black_NotKings() {
+        Tile tile54 = initialBoard.getTile(5, 4);
+        tile54.setPiece(new Piece(PlayerType.BLACK, tile54));
+
+        assertFalse(tile54.isBlank());
+        assertFalse(tile54.getPiece().isKing());
+    }
+
+    @Test
+    public void testSetPiece_54Red_NotKings() {
+        Tile tile54 = initialBoard.getTile(5, 4);
+        tile54.setPiece(new Piece(PlayerType.RED, tile54));
+
+        assertFalse(tile54.isBlank());
+        assertFalse(tile54.getPiece().isKing());
     }
 
 }
