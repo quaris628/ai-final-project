@@ -68,7 +68,7 @@ public class Tile {
      */
     public boolean doesKing(PlayerType player) {
         return row == 0 && player == PlayerType.BLACK
-                || row == board.getSize() && player == PlayerType.RED;
+                || row == board.getSize() - 1 && player == PlayerType.RED;
     }
 
     /**
@@ -85,5 +85,5 @@ public class Tile {
     // simple getters/setters
     public boolean isBlank() { return piece == null; }
     public Piece getPiece() { return piece; }
-
+    public void removePiece() { this.piece = null; }
 }

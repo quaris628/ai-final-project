@@ -1,21 +1,22 @@
-package edu.ai.tests;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+package edu.ai.tests.checkers;
 
 import edu.ai.mainproj.checkers.*;
 
+import org.junit.Test;
+import org.junit.After;
+import org.junit.Before;
 import java.util.Iterator;
+import static org.junit.Assert.*;
 
-class BoardTests {
+public class BoardTests {
 
     Board initialBoard;
     Board blankBoard;
 
-    @BeforeEach
-    void setUp() {
+    public BoardTests() {}
+
+    @Before
+    public void setUp() {
         initialBoard = Board.CreateCheckersInitialBoard();
         blankBoard = Board.CreateBlankBoard(6);
     }
@@ -25,7 +26,7 @@ class BoardTests {
     // --------------------------------
 
     @Test
-    void testInitialBoard_NullTilePositions() {
+    public void testInitialBoard_NullTilePositions() {
         // tiles that should be null are null
         for (int i = 0; i < initialBoard.getSize(); i += 2) {
             for (int j = 0; j < initialBoard.getSize(); j += 2) {
@@ -51,7 +52,7 @@ class BoardTests {
     }
 
     @Test
-    void testInitialBoard_BlankTilePositions() {
+    public void testInitialBoard_BlankTilePositions() {
         for (int j = 0; j < initialBoard.getSize(); j += 2) {
             // first 3 rows are not blank
             assertFalse(initialBoard.getTile(0, j + 1).isBlank());
@@ -70,7 +71,7 @@ class BoardTests {
     }
 
     @Test
-    void testInitialBoard_RedPieces() {
+    public void testInitialBoard_RedPieces() {
         for (int j = 0; j < initialBoard.getSize(); j += 2) {
             assertEquals(PlayerType.RED, initialBoard.getTile(0, j + 1).getPiece().getPlayer());
             assertEquals(PlayerType.RED, initialBoard.getTile(1, j).getPiece().getPlayer());
@@ -80,7 +81,7 @@ class BoardTests {
 
 
     @Test
-    void testInitialBoard_BlackPieces() {
+    public void testInitialBoard_BlackPieces() {
         for (int j = 0; j < initialBoard.getSize(); j += 2) {
             assertEquals(PlayerType.BLACK, initialBoard.getTile(5, j).getPiece().getPlayer());
             assertEquals(PlayerType.BLACK, initialBoard.getTile(6, j + 1).getPiece().getPlayer());
@@ -88,12 +89,12 @@ class BoardTests {
         }
     }
 
-    //--------------------------------
+    // --------------------------------
     // BLANK BOARD
     // --------------------------------
 
     @Test
-    void testBlankBoard_NullTilePositions() {
+    public void testBlankBoard_NullTilePositions() {
         // tiles that should be null are null
         for (int i = 0; i < blankBoard.getSize(); i += 2) {
             for (int j = 0; j < blankBoard.getSize(); j += 2) {
@@ -119,7 +120,7 @@ class BoardTests {
     }
 
     @Test
-    void testBlankBoard_BlankTilePositions() {
+    public void testBlankBoard_BlankTilePositions() {
         for (int i = 1; i < blankBoard.getSize(); i += 2) {
             for (int j = 0; j < blankBoard.getSize(); j += 2) {
                 assertTrue(blankBoard.getTile(i, j).isBlank());
@@ -137,7 +138,7 @@ class BoardTests {
     // --------------------------------
 
     @Test
-    void testGetTilesInRow1() {
+    public void testGetTilesInRow1() {
         int row = 1;
 
         // Arrange
@@ -156,7 +157,7 @@ class BoardTests {
     }
 
     @Test
-    void testGetTilesInRow5() {
+    public void testGetTilesInRow5() {
         int row = 5;
 
         // Arrange
@@ -179,13 +180,13 @@ class BoardTests {
     // --------------------------------
 
     @Test
-    void testGetTilesInColumns() {
+    public void testGetTilesInColumns() {
         for (int i = 0; i < initialBoard.getSize(); i++) {
             testGetTilesInColumn(i);
         }
     }
 
-    void testGetTilesInColumn(int column) {
+    public void testGetTilesInColumn(int column) {
         // Arrange
         Board board = Board.CreateBlankBoard();
 
@@ -205,7 +206,7 @@ class BoardTests {
     // --------------------------------
 
     @Test
-    void testGetAllTiles() {
+    public void testGetAllTiles() {
         Iterable<Tile> allTiles = initialBoard.getAllTiles();
         int blankCount = 0;
         int redCount = 0;
@@ -226,8 +227,8 @@ class BoardTests {
         assertEquals(12, redCount);
     }
 
-    @AfterEach
-    void tearDown() {
+    @After
+    public void tearDown() {
         // if needed
     }
 }
