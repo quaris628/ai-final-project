@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  *   - king
  *  Does not test:
  *   - getPlayer
- *  
+ *
  *
  * @author Nathan Swartz
  */
