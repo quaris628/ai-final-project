@@ -14,9 +14,14 @@ public enum DiagonalDirection {
         this.columnDelta = columnDelta;
     }
 
+    /**
+     * Checks if this direction is considered forwards for a player.
+     * @param player
+     * @return true iff this direction is forwards for player
+     */
     public boolean isForwardsFor(PlayerType player) {
-        return rowDelta == 1 && player == PlayerType.BLACK
-                || rowDelta == -1 && player == PlayerType.RED;
+        return (player == PlayerType.BLACK && rowDelta == -1)
+                || (player == PlayerType.RED && rowDelta == 1);
     }
 
 }
