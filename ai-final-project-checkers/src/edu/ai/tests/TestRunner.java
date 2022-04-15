@@ -1,8 +1,6 @@
 package edu.ai.tests;
 
-import edu.ai.tests.checkers.BoardTests;
-import edu.ai.tests.checkers.DiagonalDirectionTests;
-import edu.ai.tests.checkers.TileTests;
+import edu.ai.tests.checkers.*;
 
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
@@ -14,7 +12,8 @@ public class TestRunner {
         Result result = JUnitCore.runClasses(
                 BoardTests.class,
                 TileTests.class,
-                DiagonalDirectionTests.class);
+                DiagonalDirectionTests.class,
+                PlayerTypeTests.class);
 
         for (Failure failure : result.getFailures()) {
             System.out.println(failure.toString());
