@@ -18,8 +18,6 @@ public enum PlayerType {
 	 * @return true if player is opposite color, else false
 	 */
 	public boolean isOpposite(PlayerType player) {
-		if (this == RED) { return player == BLACK; }
-		if (this == BLACK) { return player == RED; }
-		return false;
+		return this.ordinal() != player.ordinal();
 	}
 }
