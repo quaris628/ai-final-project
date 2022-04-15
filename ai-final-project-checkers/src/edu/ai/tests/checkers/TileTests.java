@@ -1,24 +1,17 @@
 package edu.ai.tests.checkers;
 
 import edu.ai.mainproj.checkers.*;
-
-import org.junit.Test;
-import org.junit.After;
-import org.junit.Before;
 import java.util.HashSet;
 
+import org.junit.Test;
 import static org.junit.Assert.*;
+
 
 public class TileTests {
 
-    Board initialBoard;
+    private static final Board initialBoard = Board.CreateCheckersInitialBoard();
 
     public TileTests() {}
-
-    @Before
-    public void setUp() {
-        initialBoard = Board.CreateCheckersInitialBoard();
-    }
 
     // --------------------------------
     // IS BLANK
@@ -147,8 +140,4 @@ public class TileTests {
         assertEquals(tiles.size(), 4);
     }
 
-    @After
-    public void tearDown() {
-        // if needed
-    }
 }

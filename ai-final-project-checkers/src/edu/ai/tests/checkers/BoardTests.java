@@ -1,25 +1,19 @@
 package edu.ai.tests.checkers;
 
+
 import edu.ai.mainproj.checkers.*;
+import java.util.Iterator;
 
 import org.junit.Test;
-import org.junit.After;
-import org.junit.Before;
-import java.util.Iterator;
 import static org.junit.Assert.*;
+
 
 public class BoardTests {
 
-    Board initialBoard;
-    Board blankBoard;
+    private static final Board initialBoard = Board.CreateCheckersInitialBoard();
+    private static final Board blankBoard = Board.CreateBlankBoard(6);
 
     public BoardTests() {}
-
-    @Before
-    public void setUp() {
-        initialBoard = Board.CreateCheckersInitialBoard();
-        blankBoard = Board.CreateBlankBoard(6);
-    }
 
     //--------------------------------
     // INITIAL BOARD
@@ -227,8 +221,4 @@ public class BoardTests {
         assertEquals(12, redCount);
     }
 
-    @After
-    public void tearDown() {
-        // if needed
-    }
 }
