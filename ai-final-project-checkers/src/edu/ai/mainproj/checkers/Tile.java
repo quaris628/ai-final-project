@@ -11,8 +11,6 @@ import java.util.List;
  */
 public class Tile {
 
-    // TODO write tests for these methods
-
     private final Board board;
     private final int row;
     private final int column;
