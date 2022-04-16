@@ -1,6 +1,8 @@
 package edu.ai.tests.checkers;
 
 
+import edu.ai.mainproj.anygame.GridBoard;
+import edu.ai.mainproj.anygame.Tile;
 import edu.ai.mainproj.checkers.*;
 import java.util.Iterator;
 
@@ -26,12 +28,12 @@ import static org.junit.Assert.*;
  *
  * @author Nathan Swartz
  */
-public class BoardTests {
+public class GridBoardTests {
 
-    private static final Board initialBoard = Board.CreateCheckersInitialBoard();
-    private static final Board blankBoard = Board.CreateBlankBoard(6);
+    private static final GridBoard initialBoard = GridBoard.CreateCheckersInitialBoard();
+    private static final GridBoard blankBoard = GridBoard.CreateBlankBoard(6);
 
-    public BoardTests() {}
+    public GridBoardTests() {}
 
     //--------------------------------
     // INITIAL BOARD
@@ -154,7 +156,7 @@ public class BoardTests {
         int row = 1;
 
         // Arrange
-        Board board = Board.CreateBlankBoard();
+        GridBoard board = GridBoard.CreateBlankBoard();
 
         // Act
         Iterable<Tile> tilesInRow = board.getTilesInRow(row);
@@ -173,7 +175,7 @@ public class BoardTests {
         int row = 5;
 
         // Arrange
-        Board board = Board.CreateBlankBoard();
+        GridBoard board = GridBoard.CreateBlankBoard();
 
         // Act
         Iterable<Tile> tilesInRow = board.getTilesInRow(row);
@@ -200,7 +202,7 @@ public class BoardTests {
 
     public void testGetTilesInColumn(int column) {
         // Arrange
-        Board board = Board.CreateBlankBoard();
+        GridBoard board = GridBoard.CreateBlankBoard();
 
         // Act
         Iterable<Tile> tilesInColumn = board.getTilesInColumn(column);

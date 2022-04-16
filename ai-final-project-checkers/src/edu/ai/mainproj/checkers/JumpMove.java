@@ -1,5 +1,9 @@
 package edu.ai.mainproj.checkers;
 
+import edu.ai.mainproj.anygame.Move;
+import edu.ai.mainproj.anygame.Piece;
+import edu.ai.mainproj.anygame.Tile;
+
 public class JumpMove extends Move {
 	
 	private Tile jumpedTile;

@@ -1,9 +1,9 @@
-package edu.ai.mainproj.checkers;
+package edu.ai.mainproj.anygame;
 
 public abstract class Move {
 	
-	private Piece piece;
-	private Tile destination;
+	protected final Piece piece;
+	protected final Tile destination;
 	
 	protected Move(Piece piece, Tile destination) {
 		this.piece = piece;
@@ -12,16 +12,16 @@ public abstract class Move {
 	
 	public abstract boolean isValid();
 	
-	public void execute() {
-		if (isValid()) {
-			executeChild();
+	public boolean execute() {
+		if (!(isValid() && destination.isBlank())) {
+			return false;
 		}
-		if (piece.getTile().doesKing(piece.getPlayer())) {
-			piece.king();
-		}
+		childExecute();
+		piece.moveTo(destination);
+		return true;
 	}
-	
-	protected abstract void executeChild();
+
+	protected abstract void childExecute();
 	
 	protected Piece getPiece() { return piece; }
 	protected Tile getDestination() { return destination; }

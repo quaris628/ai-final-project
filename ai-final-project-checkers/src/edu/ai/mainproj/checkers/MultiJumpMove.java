@@ -1,5 +1,9 @@
 package edu.ai.mainproj.checkers;
 
+import edu.ai.mainproj.anygame.Move;
+import edu.ai.mainproj.anygame.Piece;
+import edu.ai.mainproj.anygame.Tile;
+
 // I'm less sure this class is correct. -Nathan
 public class MultiJumpMove extends Move {
 	

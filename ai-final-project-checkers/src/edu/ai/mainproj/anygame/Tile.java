@@ -1,4 +1,7 @@
-package edu.ai.mainproj.checkers;
+package edu.ai.mainproj.anygame;
+
+import edu.ai.mainproj.checkers.DiagonalDirection;
+import edu.ai.mainproj.checkers.PlayerType;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +14,7 @@ import java.util.List;
  */
 public class Tile {
 
-    private final Board board;
+    private final GridBoard board;
     private final int row;
     private final int column;
     private Piece piece; // null means blank
@@ -23,7 +26,7 @@ public class Tile {
      * @param row
      * @param column
      */
-    public Tile(Board board, int row, int column) {
+    public Tile(GridBoard board, int row, int column) {
         this.board = board;
         this.row = row;
         this.column = column;

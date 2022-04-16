@@ -1,5 +1,8 @@
 package edu.ai.mainproj.checkers;
 
+import edu.ai.mainproj.anygame.Move;
+import edu.ai.mainproj.anygame.Piece;
+
 public class NormalMove extends Move {
 	
 	public NormalMove(Piece piece, DiagonalDirection direction) {
@@ -15,7 +18,7 @@ public class NormalMove extends Move {
 	}
 	
 	@Override
-	protected void executeChild() {
+	protected void childExecute() {
 		this.getPiece().moveTo(this.getDestination());
 	}
 	

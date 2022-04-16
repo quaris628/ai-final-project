@@ -1,4 +1,4 @@
-package edu.ai.mainproj.checkers;
+package edu.ai.mainproj.anygame;
 
 /**
  * A Piece that can be placed and moved around Tiles
@@ -23,6 +23,10 @@ public class Piece {
         this.tile = tile;
     }
 
+    public boolean isValidMove(Move move) {
+        return true;
+    }
+
     /**
      * Moves this piece to another tile
      * DOES NOT check if the move is a
@@ -34,10 +38,18 @@ public class Piece {
             throw new IllegalArgumentException(
                     "Destination tile already has a piece");
         }
+        onMoveTo(tile);
         this.tile.removePiece();
         this.tile = tile;
         this.tile.setPiece(this);
     }
+
+    /**
+     * For child classes to override for special behavior when this
+     *     piece moves
+     * @param tile destination
+     */
+    protected void onMoveTo(Tile tile) { }
 
     /**
      * Removes this piece from the tile it is on.

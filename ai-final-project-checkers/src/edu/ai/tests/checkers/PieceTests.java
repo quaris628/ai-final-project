@@ -1,5 +1,8 @@
 package edu.ai.tests.checkers;
 
+import edu.ai.mainproj.anygame.GridBoard;
+import edu.ai.mainproj.anygame.Piece;
+import edu.ai.mainproj.anygame.Tile;
 import edu.ai.mainproj.checkers.*;
 
 import org.junit.Test;
@@ -23,8 +26,8 @@ import static org.junit.Assert.*;
  */
 public class PieceTests {
 
-    private final static Board blankBoard =
-            Board.CreateBlankBoard();
+    private final static GridBoard blankBoard =
+            GridBoard.CreateBlankBoard();
 
     public PieceTests() {}
 

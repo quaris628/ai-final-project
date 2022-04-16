@@ -10,7 +10,7 @@ import org.junit.runner.notification.Failure;
 public class TestRunner {
     public static void main(String[] args) {
         Result result = JUnitCore.runClasses(
-                BoardTests.class,
+                GridBoardTests.class,
                 TileTests.class,
                 DiagonalDirectionTests.class,
                 PlayerTypeTests.class);

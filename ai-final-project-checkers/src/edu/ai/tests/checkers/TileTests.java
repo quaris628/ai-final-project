@@ -1,5 +1,8 @@
 package edu.ai.tests.checkers;
 
+import edu.ai.mainproj.anygame.GridBoard;
+import edu.ai.mainproj.anygame.Piece;
+import edu.ai.mainproj.anygame.Tile;
 import edu.ai.mainproj.checkers.*;
 import java.util.HashSet;
 
@@ -23,7 +26,7 @@ import static org.junit.Assert.*;
  */
 public class TileTests {
 
-    private static final Board initialBoard = Board.CreateCheckersInitialBoard();
+    private static final GridBoard initialBoard = GridBoard.CreateCheckersInitialBoard();
 
     public TileTests() {}
 
