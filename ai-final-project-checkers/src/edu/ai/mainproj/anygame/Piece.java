@@ -23,10 +23,6 @@ public class Piece {
         this.tile = tile;
     }
 
-    public boolean isValidMove(Move move) {
-        return true;
-    }
-
     /**
      * Moves this piece to another tile
      * DOES NOT check if the move is a
