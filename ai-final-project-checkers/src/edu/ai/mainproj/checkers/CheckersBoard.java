@@ -37,18 +37,18 @@ public class CheckersBoard extends GridBoard {
         CheckersBoard toReturn = new CheckersBoard();
         // Place Red pieces
         for (Tile tile : toReturn.getTilesInRow(0)) {
-            tile.setPiece(new CheckersPiece(PlayerType.RED, tile));
+            tile.setPiece(new CheckersPiece(PlayerType.RED, (CheckersTile)tile));
         } for (Tile tile : toReturn.getTilesInRow(1)) {
-            tile.setPiece(new CheckersPiece(PlayerType.RED, tile));
+            tile.setPiece(new CheckersPiece(PlayerType.RED, (CheckersTile)tile));
         } for (Tile tile : toReturn.getTilesInRow(2)) {
-            tile.setPiece(new CheckersPiece(PlayerType.RED, tile));
+            tile.setPiece(new CheckersPiece(PlayerType.RED, (CheckersTile)tile));
         // Place Black pieces
         } for (Tile tile : toReturn.getTilesInRow(5)) {
-            tile.setPiece(new CheckersPiece(PlayerType.BLACK, tile));
+            tile.setPiece(new CheckersPiece(PlayerType.BLACK, (CheckersTile)tile));
         } for (Tile tile : toReturn.getTilesInRow(6)) {
-            tile.setPiece(new CheckersPiece(PlayerType.BLACK, tile));
+            tile.setPiece(new CheckersPiece(PlayerType.BLACK, (CheckersTile)tile));
         } for (Tile tile : toReturn.getTilesInRow(7)) {
-            tile.setPiece(new CheckersPiece(PlayerType.BLACK, tile));
+            tile.setPiece(new CheckersPiece(PlayerType.BLACK, (CheckersTile)tile));
         }
         return toReturn;
     }

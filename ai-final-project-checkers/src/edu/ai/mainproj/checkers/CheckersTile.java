@@ -46,4 +46,5 @@ public class CheckersTile extends Tile {
             || player == PlayerType.RED && row == board.getNumRows() - 1;
     }
 
+    public CheckersPiece getCheckersPiece() { return (CheckersPiece)getPiece(); }
 }

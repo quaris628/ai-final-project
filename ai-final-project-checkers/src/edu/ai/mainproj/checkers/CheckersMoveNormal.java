@@ -2,14 +2,12 @@ package edu.ai.mainproj.checkers;
 
 import edu.ai.mainproj.anygame.Move;
 
-public class CheckersMoveNormal extends Move {
+public class CheckersMoveNormal extends CheckersMove {
 
 	private final DiagonalDirection direction;
-	private final CheckersPiece piece;
 
 	public CheckersMoveNormal(CheckersPiece piece, DiagonalDirection direction) {
 		super(piece, piece.getCheckersTile().getNeighborAt(direction));
-		this.piece = piece;
 		this.direction = direction;
 	}
 	

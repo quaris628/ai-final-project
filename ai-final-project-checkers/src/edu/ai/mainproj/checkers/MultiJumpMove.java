@@ -7,29 +7,29 @@ import edu.ai.mainproj.anygame.Tile;
 // I'm less sure this class is correct. -Nathan
 public class MultiJumpMove extends Move {
 	
-	private JumpMove[] jumps;
+	private CheckersMoveJump[] jumps;
 	
 	public static MultiJumpMove CreateMultiJumpMove(Piece piece, DiagonalDirection[] directions) {
-		JumpMove[] jumps = new JumpMove[directions.length];
+		CheckersMoveJump[] jumps = new CheckersMoveJump[directions.length];
 		Tile tile = piece.getTile();
 		for (int i = 0; i < directions.length; i++) {
 			Tile jumpedTile = tile.getNeighborAt(directions[i]);
 			Tile destTile = jumpedTile.getNeighborAt(directions[i]);
-			jumps[i] = new JumpMove(piece, jumpedTile, destTile);
+			jumps[i] = new CheckersMoveJump(piece, jumpedTile, destTile);
 			tile = destTile;
 			if (tile == null) { return null; }
 		}
 		return new MultiJumpMove(piece, tile, jumps);
 	}
 	
-	private MultiJumpMove(Piece piece, Tile destination, JumpMove[] jumps) {
+	private MultiJumpMove(Piece piece, Tile destination, CheckersMoveJump[] jumps) {
 		super(piece, destination);
 		this.jumps = jumps;
 	}
 	
 	@Override
 	public boolean isValid() {
-		for (JumpMove jump : jumps) {
+		for (CheckersMoveJump jump : jumps) {
 			if (!jump.isValid()) {
 				return false;
 			}
