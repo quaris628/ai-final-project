@@ -1,4 +1,4 @@
-package edu.ai.tests.checkers;
+package edu.ai.tests.anygame;
 
 
 import edu.ai.mainproj.anygame.GridBoard;

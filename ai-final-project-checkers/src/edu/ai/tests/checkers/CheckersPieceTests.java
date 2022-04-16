@@ -3,9 +3,9 @@ package edu.ai.tests.checkers;
 import edu.ai.mainproj.anygame.GridBoard;
 import edu.ai.mainproj.anygame.Piece;
 import edu.ai.mainproj.anygame.Tile;
-import edu.ai.mainproj.checkers.*;
-
+import edu.ai.mainproj.checkers.PlayerType;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**
@@ -24,12 +24,12 @@ import static org.junit.Assert.*;
  *
  * @author Nathan Swartz
  */
-public class PieceTests {
+public class CheckersPieceTests {
 
     private final static GridBoard blankBoard =
             GridBoard.CreateBlankBoard();
 
-    public PieceTests() {}
+    public CheckersPieceTests() {}
 
     // --------------------------------
     // CONSTRUCTOR / GET TILE
