@@ -15,9 +15,7 @@ public class GridBoard {
 
     protected final Tile[][] board;
 
-    // creates a new board of specified size
-    // initializes tiles to be all blank, does not add pieces
-    protected GridBoard(int rows, int columns) {
+    public GridBoard(int rows, int columns) {
         board = new Tile[rows][columns];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
