@@ -1,6 +1,8 @@
-package edu.ai.mainproj.checkers;
+package edu.ai.mainproj.checkers.moves;
 
 import edu.ai.mainproj.anygame.Move;
+import edu.ai.mainproj.checkers.CheckersPiece;
+import edu.ai.mainproj.checkers.CheckersTile;
 
 /**
  * An extra layer in the inheritance tree for all
