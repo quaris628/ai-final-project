@@ -1,10 +1,8 @@
 package edu.ai.mainproj.checkers;
 
 import edu.ai.mainproj.anygame.GridBoard;
-import edu.ai.mainproj.anygame.Piece;
 import edu.ai.mainproj.anygame.Tile;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,6 +51,8 @@ public class CheckersBoard extends GridBoard {
         return toReturn;
     }
 
+    // NO IT WON'T
+    // TODO
     // super.getTilesInRow will work and does not need to be overridden
 
     @Override
@@ -64,7 +64,13 @@ public class CheckersBoard extends GridBoard {
         return columnTiles;
     }
 
+    // NO IT WON'T
+    // TODO
     // super.getAllTiles will work and does not need to be overridden
+
+    public CheckersTile getCheckersTile(int row, int column) {
+        return (CheckersTile) getTile(row, column);
+    }
 
     @Override
     public Tile getTile(int row, int column) {

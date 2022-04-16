@@ -1,8 +1,9 @@
 package edu.ai.tests.checkers;
 
-
 import edu.ai.mainproj.anygame.GridBoard;
 import edu.ai.mainproj.anygame.Tile;
+import edu.ai.mainproj.checkers.CheckersBoard;
+import edu.ai.mainproj.checkers.CheckersPiece;
 import edu.ai.mainproj.checkers.PlayerType;
 import org.junit.Test;
 
@@ -11,8 +12,9 @@ import java.util.Iterator;
 import static org.junit.Assert.*;
 
 /**
- * Unit Tests for Board class
+ * Unit Tests for CheckersBoard class
  *
+ * TODO update this list
  * Tests instantiation methods (constructor is private):
  *  - CreateCheckersInitialBoard
  *  - CreateBlankBoard
@@ -31,7 +33,7 @@ import static org.junit.Assert.*;
  */
 public class CheckersBoardTests {
 
-    private static final GridBoard blankBoard = new GridBoard(8, 8);
+    private static final CheckersBoard initialBoard = CheckersBoard.CreateInitialBoard();
 
     public CheckersBoardTests() {}
 
@@ -42,24 +44,24 @@ public class CheckersBoardTests {
     @Test
     public void testInitialBoard_NullTilePositions() {
         // tiles that should be null are null
-        for (int i = 0; i < initialBoard.getSize(); i += 2) {
-            for (int j = 0; j < initialBoard.getSize(); j += 2) {
+        for (int i = 0; i < CheckersBoard.SIZE; i += 2) {
+            for (int j = 0; j < CheckersBoard.SIZE; j += 2) {
                 assertNull(initialBoard.getTile(i,j));
             }
         }
-        for (int i = 1; i < initialBoard.getSize(); i += 2) {
-            for (int j = 1; j < initialBoard.getSize(); j += 2) {
+        for (int i = 1; i < CheckersBoard.SIZE; i += 2) {
+            for (int j = 1; j < CheckersBoard.SIZE; j += 2) {
                 assertNull(initialBoard.getTile(i,j));
             }
         }
         // tiles that should not be null are not null
-        for (int i = 1; i < initialBoard.getSize(); i += 2) {
-            for (int j = 0; j < initialBoard.getSize(); j += 2) {
+        for (int i = 1; i < CheckersBoard.SIZE; i += 2) {
+            for (int j = 0; j < CheckersBoard.SIZE; j += 2) {
                 assertNotNull(initialBoard.getTile(i,j));
             }
         }
-        for (int i = 0; i < initialBoard.getSize(); i += 2) {
-            for (int j = 1; j < initialBoard.getSize(); j += 2) {
+        for (int i = 0; i < CheckersBoard.SIZE; i += 2) {
+            for (int j = 1; j < CheckersBoard.SIZE; j += 2) {
                 assertNotNull(initialBoard.getTile(i,j));
             }
         }
@@ -67,7 +69,7 @@ public class CheckersBoardTests {
 
     @Test
     public void testInitialBoard_BlankTilePositions() {
-        for (int j = 0; j < initialBoard.getSize(); j += 2) {
+        for (int j = 0; j < CheckersBoard.SIZE; j += 2) {
             // first 3 rows are not blank
             assertFalse(initialBoard.getTile(0, j + 1).isBlank());
             assertFalse(initialBoard.getTile(1, j).isBlank());
@@ -86,64 +88,26 @@ public class CheckersBoardTests {
 
     @Test
     public void testInitialBoard_RedPieces() {
-        for (int j = 0; j < initialBoard.getSize(); j += 2) {
-            assertEquals(PlayerType.RED, initialBoard.getTile(0, j + 1).getPiece().getPlayer());
-            assertEquals(PlayerType.RED, initialBoard.getTile(1, j).getPiece().getPlayer());
-            assertEquals(PlayerType.RED, initialBoard.getTile(2, j + 1).getPiece().getPlayer());
+        for (int j = 0; j < CheckersBoard.SIZE; j += 2) {
+            CheckersPiece piece0 = initialBoard.getCheckersTile(0, j + 1).getCheckersPiece();
+            assertEquals(PlayerType.RED, piece0.getPlayer());
+            CheckersPiece piece1 = initialBoard.getCheckersTile(1, j).getCheckersPiece();
+            assertEquals(PlayerType.RED, piece1.getPlayer());
+            CheckersPiece piece2 = initialBoard.getCheckersTile(2, j + 1).getCheckersPiece();
+            assertEquals(PlayerType.RED, piece2.getPlayer());
         }
     }
 
 
     @Test
     public void testInitialBoard_BlackPieces() {
-        for (int j = 0; j < initialBoard.getSize(); j += 2) {
-            assertEquals(PlayerType.BLACK, initialBoard.getTile(5, j).getPiece().getPlayer());
-            assertEquals(PlayerType.BLACK, initialBoard.getTile(6, j + 1).getPiece().getPlayer());
-            assertEquals(PlayerType.BLACK, initialBoard.getTile(7, j).getPiece().getPlayer());
-        }
-    }
-
-    // --------------------------------
-    // BLANK BOARD
-    // --------------------------------
-
-    @Test
-    public void testBlankBoard_NullTilePositions() {
-        // tiles that should be null are null
-        for (int i = 0; i < blankBoard.getSize(); i += 2) {
-            for (int j = 0; j < blankBoard.getSize(); j += 2) {
-                assertNull(blankBoard.getTile(i,j));
-            }
-        }
-        for (int i = 1; i < blankBoard.getSize(); i += 2) {
-            for (int j = 1; j < blankBoard.getSize(); j += 2) {
-                assertNull(blankBoard.getTile(i,j));
-            }
-        }
-        // tiles that should not be null are not null
-        for (int i = 1; i < blankBoard.getSize(); i += 2) {
-            for (int j = 0; j < blankBoard.getSize(); j += 2) {
-                assertNotNull(blankBoard.getTile(i,j));
-            }
-        }
-        for (int i = 0; i < blankBoard.getSize(); i += 2) {
-            for (int j = 1; j < blankBoard.getSize(); j += 2) {
-                assertNotNull(blankBoard.getTile(i,j));
-            }
-        }
-    }
-
-    @Test
-    public void testBlankBoard_BlankTilePositions() {
-        for (int i = 1; i < blankBoard.getSize(); i += 2) {
-            for (int j = 0; j < blankBoard.getSize(); j += 2) {
-                assertTrue(blankBoard.getTile(i, j).isBlank());
-            }
-        }
-        for (int i = 0; i < blankBoard.getSize(); i += 2) {
-            for (int j = 1; j < blankBoard.getSize(); j += 2) {
-                assertTrue(blankBoard.getTile(i, j).isBlank());
-            }
+        for (int j = 0; j < CheckersBoard.SIZE; j += 2) {
+            CheckersPiece piece0 = initialBoard.getCheckersTile(5, j).getCheckersPiece();
+            assertEquals(PlayerType.BLACK, piece0.getPlayer());
+            CheckersPiece piece1 = initialBoard.getCheckersTile(6, j + 1).getCheckersPiece();
+            assertEquals(PlayerType.BLACK, piece1.getPlayer());
+            CheckersPiece piece2 = initialBoard.getCheckersTile(7, j).getCheckersPiece();
+            assertEquals(PlayerType.BLACK, piece2.getPlayer());
         }
     }
 
@@ -155,18 +119,13 @@ public class CheckersBoardTests {
     public void testGetTilesInRow1() {
         int row = 1;
 
-        // Arrange
-        GridBoard board = GridBoard.CreateBlankBoard();
+        Iterable<Tile> tilesInRow = initialBoard.getTilesInRow(row);
 
-        // Act
-        Iterable<Tile> tilesInRow = board.getTilesInRow(row);
-
-        // Assert
         Iterator<Tile> iter = tilesInRow.iterator();
-        assertEquals(board.getTile(row, 1 - row % 2), iter.next());
-        assertEquals(board.getTile(row, 2 + 1 - row % 2), iter.next());
-        assertEquals(board.getTile(row, 4 + 1 - row % 2), iter.next());
-        assertEquals(board.getTile(row, 6 + 1 - row % 2), iter.next());
+        assertEquals(initialBoard.getTile(row, 1 - row % 2), iter.next());
+        assertEquals(initialBoard.getTile(row, 2 + 1 - row % 2), iter.next());
+        assertEquals(initialBoard.getTile(row, 4 + 1 - row % 2), iter.next());
+        assertEquals(initialBoard.getTile(row, 6 + 1 - row % 2), iter.next());
         assertFalse(iter.hasNext());
     }
 
@@ -174,18 +133,13 @@ public class CheckersBoardTests {
     public void testGetTilesInRow5() {
         int row = 5;
 
-        // Arrange
-        GridBoard board = GridBoard.CreateBlankBoard();
+        Iterable<Tile> tilesInRow = initialBoard.getTilesInRow(row);
 
-        // Act
-        Iterable<Tile> tilesInRow = board.getTilesInRow(row);
-
-        // Assert
         Iterator<Tile> iter = tilesInRow.iterator();
-        assertEquals(board.getTile(row, 1 - row % 2), iter.next());
-        assertEquals(board.getTile(row, 2 + 1 - row % 2), iter.next());
-        assertEquals(board.getTile(row, 4 + 1 - row % 2), iter.next());
-        assertEquals(board.getTile(row, 6 + 1 - row % 2), iter.next());
+        assertEquals(initialBoard.getTile(row, 1 - row % 2), iter.next());
+        assertEquals(initialBoard.getTile(row, 2 + 1 - row % 2), iter.next());
+        assertEquals(initialBoard.getTile(row, 4 + 1 - row % 2), iter.next());
+        assertEquals(initialBoard.getTile(row, 6 + 1 - row % 2), iter.next());
         assertFalse(iter.hasNext());
     }
 
@@ -195,22 +149,17 @@ public class CheckersBoardTests {
 
     @Test
     public void testGetTilesInColumns() {
-        for (int i = 0; i < initialBoard.getSize(); i++) {
+        for (int i = 0; i < CheckersBoard.SIZE; i++) {
             testGetTilesInColumn(i);
         }
     }
 
     public void testGetTilesInColumn(int column) {
-        // Arrange
-        GridBoard board = GridBoard.CreateBlankBoard();
+        Iterable<Tile> tilesInColumn = initialBoard.getTilesInColumn(column);
 
-        // Act
-        Iterable<Tile> tilesInColumn = board.getTilesInColumn(column);
-
-        // Assert
         Iterator<Tile> iter = tilesInColumn.iterator();
-        for (int i = 1 - column % 2; i < initialBoard.getSize(); i += 2) {
-            assertEquals(board.getTile(i, column), iter.next());
+        for (int i = 1 - column % 2; i < CheckersBoard.SIZE; i += 2) {
+            assertEquals(initialBoard.getTile(i, column), iter.next());
         }
         assertFalse(iter.hasNext());
     }
@@ -228,9 +177,9 @@ public class CheckersBoardTests {
         for (Tile tile : allTiles) {
             if (tile.isBlank()) {
                 blankCount++;
-            } else if (tile.getPiece().getPlayer() == PlayerType.RED) {
+            } else if (((CheckersPiece)tile.getPiece()).getPlayer() == PlayerType.RED) {
                 redCount++;
-            } else if (tile.getPiece().getPlayer() == PlayerType.BLACK) {
+            } else if (((CheckersPiece)tile.getPiece()).getPlayer() == PlayerType.BLACK) {
                 blackCount++;
             } else {
                 fail();

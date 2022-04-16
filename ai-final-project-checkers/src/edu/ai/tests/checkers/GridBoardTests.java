@@ -80,7 +80,7 @@ public class GridBoardTests {
         Iterable<Tile> tilesInRow = blankBoard.getTilesInRow(row);
 
         Iterator<Tile> iter = tilesInRow.iterator();
-        for (int j = 1 - row % 2; j < blankBoard.getNumRows(); j += 2) {
+        for (int j = 0; j < blankBoard.getNumRows(); j++) {
             assertEquals(blankBoard.getTile(row, j), iter.next());
         }
         assertFalse(iter.hasNext());
@@ -101,7 +101,7 @@ public class GridBoardTests {
         Iterable<Tile> tilesInColumn = blankBoard.getTilesInColumn(column);
 
         Iterator<Tile> iter = tilesInColumn.iterator();
-        for (int i = 1 - column % 2; i < blankBoard.getNumRows(); i += 2) {
+        for (int i = 0; i < blankBoard.getNumRows(); i++) {
             assertEquals(blankBoard.getTile(i, column), iter.next());
         }
         assertFalse(iter.hasNext());
