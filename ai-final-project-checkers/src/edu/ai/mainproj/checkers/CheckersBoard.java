@@ -14,28 +14,26 @@ import java.util.List;
  * The board consists of a grid of tiles, where only half of the
  *     tiles, in a checkerboard pattern, are in-play. The others
  *     are never used.
- * The tile at position 0,0 is out-of-play.
- * The tiles at positions 0,1 and 1,0 are in-play.
- *
- * Also supports square boards of any even-numbered size, default 8.
+ * The tile at position 0,0 is out-of-play
+ * The tiles at positions 0,1 and 1,0 are in-play
  *
  * @author Nathan Swartz
  */
 public class CheckersBoard extends GridBoard {
 
     public static final int SIZE = 8;
-    
+
     private CheckersBoard() {
         // use only a half-size array for better memory space usage
         super(SIZE, SIZE / 2);
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE / 2; j++) {
-                board[i][j] = new Tile(this, i, 2 * j + (1 - i % 2));
+                board[i][j] = new CheckersTile(this, i, 2 * j + (1 - i % 2));
             }
         }
     }
 
-    public static GridBoard CreateInitialBoard() {
+    public static CheckersBoard CreateInitialBoard() {
         CheckersBoard toReturn = new CheckersBoard();
         // Place Red pieces
         for (Tile tile : toReturn.getTilesInRow(0)) {

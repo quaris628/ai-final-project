@@ -1,29 +1,29 @@
 package edu.ai.mainproj.anygame;
 
-public abstract class Move {
+public class Move {
+
+	private final Piece piece;
+	private final Tile destination;
 	
-	protected final Piece piece;
-	protected final Tile destination;
-	
-	protected Move(Piece piece, Tile destination) {
+	public Move(Piece piece, Tile destination) {
 		this.piece = piece;
 		this.destination = destination;
 	}
 	
-	public abstract boolean isValid();
+	public boolean isValid() {
+		return piece != null && destination != null
+				&& destination.isBlank();
+	}
 	
-	public boolean execute() {
-		if (!(isValid() && destination.isBlank())) {
-			return false;
+	public void execute() {
+		if (!(isValid())) {
+			throw new IllegalStateException(
+					"Move is not valid, cannot execute.");
 		}
-		childExecute();
 		piece.moveTo(destination);
-		return true;
 	}
 
-	protected abstract void childExecute();
-	
-	protected Piece getPiece() { return piece; }
-	protected Tile getDestination() { return destination; }
+	public Piece getPiece() { return piece; }
+	public Tile getDestination() { return destination; }
 	
 }

@@ -9,6 +9,8 @@ import edu.ai.mainproj.anygame.Tile;
  * Is either black or red depending on its PlayerType (enum)
  * Is either a normal piece or a king
  *
+ * Can only be placed on checkers tiles
+ *
  * @author Nathan Swartz
  */
 public class CheckersPiece extends Piece {
@@ -21,30 +23,44 @@ public class CheckersPiece extends Piece {
      * @param player the piece belongs to
      * @param tile the piece starts on
      */
-    public CheckersPiece(PlayerType player, Tile tile) {
+    public CheckersPiece(PlayerType player, CheckersTile tile) {
         super(tile);
         this.player = player;
-
     }
 
     @Override
     public boolean isValidMove(Move move) {
-        if (move.piece != this) { return false; }
-
+        // TODO
+        return true;
     }
 
     @Override
-    public void onMoveTo(Tile tile) {
-        if (getTile().doesKing(player)) {
-            king = true;
+    public void moveTo(Tile tile) {
+        if (tile instanceof CheckersTile) {
+            super.moveTo(tile);
+            if (((CheckersTile) tile).doesKing(player)){
+                king = true;
+            }
+        } else {
+            // not ideal to throw exception, but I don't
+            // see a better way to enforce this
+            throw new IllegalArgumentException(
+                    "Checkers piece cannot be placed on a non-checkers tile");
         }
     }
 
-    /**
-     * Checks whether this piece is a king or not
-     * @return true if this piece is a king, else false
-     */
-    public boolean isKing() { return king; }
+    public CheckersTile getCheckersTile() {
+        return (CheckersTile) getTile();
+    }
 
+    public boolean isKing() { return king; }
+    public PlayerType getPlayer() { return player; }
+
+    @Override
+    public String toString() {
+        if (player == PlayerType.BLACK) { return "B"; }
+        if (player == PlayerType.RED) { return "R"; }
+        return super.toString();
+    }
 
 }

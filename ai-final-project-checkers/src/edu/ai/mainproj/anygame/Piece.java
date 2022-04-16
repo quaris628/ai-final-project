@@ -38,18 +38,10 @@ public class Piece {
             throw new IllegalArgumentException(
                     "Destination tile already has a piece");
         }
-        onMoveTo(tile);
         this.tile.removePiece();
         this.tile = tile;
         this.tile.setPiece(this);
     }
-
-    /**
-     * For child classes to override for special behavior when this
-     *     piece moves
-     * @param tile destination
-     */
-    protected void onMoveTo(Tile tile) { }
 
     /**
      * Removes this piece from the tile it is on.
@@ -63,4 +55,7 @@ public class Piece {
 
     // simple getters/setters
 	public Tile getTile() { return tile; }
+
+    @Override
+    public String toString() { return "O"; }
 }
