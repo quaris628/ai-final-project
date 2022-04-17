@@ -29,12 +29,6 @@ public class CheckersPiece extends Piece {
     }
 
     @Override
-    public boolean isValidMove(Move move) {
-        // TODO
-        return true;
-    }
-
-    @Override
     public void moveTo(Tile tile) {
         if (tile instanceof CheckersTile) {
             super.moveTo(tile);
