@@ -26,13 +26,16 @@ public class CheckersPiece extends Piece {
     public CheckersPiece(PlayerType player, CheckersTile tile) {
         super(tile);
         this.player = player;
+        if (tile.doesKing(player)) {
+            king = true;
+        }
     }
 
     @Override
     public void moveTo(Tile tile) {
         if (tile instanceof CheckersTile) {
             super.moveTo(tile);
-            if (((CheckersTile) tile).doesKing(player)){
+            if (((CheckersTile) tile).doesKing(player)) {
                 king = true;
             }
         } else {

@@ -29,9 +29,6 @@ import static org.junit.Assert.*;
  */
 public class CheckersPieceTests {
 
-    private final static CheckersBoard initialBoard =
-            CheckersBoard.CreateInitialBoard();
-
     public CheckersPieceTests() {}
 
     // --------------------------------
@@ -40,7 +37,7 @@ public class CheckersPieceTests {
 
     @Test
     public void testGetCheckersTile() {
-        CheckersTile tile01 = initialBoard.getCheckersTile(0, 1);
+        CheckersTile tile01 = new CheckersBoard().getCheckersTile(0, 1);
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, tile01);
 
@@ -54,7 +51,7 @@ public class CheckersPieceTests {
 
     @Test
     public void testIsKing_01Red_False() {
-        CheckersTile tile01 = initialBoard.getCheckersTile(0, 1);
+        CheckersTile tile01 = new CheckersBoard().getCheckersTile(0, 1);
         CheckersPiece piece = new CheckersPiece(PlayerType.RED, tile01);
 
         assertFalse(piece.isKing());
@@ -62,7 +59,7 @@ public class CheckersPieceTests {
 
     @Test
     public void testIsKing_01Black_True() {
-        CheckersTile tile01 = initialBoard.getCheckersTile(0, 1);
+        CheckersTile tile01 = new CheckersBoard().getCheckersTile(0, 1);
         CheckersPiece piece = new CheckersPiece(PlayerType.BLACK, tile01);
 
         assertTrue(piece.isKing());
@@ -70,7 +67,7 @@ public class CheckersPieceTests {
 
     @Test
     public void testIsKing_70Red_True() {
-        CheckersTile tile70 = initialBoard.getCheckersTile(7, 0);
+        CheckersTile tile70 = new CheckersBoard().getCheckersTile(7, 0);
         CheckersPiece piece = new CheckersPiece(PlayerType.RED, tile70);
 
         assertTrue(piece.isKing());
@@ -78,7 +75,7 @@ public class CheckersPieceTests {
 
     @Test
     public void testIsKing_70Black_False() {
-        CheckersTile tile70 = initialBoard.getCheckersTile(7, 0);
+        CheckersTile tile70 = new CheckersBoard().getCheckersTile(7, 0);
         CheckersPiece piece = new CheckersPiece(PlayerType.BLACK, tile70);
 
         assertFalse(piece.isKing());
@@ -86,8 +83,8 @@ public class CheckersPieceTests {
 
     @Test
     public void testIsKing_70Red_Moved61_True() {
-        CheckersTile tile70 = initialBoard.getCheckersTile(7, 0);
-        CheckersTile tile61 = initialBoard.getCheckersTile(6, 1);
+        CheckersTile tile70 = new CheckersBoard().getCheckersTile(7, 0);
+        CheckersTile tile61 = new CheckersBoard().getCheckersTile(6, 1);
         CheckersPiece piece = new CheckersPiece(PlayerType.RED, tile70);
 
         piece.moveTo(tile61);
@@ -102,7 +99,7 @@ public class CheckersPieceTests {
 
     @Test
     public void testRemove() {
-        CheckersTile tile01 = initialBoard.getCheckersTile(0, 1);
+        CheckersTile tile01 = new CheckersBoard().getCheckersTile(0, 1);
         CheckersPiece piece = new CheckersPiece(PlayerType.RED, tile01);
 
         piece.remove();
@@ -117,8 +114,8 @@ public class CheckersPieceTests {
 
     @Test
     public void testMoveTo() {
-        CheckersTile tile01 = initialBoard.getCheckersTile(0, 1);
-        CheckersTile tile10 = initialBoard.getCheckersTile(1, 0);
+        CheckersTile tile01 = new CheckersBoard().getCheckersTile(0, 1);
+        CheckersTile tile10 = new CheckersBoard().getCheckersTile(1, 0);
         CheckersPiece piece = new CheckersPiece(PlayerType.RED, tile01);
 
         piece.moveTo(tile10);
@@ -130,8 +127,8 @@ public class CheckersPieceTests {
 
     @Test
     public void testMoveTo_DestinationNotBlank_Exception() {
-        CheckersTile tile01 = initialBoard.getCheckersTile(0, 1);
-        CheckersTile tile10 = initialBoard.getCheckersTile(1, 0);
+        CheckersTile tile01 = new CheckersBoard().getCheckersTile(0, 1);
+        CheckersTile tile10 = new CheckersBoard().getCheckersTile(1, 0);
         CheckersPiece piece01 = new CheckersPiece(PlayerType.RED, tile01);
         CheckersPiece piece10 = new CheckersPiece(PlayerType.RED, tile10);
 
