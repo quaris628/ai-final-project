@@ -1,6 +1,5 @@
 package edu.ai.mainproj.checkers;
 
-import edu.ai.mainproj.anygame.Piece;
 import edu.ai.mainproj.anygame.Tile;
 
 import java.util.LinkedList;

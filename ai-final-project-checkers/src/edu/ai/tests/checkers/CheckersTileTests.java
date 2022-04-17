@@ -1,10 +1,7 @@
 package edu.ai.tests.checkers;
 
-import edu.ai.mainproj.anygame.GridBoard;
-import edu.ai.mainproj.anygame.Piece;
 import edu.ai.mainproj.anygame.Tile;
-import edu.ai.mainproj.checkers.DiagonalDirection;
-import edu.ai.mainproj.checkers.PlayerType;
+import edu.ai.mainproj.checkers.*;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -12,13 +9,12 @@ import java.util.HashSet;
 import static org.junit.Assert.*;
 
 /**
- * Unit Tests for Tile class
+ * Unit Tests for CheckersTile class
  *
  * Tests methods:
- *  - isBlank
- *  - doesKing
  *  - getNeighbors
- *  - setPiece
+ *  - doesKing
+ *  - setPiece (kinging behavior)
  * Tests indirectly / assumes functional:
  *  - Constructor
  *  - getPiece
@@ -28,113 +24,59 @@ import static org.junit.Assert.*;
  */
 public class CheckersTileTests {
 
-    private static final GridBoard initialBoard = GridBoard.CreateCheckersInitialBoard();
+    private static final CheckersBoard initialBoard =
+            CheckersBoard.CreateInitialBoard();
 
     public CheckersTileTests() {}
-
-    // --------------------------------
-    // IS BLANK
-    // --------------------------------
-
-    @Test
-    public void testIsBlank_NewTile_True() {
-        Tile tile = new Tile(initialBoard, 9, 9);
-
-        assertTrue(tile.isBlank());
-    }
-
-    @Test
-    public void testIsBlank_AddPiece_False() {
-        Tile tile = new Tile(initialBoard, 9, 9);
-
-        tile.setPiece(new Piece(PlayerType.BLACK,tile));
-
-        assertFalse(tile.isBlank());
-    }
-
-    @Test
-    public void testIsBlank_AddPieceRemovePiece_True() {
-        Tile tile = new Tile(initialBoard, 9, 9);
-
-        tile.setPiece(new Piece(PlayerType.BLACK,tile));
-        tile.removePiece();
-
-        assertTrue(tile.isBlank());
-    }
-
-    // --------------------------------
-    // DOES KING
-    // --------------------------------
-
-    @Test
-    public void testDoesKing() {
-        // top row should king only black
-        for (Tile tile : initialBoard.getTilesInRow(0)) {
-            assertTrue(tile.doesKing(PlayerType.BLACK));
-            assertFalse(tile.doesKing(PlayerType.RED));
-        }
-        // middle rows shouldn't king anyone
-        for (int i = 1; i < initialBoard.getSize() - 1; i++) {
-            for (Tile tile : initialBoard.getTilesInRow(i)) {
-                assertFalse(tile.doesKing(PlayerType.BLACK));
-                assertFalse(tile.doesKing(PlayerType.RED));
-            }
-        }
-        // bottom row should king only red
-        for (Tile tile : initialBoard.getTilesInRow(initialBoard.getSize() - 1)) {
-            assertFalse(tile.doesKing(PlayerType.BLACK));
-            assertTrue(tile.doesKing(PlayerType.RED));
-        }
-    }
 
     // --------------------------------
     // GET NEIGHBOR AT
     // --------------------------------
     @Test
     public void testGetNeighborAt_23ForwardLeft_12() {
-        Tile tile23 = initialBoard.getTile(2, 3);
-        Tile tile12 = initialBoard.getTile(1, 2);
+        CheckersTile tile23 = initialBoard.getCheckersTile(2, 3);
+        CheckersTile tile12 = initialBoard.getCheckersTile(1, 2);
 
-        Tile tile = tile23.getNeighborAt(DiagonalDirection.FORWARD_LEFT);
+        CheckersTile tile = tile23.getNeighborAt(DiagonalDirection.FORWARD_LEFT);
 
         assertEquals(tile12, tile);
     }
 
     @Test
     public void testGetNeighborAt_70ForwardRight_61() {
-        Tile tile70 = initialBoard.getTile(7, 0);
-        Tile tile61 = initialBoard.getTile(6, 1);
+        CheckersTile tile70 = initialBoard.getCheckersTile(7, 0);
+        CheckersTile tile61 = initialBoard.getCheckersTile(6, 1);
 
-        Tile tile = tile70.getNeighborAt(DiagonalDirection.FORWARD_RIGHT);
+        CheckersTile tile = tile70.getNeighborAt(DiagonalDirection.FORWARD_RIGHT);
 
         assertEquals(tile61, tile);
     }
 
     @Test
     public void testGetNeighborAt_34BackwardRight_43() {
-        Tile tile34 = initialBoard.getTile(3, 4);
-        Tile tile45 = initialBoard.getTile(4, 5);
+        CheckersTile tile34 = initialBoard.getCheckersTile(3, 4);
+        CheckersTile tile45 = initialBoard.getCheckersTile(4, 5);
 
-        Tile tile = tile34.getNeighborAt(DiagonalDirection.BACKWARD_RIGHT);
+        CheckersTile tile = tile34.getNeighborAt(DiagonalDirection.BACKWARD_RIGHT);
 
         assertEquals(tile45, tile);
     }
 
     @Test
     public void testGetNeighborAt_36BackwardLeft_45() {
-        Tile tile36 = initialBoard.getTile(3, 6);
-        Tile tile45 = initialBoard.getTile(4, 5);
+        CheckersTile tile36 = initialBoard.getCheckersTile(3, 6);
+        CheckersTile tile45 = initialBoard.getCheckersTile(4, 5);
 
-        Tile tile = tile36.getNeighborAt(DiagonalDirection.BACKWARD_LEFT);
+        CheckersTile tile = tile36.getNeighborAt(DiagonalDirection.BACKWARD_LEFT);
 
         assertEquals(tile45, tile);
     }
 
     @Test
     public void testGetNeighborAt_27ForwardRight_Null() {
-        Tile tile27 = initialBoard.getTile(2, 7);
+        CheckersTile tile27 = initialBoard.getCheckersTile(2, 7);
 
-        Tile tile = tile27.getNeighborAt(DiagonalDirection.FORWARD_RIGHT);
+        CheckersTile tile = tile27.getNeighborAt(DiagonalDirection.FORWARD_RIGHT);
 
         assertNull(tile);
     }
@@ -145,76 +87,103 @@ public class CheckersTileTests {
 
     @Test
     public void testGetNeighbors_36_gets_25_45_27_47() {
-        Tile tile36 = initialBoard.getTile(3, 6);
+        CheckersTile tile36 = initialBoard.getCheckersTile(3, 6);
 
-        HashSet<Tile> tiles = new HashSet<Tile>();
-        for (Tile neighbor : tile36.getNeighbors()) {
+        HashSet<CheckersTile> tiles = new HashSet<CheckersTile>();
+        for (CheckersTile neighbor : tile36.getNeighbors()) {
             tiles.add(neighbor);
         }
 
-        assertTrue(tiles.contains(initialBoard.getTile(2, 5)));
-        assertTrue(tiles.contains(initialBoard.getTile(4, 5)));
-        assertTrue(tiles.contains(initialBoard.getTile(2, 7)));
-        assertTrue(tiles.contains(initialBoard.getTile(4, 7)));
+        assertTrue(tiles.contains(initialBoard.getCheckersTile(2, 5)));
+        assertTrue(tiles.contains(initialBoard.getCheckersTile(4, 5)));
+        assertTrue(tiles.contains(initialBoard.getCheckersTile(2, 7)));
+        assertTrue(tiles.contains(initialBoard.getCheckersTile(4, 7)));
         assertEquals(tiles.size(), 4);
     }
 
+    // --------------------------------
+    // DOES KING
+    // --------------------------------
+
+    @Test
+    public void testDoesKing() {
+        // top row should king only black
+        for (Tile tile : initialBoard.getTilesInRow(0)) {
+            assertTrue(((CheckersTile)tile).doesKing(PlayerType.BLACK));
+            assertFalse(((CheckersTile)tile).doesKing(PlayerType.RED));
+        }
+        // middle rows shouldn't king anyone
+        for (int i = 1; i < CheckersBoard.SIZE - 1; i++) {
+            for (Tile tile : initialBoard.getTilesInRow(i)) {
+                assertFalse(((CheckersTile)tile).doesKing(PlayerType.BLACK));
+                assertFalse(((CheckersTile)tile).doesKing(PlayerType.RED));
+            }
+        }
+        // bottom row should king only red
+        for (Tile tile : initialBoard.getTilesInRow(CheckersBoard.SIZE - 1)) {
+            assertFalse(((CheckersTile)tile).doesKing(PlayerType.BLACK));
+            assertTrue(((CheckersTile)tile).doesKing(PlayerType.RED));
+        }
+    }
+
+    /*
     // --------------------------------
     // SET PIECE
     // --------------------------------
 
     @Test
     public void testSetPiece_01Black_Kings() {
-        Tile tile01 = initialBoard.getTile(0, 1);
-        tile01.setPiece(new Piece(PlayerType.BLACK, tile01));
+        CheckersTile tile01 = initialBoard.getCheckersTile(0, 1);
+        tile01.setPiece(new CheckersPiece(PlayerType.BLACK, tile01));
 
         assertFalse(tile01.isBlank());
-        assertTrue(tile01.getPiece().isKing());
+        assertTrue(tile01.getCheckersPiece().isKing());
     }
 
     @Test
     public void testSetPiece_01Red_NotKings() {
-        Tile tile01 = initialBoard.getTile(0, 1);
-        tile01.setPiece(new Piece(PlayerType.RED, tile01));
+        CheckersTile tile01 = initialBoard.getCheckersTile(0, 1);
+        tile01.setPiece(new CheckersPiece(PlayerType.RED, tile01));
 
         assertFalse(tile01.isBlank());
-        assertFalse(tile01.getPiece().isKing());
+        assertFalse(tile01.getCheckersPiece().isKing());
     }
 
     @Test
     public void testSetPiece_70Black_NotKings() {
-        Tile tile70 = initialBoard.getTile(7, 0);
-        tile70.setPiece(new Piece(PlayerType.BLACK, tile70));
+        CheckersTile tile70 = initialBoard.getCheckersTile(7, 0);
+        tile70.setPiece(new CheckersPiece(PlayerType.BLACK, tile70));
 
         assertFalse(tile70.isBlank());
-        assertFalse(tile70.getPiece().isKing());
+        assertFalse(tile70.getCheckersPiece().isKing());
     }
 
     @Test
     public void testSetPiece_70Red_Kings() {
-        Tile tile70 = initialBoard.getTile(7, 0);
-        tile70.setPiece(new Piece(PlayerType.RED, tile70));
+        CheckersTile tile70 = initialBoard.getCheckersTile(7, 0);
+        tile70.setPiece(new CheckersPiece(PlayerType.RED, tile70));
 
         assertFalse(tile70.isBlank());
-        assertTrue(tile70.getPiece().isKing());
+        assertTrue(tile70.getCheckersPiece().isKing());
     }
 
     @Test
     public void testSetPiece_54Black_NotKings() {
-        Tile tile54 = initialBoard.getTile(5, 4);
-        tile54.setPiece(new Piece(PlayerType.BLACK, tile54));
+        CheckersTile tile54 = initialBoard.getCheckersTile(5, 4);
+        tile54.setPiece(new CheckersPiece(PlayerType.BLACK, tile54));
 
         assertFalse(tile54.isBlank());
-        assertFalse(tile54.getPiece().isKing());
+        assertFalse(tile54.getCheckersPiece().isKing());
     }
 
     @Test
     public void testSetPiece_54Red_NotKings() {
-        Tile tile54 = initialBoard.getTile(5, 4);
-        tile54.setPiece(new Piece(PlayerType.RED, tile54));
+        CheckersTile tile54 = initialBoard.getCheckersTile(5, 4);
+        tile54.setPiece(new CheckersPiece(PlayerType.RED, tile54));
 
         assertFalse(tile54.isBlank());
-        assertFalse(tile54.getPiece().isKing());
+        assertFalse(tile54.getCheckersPiece().isKing());
     }
+     */
 
 }
