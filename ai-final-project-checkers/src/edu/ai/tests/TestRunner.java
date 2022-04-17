@@ -3,6 +3,7 @@ package edu.ai.tests;
 import edu.ai.tests.anygame.*;
 import edu.ai.tests.checkers.*;
 
+import edu.ai.tests.checkers.moves.CheckersMoveNormalTests;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -16,6 +17,8 @@ public class TestRunner {
                 PieceTests.class,
                 CheckersBoardTests.class,
                 CheckersTileTests.class,
+                CheckersPieceTests.class,
+                CheckersMoveNormalTests.class,
                 DiagonalDirectionTests.class,
                 PlayerTypeTests.class);
 

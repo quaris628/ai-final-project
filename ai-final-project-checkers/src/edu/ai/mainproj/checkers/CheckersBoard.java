@@ -21,7 +21,7 @@ public class CheckersBoard extends GridBoard {
 
     public static final int SIZE = 8;
 
-    private CheckersBoard() {
+    public CheckersBoard() {
         // use only a half-size array for better memory space usage
         super(SIZE, SIZE / 2);
         for (int i = 0; i < SIZE; i++) {
