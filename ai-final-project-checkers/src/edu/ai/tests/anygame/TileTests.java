@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
  */
 public class TileTests {
 
-    private static final GridBoard initialBoard = new GridBoard(8, 8);
+    private static final GridBoard blankBoard = new GridBoard(8, 8);
 
     public TileTests() {}
 
@@ -32,14 +32,14 @@ public class TileTests {
 
     @Test
     public void testIsBlank_NewTile_True() {
-        Tile tile = new Tile(initialBoard, 9, 9);
+        Tile tile = new Tile(blankBoard, 9, 9);
 
         assertTrue(tile.isBlank());
     }
 
     @Test
     public void testIsBlank_AddPiece_False() {
-        Tile tile = new Tile(initialBoard, 9, 9);
+        Tile tile = new Tile(blankBoard, 9, 9);
 
         tile.setPiece(new Piece(tile));
 
@@ -48,7 +48,7 @@ public class TileTests {
 
     @Test
     public void testIsBlank_AddPieceRemovePiece_True() {
-        Tile tile = new Tile(initialBoard, 9, 9);
+        Tile tile = new Tile(blankBoard, 9, 9);
 
         tile.setPiece(new Piece(tile));
         tile.removePiece();
