@@ -44,7 +44,14 @@ public class GridBoard {
         return allTiles;
     }
 
-    public Tile getTile(int row, int column) { return board[row][column]; }
+    public Tile getTile(int row, int column) {
+        if (row < 0 || board.length <= row
+            || column < 0 || board[0].length <= column) {
+            return null;
+        }
+        return board[row][column];
+    }
+
     public int getNumRows() { return board.length; }
     public int getNumColumns() { return board[0].length; }
 

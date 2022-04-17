@@ -21,6 +21,7 @@ public class Piece {
      */
     public Piece(Tile tile) {
         this.tile = tile;
+        tile.setPiece(this);
     }
 
     /**

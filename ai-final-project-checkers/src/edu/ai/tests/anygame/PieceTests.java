@@ -23,8 +23,6 @@ import static org.junit.Assert.*;
  */
 public class PieceTests {
 
-    private final static GridBoard blankBoard = new GridBoard(8, 8);
-
     public PieceTests() {}
 
     // --------------------------------
@@ -33,7 +31,7 @@ public class PieceTests {
 
     @Test
     public void testGetTile() {
-        Tile tile01 = blankBoard.getTile(0, 1);
+        Tile tile01 = new GridBoard(2, 2).getTile(0, 1);
         Piece piece = new Piece(tile01);
 
         assertEquals(tile01, piece.getTile());
@@ -45,7 +43,7 @@ public class PieceTests {
 
     @Test
     public void testGetPiece() {
-        Tile tile01 = blankBoard.getTile(0, 1);
+        Tile tile01 = new GridBoard(2, 2).getTile(0, 1);
         Piece piece = new Piece(tile01);
 
         assertEquals(piece, tile01.getPiece());
@@ -58,7 +56,7 @@ public class PieceTests {
 
     @Test
     public void testRemove() {
-        Tile tile01 = blankBoard.getTile(0, 1);
+        Tile tile01 = new GridBoard(2, 2).getTile(0, 1);
         Piece piece = new Piece(tile01);
 
         piece.remove();
@@ -73,8 +71,8 @@ public class PieceTests {
 
     @Test
     public void testMoveTo() {
-        Tile tile01 = blankBoard.getTile(0, 1);
-        Tile tile10 = blankBoard.getTile(1, 0);
+        Tile tile01 = new GridBoard(2, 2).getTile(0, 1);
+        Tile tile10 = new GridBoard(2, 2).getTile(1, 0);
         Piece piece = new Piece(tile01);
 
         piece.moveTo(tile10);
@@ -86,8 +84,8 @@ public class PieceTests {
 
     @Test
     public void testMoveTo_DestinationNotBlank_Exception() {
-        Tile tile01 = blankBoard.getTile(0, 1);
-        Tile tile10 = blankBoard.getTile(1, 0);
+        Tile tile01 = new GridBoard(2, 2).getTile(0, 1);
+        Tile tile10 = new GridBoard(2, 2).getTile(1, 0);
         Piece piece01 = new Piece(tile01);
         Piece piece10 = new Piece(tile10);
 
