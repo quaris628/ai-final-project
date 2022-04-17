@@ -1,5 +1,6 @@
 package edu.ai.tests;
 
+import edu.ai.tests.anygame.*;
 import edu.ai.tests.checkers.*;
 
 import org.junit.runner.JUnitCore;
@@ -10,8 +11,11 @@ import org.junit.runner.notification.Failure;
 public class TestRunner {
     public static void main(String[] args) {
         Result result = JUnitCore.runClasses(
-                BoardTests.class,
+                GridBoardTests.class,
                 TileTests.class,
+                PieceTests.class,
+                CheckersBoardTests.class,
+                CheckersTileTests.class,
                 DiagonalDirectionTests.class,
                 PlayerTypeTests.class);
 

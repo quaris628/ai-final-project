@@ -1,3 +1,10 @@
+# visual paradigm backup and lock files
+*.vpp.bak*
+*.vpp.lck
+
+# ^^^ added manually
+# vvv from a generic java .gitignore
+
 # Compiled class file
 *.class
 

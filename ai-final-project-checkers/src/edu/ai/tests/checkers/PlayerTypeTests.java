@@ -1,6 +1,5 @@
 package edu.ai.tests.checkers;
 
-import edu.ai.mainproj.checkers.DiagonalDirection;
 import edu.ai.mainproj.checkers.PlayerType;
 import org.junit.Test;
 

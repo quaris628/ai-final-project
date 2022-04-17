@@ -1,5 +1,8 @@
 package edu.ai.mainproj.checkers;
 
+import edu.ai.mainproj.anygame.GridBoard;
+import edu.ai.mainproj.anygame.Move;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -12,7 +15,7 @@ public interface CheckersGamePlayable {
      * Gets the current board state
      * @return board
      */
-    Board getBoardState();
+    GridBoard getBoardState();
 
     /**
      * Get whose turn it is (either Red or Black)

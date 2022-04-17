@@ -1,7 +1,7 @@
 package edu.ai.mainproj.checkers;
 
 /**
- * Enum for player types/colors
+ * Enum for checkers players types/colors
  * Black goes first and starts on the bottom
  * Red goes second and starts on the top
  *
