@@ -13,6 +13,8 @@ import static org.junit.Assert.*;
  * Tests methods:
  *  - Constructor (does not throw exception)
  *  - isValid
+ *  - execute
+ * Also tests kinging behavior
  *
  * @author Nathan Swartz
  */
@@ -209,7 +211,66 @@ public class CheckersMoveNormalTests {
         assertTrue(move.isValid());
     }
 
+    // --------------------------------
+    // EXECUTE
+    // --------------------------------
+
+    @Test
+    public void testExecute_normalBlack45ForwardLeft() {
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(4, 5);
+        CheckersTile dest = board.getCheckersTile(3, 4);
+        CheckersPiece piece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersMoveNormal move = new CheckersMoveNormal(piece, DiagonalDirection.FORWARD_LEFT);
+
+        assertEquals(piece, start.getCheckersPiece());
+        assertTrue(dest.isBlank());
+
+        assertTrue(move.isValid());
+        move.execute();
+
+        assertTrue(start.isBlank());
+        assertEquals(piece, dest.getCheckersPiece());
+    }
+
+    @Test
+    public void testExecute_normalRed56BackwardLeft() {
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(5, 6);
+        CheckersTile dest = board.getCheckersTile(6, 5);
+        CheckersPiece piece = new CheckersPiece(PlayerType.RED, start);
+        CheckersMoveNormal move = new CheckersMoveNormal(piece, DiagonalDirection.BACKWARD_LEFT);
+
+        assertEquals(piece, start.getCheckersPiece());
+        assertTrue(dest.isBlank());
+
+        assertTrue(move.isValid());
+        move.execute();
+
+        assertTrue(start.isBlank());
+        assertEquals(piece, dest.getCheckersPiece());
+    }
+
+
+    @Test
+    public void testExecute_normalRed56ForwardLeft_exception() {
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(5, 6);
+        CheckersPiece piece = new CheckersPiece(PlayerType.RED, start);
+        CheckersMoveNormal move = new CheckersMoveNormal(piece, DiagonalDirection.FORWARD_LEFT);
+
+        assertFalse(move.isValid());
+        try {
+            move.execute();
+            fail();
+        } catch (IllegalStateException e) {
+            assertTrue(true);
+        }
+    }
+
+    // --------------------------------
     // KINGING BEHAVIOR
+    // --------------------------------
 
     @Test
     public void testKinging_normalBlack10_false() {
