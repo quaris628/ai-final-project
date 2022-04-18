@@ -2,8 +2,8 @@ package edu.ai.mainproj.anygame;
 
 public class Move {
 
-	private final Piece piece;
-	private final Tile destination;
+	public final Piece piece;
+	public final Tile destination;
 	
 	public Move(Piece piece, Tile destination) {
 		this.piece = piece;
@@ -23,7 +23,4 @@ public class Move {
 		piece.moveTo(destination);
 	}
 
-	public Piece getPiece() { return piece; }
-	public Tile getDestination() { return destination; }
-	
 }

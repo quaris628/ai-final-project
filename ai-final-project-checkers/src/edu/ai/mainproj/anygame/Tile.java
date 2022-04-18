@@ -20,10 +20,10 @@ public class Tile {
         piece = null;
     }
 
-    public boolean isBlank() { return piece == null; }
     public void setPiece(Piece piece) { this.piece = piece; }
-    public Piece getPiece() { return piece; }
     public void removePiece() { this.piece = null; }
+    public boolean isBlank() { return piece == null; }
+    public Piece getPiece() { return piece; }
 
     @Override
     public String toString() {
