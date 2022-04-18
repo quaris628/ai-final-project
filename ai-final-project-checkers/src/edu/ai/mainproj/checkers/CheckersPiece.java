@@ -26,9 +26,7 @@ public class CheckersPiece extends Piece {
     public CheckersPiece(PlayerType player, CheckersTile tile) {
         super(tile);
         this.player = player;
-        if (tile.doesKing(player)) {
-            king = true;
-        }
+        king = tile.doesKing(player);
     }
 
     @Override
