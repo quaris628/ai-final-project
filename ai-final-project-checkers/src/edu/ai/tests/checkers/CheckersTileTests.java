@@ -2,6 +2,7 @@ package edu.ai.tests.checkers;
 
 import edu.ai.mainproj.anygame.Tile;
 import edu.ai.mainproj.checkers.*;
+import edu.ai.mainproj.checkers.moves.DiagonalDirection;
 import org.junit.Test;
 
 import java.util.HashSet;

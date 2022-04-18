@@ -2,6 +2,7 @@ package edu.ai.tests.checkers.moves;
 
 import edu.ai.mainproj.checkers.*;
 import edu.ai.mainproj.checkers.moves.CheckersMoveNormal;
+import edu.ai.mainproj.checkers.moves.DiagonalDirection;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

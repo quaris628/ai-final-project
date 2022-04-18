@@ -2,7 +2,6 @@ package edu.ai.mainproj.checkers.moves;
 
 import edu.ai.mainproj.checkers.CheckersPiece;
 import edu.ai.mainproj.checkers.CheckersTile;
-import edu.ai.mainproj.checkers.DiagonalDirection;
 
 import java.util.Iterator;
 import java.util.LinkedList;

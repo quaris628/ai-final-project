@@ -1,4 +1,6 @@
-package edu.ai.mainproj.checkers;
+package edu.ai.mainproj.checkers.moves;
+
+import edu.ai.mainproj.checkers.PlayerType;
 
 /**
  * Enum for 4 basic diagonal directions

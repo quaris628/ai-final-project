@@ -1,7 +1,6 @@
 package edu.ai.mainproj.checkers.moves;
 
 import edu.ai.mainproj.checkers.CheckersPiece;
-import edu.ai.mainproj.checkers.DiagonalDirection;
 
 /**
  * For a normal single-tile-away move that a checkers piece can make
@@ -25,5 +24,5 @@ public class CheckersMoveNormal extends CheckersMove {
 		return super.isValid() && (piece.isKing()
 				|| direction.isForwardsFor(piece.getPlayer()));
 	}
-	
+
 }

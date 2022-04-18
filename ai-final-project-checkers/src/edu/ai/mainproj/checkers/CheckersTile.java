@@ -1,6 +1,7 @@
 package edu.ai.mainproj.checkers;
 
 import edu.ai.mainproj.anygame.Tile;
+import edu.ai.mainproj.checkers.moves.DiagonalDirection;
 
 import java.util.LinkedList;
 import java.util.List;
