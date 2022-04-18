@@ -34,14 +34,14 @@ public class CheckersMoveMultiJump extends CheckersMove {
 		// all subsequent jumps (piece is not on the starting tile)
 		while (dirIter.hasNext()) {
 			dir = dirIter.next();
-			jumps.add(CheckersMoveJump.Create(piece, tile, dir));
+			jumps.add(CheckersMoveJump.CreateAsPartOfMultiJump(piece, tile, dir));
 			tile = tile.getNeighborAt(dir).getNeighborAt(dir);
 		}
 
 		return new CheckersMoveMultiJump(piece, tile, jumps);
 	}
 	
-	private CheckersMoveMultiJump(CheckersPiece piece,
+	protected CheckersMoveMultiJump(CheckersPiece piece,
 			CheckersTile destination, List<CheckersMoveJump> jumps) {
 		super(piece, destination);
 		this.jumps = jumps;

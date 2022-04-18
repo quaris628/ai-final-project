@@ -44,12 +44,11 @@ public class CheckersPiece extends Piece {
         }
     }
 
+    public boolean isKing() { return king; }
+    public PlayerType getPlayer() { return player; }
     public CheckersTile getCheckersTile() {
         return (CheckersTile) getTile();
     }
-
-    public boolean isKing() { return king; }
-    public PlayerType getPlayer() { return player; }
 
     @Override
     public String toString() {

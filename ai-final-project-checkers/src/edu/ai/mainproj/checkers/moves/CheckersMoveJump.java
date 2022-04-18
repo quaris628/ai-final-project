@@ -14,7 +14,7 @@ public class CheckersMoveJump extends CheckersMove {
 	public final DiagonalDirection direction;
 	public final CheckersTile startingTile;
 	public final CheckersTile jumpedTile;
-	private final boolean multiJumpStartingTileNotBlank; // see doc comment below
+	private final boolean multiJumpCheckStartingTileBlank; // see doc comment below
 
 	public static CheckersMoveJump Create(CheckersPiece piece, DiagonalDirection direction) {
 		CheckersTile startingTile = piece.getCheckersTile();
@@ -35,8 +35,8 @@ public class CheckersMoveJump extends CheckersMove {
 	 * 	   is not currently on the starting tile.
 	 * In this case, the startingTile must be blank.
 	 */
-	public static CheckersMoveJump Create(CheckersPiece piece, CheckersTile startingTile,
-										  DiagonalDirection direction) {
+	public static CheckersMoveJump CreateAsPartOfMultiJump(CheckersPiece piece, CheckersTile startingTile,
+														   DiagonalDirection direction) {
 		CheckersTile jumpedTile = startingTile.getNeighborAt(direction);
 		CheckersTile destination = jumpedTile.getNeighborAt(direction);
 		return new CheckersMoveJump(piece, startingTile, jumpedTile, destination, direction, startingTile.isBlank());
@@ -49,18 +49,18 @@ public class CheckersMoveJump extends CheckersMove {
 		this.startingTile = startingTile;
 		this.jumpedTile = jumpedTile;
 		this.direction = direction;
-		this.multiJumpStartingTileNotBlank = false;
+		this.multiJumpCheckStartingTileBlank = false;
 	}
 
 	protected CheckersMoveJump(CheckersPiece piece, CheckersTile startingTile,
 							   CheckersTile jumpedTile, CheckersTile destination,
 							   DiagonalDirection direction,
-							   boolean multiJumpStartingTileNotBlank) {
+							   boolean multiJumpCheckStartingTileBlank) {
 		super(piece, destination);
 		this.startingTile = startingTile;
 		this.jumpedTile = jumpedTile;
 		this.direction = direction;
-		this.multiJumpStartingTileNotBlank = multiJumpStartingTileNotBlank;
+		this.multiJumpCheckStartingTileBlank = multiJumpCheckStartingTileBlank;
 	}
 	
 	@Override
@@ -71,7 +71,7 @@ public class CheckersMoveJump extends CheckersMove {
 				&& this.jumpedTile.getCheckersPiece().getPlayer() != null
 				&& this.jumpedTile.getCheckersPiece().getPlayer().isOpposite(piece.getPlayer())
 				&& (piece.isKing() || direction.isForwardsFor(piece.getPlayer()))
-				&& !multiJumpStartingTileNotBlank;
+				&& (!multiJumpCheckStartingTileBlank || startingTile.isBlank());
 	}
 
 	@Override
