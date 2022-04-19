@@ -21,6 +21,11 @@ public class Tile {
     }
 
     public void setPiece(Piece piece) { this.piece = piece; }
+
+    /**
+     * Probably shouldn't be used outside of the Piece class.
+     * Does not change piece's reference to this tile.
+     */
     public void removePiece() { this.piece = null; }
     public boolean isBlank() { return piece == null; }
     public Piece getPiece() { return piece; }

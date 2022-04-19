@@ -27,41 +27,41 @@ public class CheckersMoveNormalTests {
     // --------------------------------
 
     @Test
-    public void testConstructor_allNull_fails() {
+    public void testConstructor_allNull_exception() {
         try {
-            new CheckersMoveNormal(null, null);
+            CheckersMoveNormal.Create(null, null);
             fail();
-        } catch (Exception e) { assertTrue(true); }
+        } catch (IllegalArgumentException e) { assertTrue(true); }
     }
 
     @Test
-    public void testConstructor_pieceNull_fails() {
+    public void testConstructor_pieceNull_exception() {
         try {
-            new CheckersMoveNormal(null, DiagonalDirection.FORWARD_RIGHT);
+            CheckersMoveNormal.Create(null, DiagonalDirection.FORWARD_RIGHT);
             fail();
-        } catch (Exception e) { assertTrue(true); }
+        } catch (IllegalArgumentException e) { assertTrue(true); }
     }
 
     @Test
-    public void testConstructor_dirNull_fails() {
+    public void testConstructor_dirNull_exception() {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(1, 0));
         try {
-            new CheckersMoveNormal(piece, null);
+            CheckersMoveNormal.Create(piece, null);
             fail();
-        } catch (Exception e) { assertTrue(true); }
+        } catch (IllegalArgumentException e) { assertTrue(true); }
     }
 
     @Test
-    public void testConstructor_piece01dirForwardLeft_succeeds() {
+    public void testConstructor_piece01dirForwardLeft_exception() {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(1, 0));
         try {
-            new CheckersMoveNormal(piece, DiagonalDirection.FORWARD_LEFT);
-            assertTrue(true);
-        } catch (Exception e) { fail(); }
+            CheckersMoveNormal.Create(piece, DiagonalDirection.FORWARD_LEFT);
+            fail();
+        } catch (IllegalArgumentException e) { assertTrue(true); }
     }
 
     @Test
@@ -70,7 +70,7 @@ public class CheckersMoveNormalTests {
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(4, 5));
         try {
-            new CheckersMoveNormal(piece, DiagonalDirection.BACKWARD_RIGHT);
+            CheckersMoveNormal.Create(piece, DiagonalDirection.BACKWARD_RIGHT);
             assertTrue(true);
         } catch (Exception e) { fail(); }
     }
@@ -89,7 +89,7 @@ public class CheckersMoveNormalTests {
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.BLACK, board.getCheckersTile(4, 5));
 
-        CheckersMoveNormal move = new CheckersMoveNormal(
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
                 piece, DiagonalDirection.FORWARD_RIGHT);
 
         assertTrue(move.isValid());
@@ -101,7 +101,7 @@ public class CheckersMoveNormalTests {
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.BLACK, board.getCheckersTile(4, 5));
 
-        CheckersMoveNormal move = new CheckersMoveNormal(
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
                 piece, DiagonalDirection.BACKWARD_RIGHT);
 
         assertFalse(move.isValid());
@@ -113,7 +113,7 @@ public class CheckersMoveNormalTests {
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(4, 5));
 
-        CheckersMoveNormal move = new CheckersMoveNormal(
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
                 piece, DiagonalDirection.FORWARD_RIGHT);
 
         assertFalse(move.isValid());
@@ -125,62 +125,10 @@ public class CheckersMoveNormalTests {
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(4, 5));
 
-        CheckersMoveNormal move = new CheckersMoveNormal(
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
                 piece, DiagonalDirection.BACKWARD_RIGHT);
 
         assertTrue(move.isValid());
-    }
-
-    // destination not on the board
-
-    @Test
-    public void testIsValid_normalPieceBlack10dirForwardLeft_false() {
-        CheckersBoard board = new CheckersBoard();
-        CheckersPiece piece = new CheckersPiece(
-                PlayerType.BLACK, board.getCheckersTile(1, 0));
-
-        CheckersMoveNormal move = new CheckersMoveNormal(
-                piece, DiagonalDirection.FORWARD_LEFT);
-
-        assertFalse(move.isValid());
-    }
-
-    @Test
-    public void testIsValid_normalPieceBlack27dirForwardRight_false() {
-        CheckersBoard board = new CheckersBoard();
-        CheckersPiece piece = new CheckersPiece(
-                PlayerType.BLACK, board.getCheckersTile(2, 7));
-
-        CheckersMoveNormal move = new CheckersMoveNormal(
-                piece, DiagonalDirection.FORWARD_RIGHT);
-
-        assertFalse(move.isValid());
-    }
-
-    @Test
-    public void testIsValid_kingPieceBlack01dirForwardRight_false() {
-        CheckersBoard board = new CheckersBoard();
-        CheckersPiece piece = new CheckersPiece(
-                PlayerType.BLACK, board.getCheckersTile(0, 1));
-
-        CheckersMoveNormal move = new CheckersMoveNormal(
-                piece, DiagonalDirection.FORWARD_RIGHT);
-
-        assertTrue(piece.isKing());
-        assertFalse(move.isValid());
-    }
-
-    @Test
-    public void testIsValid_kingPieceRed70dirBackwardRight_false() {
-        CheckersBoard board = new CheckersBoard();
-        CheckersPiece piece = new CheckersPiece(
-                PlayerType.RED, board.getCheckersTile(7, 0));
-
-        CheckersMoveNormal move = new CheckersMoveNormal(
-                piece, DiagonalDirection.BACKWARD_RIGHT);
-
-        assertTrue(piece.isKing());
-        assertFalse(move.isValid());
     }
 
     // KING PIECE
@@ -192,7 +140,7 @@ public class CheckersMoveNormalTests {
                 PlayerType.BLACK, board.getCheckersTile(0, 1));
         piece.moveTo(board.getTile(4, 5));
 
-        CheckersMoveNormal move = new CheckersMoveNormal(
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
                 piece, DiagonalDirection.FORWARD_RIGHT);
 
         assertTrue(move.isValid());
@@ -205,7 +153,7 @@ public class CheckersMoveNormalTests {
                 PlayerType.BLACK, board.getCheckersTile(0, 1));
         piece.moveTo(board.getTile(4, 5));
 
-        CheckersMoveNormal move = new CheckersMoveNormal(
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
                 piece, DiagonalDirection.BACKWARD_LEFT);
 
         assertTrue(move.isValid());
@@ -221,7 +169,7 @@ public class CheckersMoveNormalTests {
         CheckersTile start = board.getCheckersTile(4, 5);
         CheckersTile dest = board.getCheckersTile(3, 4);
         CheckersPiece piece = new CheckersPiece(PlayerType.BLACK, start);
-        CheckersMoveNormal move = new CheckersMoveNormal(piece, DiagonalDirection.FORWARD_LEFT);
+        CheckersMoveNormal move = CheckersMoveNormal.Create(piece, DiagonalDirection.FORWARD_LEFT);
 
         assertEquals(piece, start.getCheckersPiece());
         assertTrue(dest.isBlank());
@@ -239,7 +187,7 @@ public class CheckersMoveNormalTests {
         CheckersTile start = board.getCheckersTile(5, 6);
         CheckersTile dest = board.getCheckersTile(6, 5);
         CheckersPiece piece = new CheckersPiece(PlayerType.RED, start);
-        CheckersMoveNormal move = new CheckersMoveNormal(piece, DiagonalDirection.BACKWARD_LEFT);
+        CheckersMoveNormal move = CheckersMoveNormal.Create(piece, DiagonalDirection.BACKWARD_LEFT);
 
         assertEquals(piece, start.getCheckersPiece());
         assertTrue(dest.isBlank());
@@ -257,7 +205,7 @@ public class CheckersMoveNormalTests {
         CheckersBoard board = new CheckersBoard();
         CheckersTile start = board.getCheckersTile(5, 6);
         CheckersPiece piece = new CheckersPiece(PlayerType.RED, start);
-        CheckersMoveNormal move = new CheckersMoveNormal(piece, DiagonalDirection.FORWARD_LEFT);
+        CheckersMoveNormal move = CheckersMoveNormal.Create(piece, DiagonalDirection.FORWARD_LEFT);
 
         assertFalse(move.isValid());
         try {
@@ -286,7 +234,7 @@ public class CheckersMoveNormalTests {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.BLACK, board.getCheckersTile(6, 3));
-        CheckersMoveNormal move = new CheckersMoveNormal(
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
                 piece, DiagonalDirection.FORWARD_RIGHT);
 
         move.execute();
@@ -299,7 +247,7 @@ public class CheckersMoveNormalTests {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.BLACK, board.getCheckersTile(1, 0));
-        CheckersMoveNormal move = new CheckersMoveNormal(
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
                 piece, DiagonalDirection.FORWARD_RIGHT);
 
         move.execute();
@@ -312,10 +260,10 @@ public class CheckersMoveNormalTests {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.BLACK, board.getCheckersTile(1, 0));
-        CheckersMoveNormal move1 = new CheckersMoveNormal(
+        CheckersMoveNormal move1 = CheckersMoveNormal.Create(
                 piece, DiagonalDirection.FORWARD_RIGHT);
         move1.execute();
-        CheckersMoveNormal move2 = new CheckersMoveNormal(
+        CheckersMoveNormal move2 = CheckersMoveNormal.Create(
                 piece, DiagonalDirection.BACKWARD_LEFT);
         move2.execute();
 
@@ -327,7 +275,7 @@ public class CheckersMoveNormalTests {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(6, 1));
-        CheckersMoveNormal move = new CheckersMoveNormal(
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
                 piece, DiagonalDirection.BACKWARD_RIGHT);
 
         move.execute();
