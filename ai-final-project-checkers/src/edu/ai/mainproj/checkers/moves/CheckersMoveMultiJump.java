@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+// TODO write unit tests for this class
+
 /**
  * For a sequence of back-to-back jumps that one piece can do in checkers
  * These multiple jumps are still considered a single move

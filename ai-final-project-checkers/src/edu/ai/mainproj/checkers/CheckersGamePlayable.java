@@ -31,6 +31,7 @@ public interface CheckersGamePlayable {
 
     /**
      * Checks if a move is valid or not for the current game state
+     * (May go unused, but it's easy enough to include so it'll stay here for now.)
      * @param move to check
      * @return true if move is valid, otherwise false
      */
