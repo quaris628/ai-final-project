@@ -15,9 +15,9 @@ import static org.junit.Assert.*;
  *
  * Tests methods:
  *  - Create (does not throw exception)
- *  - isValid TODO
- *  - execute TODO
- *  Also tests kinging behavior TODO
+ *  - isValid
+ *  - execute
+ *  Also tests kinging behavior
  *
  * @author Nathan Swartz
  */
@@ -316,29 +316,122 @@ public class CheckersMoveJumpTests {
 
     @Test
     public void testIsValid_blackJumpBlank_false() {
-        // TODO
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(4, 5);
+        CheckersTile jumped = board.getCheckersTile(3, 6);
+        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertTrue(jumped.isBlank());
+        assertTrue(dest.isBlank());
+
+        CheckersMoveJump move = CheckersMoveJump.Create(
+                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+
+        assertFalse(move.isValid());
     }
 
     @Test
     public void testIsValid_blackJumpBlack_false() {
-        // TODO
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(4, 5);
+        CheckersTile jumped = board.getCheckersTile(3, 6);
+        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.BLACK, jumped);
+
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece, jumped.getCheckersPiece());
+        assertTrue(dest.isBlank());
+
+        CheckersMoveJump move = CheckersMoveJump.Create(
+                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+
+        assertFalse(move.isValid());
     }
 
     @Test
     public void testIsValid_testExecute_blackJumpRed_true() {
-        // TODO
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(4, 5);
+        CheckersTile jumped = board.getCheckersTile(3, 6);
+        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
+
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece, jumped.getCheckersPiece());
+        assertTrue(dest.isBlank());
+
+        CheckersMoveJump move = CheckersMoveJump.Create(
+                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+
+        assertTrue(move.isValid());
+        move.execute();
+
+        // check tiles
+        assertTrue(start.isBlank());
+        assertTrue(jumped.isBlank());
+        assertEquals(jumperPiece, dest.getCheckersPiece());
+        // check pieces
+        assertNull(jumpedPiece.getCheckersTile());
+        assertEquals(dest, jumperPiece.getCheckersTile());
     }
 
     // Second neighbor is blank
 
     @Test
     public void testIsValid_jumpToPiece_false() {
-        // TODO
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(4, 5);
+        CheckersTile jumped = board.getCheckersTile(3, 6);
+        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
+        new CheckersPiece(PlayerType.RED, dest);
+
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece, jumped.getCheckersPiece());
+        assertFalse(dest.isBlank());
+
+        CheckersMoveJump move = CheckersMoveJump.Create(
+                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+
+        assertFalse(move.isValid());
     }
 
     @Test
     public void testIsValid_testExecute_jumpToBlank_true() {
-        // TODO
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(4, 5);
+        CheckersTile jumped = board.getCheckersTile(3, 6);
+        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
+
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece, jumped.getCheckersPiece());
+        assertTrue(dest.isBlank());
+
+        CheckersMoveJump move = CheckersMoveJump.Create(
+                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+
+        assertTrue(move.isValid());
+        move.execute();
+
+        // check tiles
+        assertTrue(start.isBlank());
+        assertTrue(jumped.isBlank());
+        assertEquals(jumperPiece, dest.getCheckersPiece());
+        // check pieces
+        assertNull(jumpedPiece.getCheckersTile());
+        assertEquals(dest, jumperPiece.getCheckersTile());
     }
 
     // --------------------------------
@@ -347,18 +440,71 @@ public class CheckersMoveJumpTests {
 
     @Test
     public void testKinging_jumpMidBoard_false() {
-        // TODO
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(4, 5);
+        CheckersTile jumped = board.getCheckersTile(3, 6);
+        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
+
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece, jumped.getCheckersPiece());
+        assertTrue(dest.isBlank());
+
+        CheckersMoveJump move = CheckersMoveJump.Create(
+                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+
+        assertTrue(move.isValid());
+        move.execute();
+
+        assertFalse(jumperPiece.isKing());
     }
 
     @Test
     public void testKinging_jumpBlackTop_true() {
-        // TODO
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(2, 5);
+        CheckersTile jumped = board.getCheckersTile(1, 6);
+        CheckersTile dest = board.getCheckersTile(0, 7);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
+
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece, jumped.getCheckersPiece());
+        assertTrue(dest.isBlank());
+
+        CheckersMoveJump move = CheckersMoveJump.Create(
+                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+
+        assertTrue(move.isValid());
+        move.execute();
+
+        assertTrue(jumperPiece.isKing());
     }
 
     @Test
     public void testKinging_jumpRedBottom_true() {
-        // TODO
-    }
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(5, 4);
+        CheckersTile jumped = board.getCheckersTile(6, 5);
+        CheckersTile dest = board.getCheckersTile(7, 6);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.RED, start);
+        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.BLACK, jumped);
 
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece, jumped.getCheckersPiece());
+        assertTrue(dest.isBlank());
+
+        CheckersMoveJump move = CheckersMoveJump.Create(
+                jumperPiece, DiagonalDirection.BACKWARD_RIGHT);
+
+        assertTrue(move.isValid());
+        move.execute();
+
+        assertTrue(jumperPiece.isKing());
+    }
 
 }
