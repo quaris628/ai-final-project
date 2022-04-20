@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  * Unit Tests for CheckersMoveNormal class
  *
  * Tests methods:
- *  - Constructor (does not throw exception)
+ *  - Create
  *  - isValid
  *  - execute
  * Also tests kinging behavior
@@ -23,45 +23,39 @@ public class CheckersMoveNormalTests {
     public CheckersMoveNormalTests() {}
 
     // --------------------------------
-    // CONSTRUCTOR
+    // CREATE
     // --------------------------------
 
     @Test
-    public void testConstructor_allNull_exception() {
-        try {
-            CheckersMoveNormal.Create(null, null);
-            fail();
-        } catch (IllegalArgumentException e) { assertTrue(true); }
+    public void testCreate_allNull_null() {
+        CheckersMoveNormal move = CheckersMoveNormal.Create(null, null);
+        assertNull(move);
     }
 
     @Test
-    public void testConstructor_pieceNull_exception() {
-        try {
-            CheckersMoveNormal.Create(null, DiagonalDirection.FORWARD_RIGHT);
-            fail();
-        } catch (IllegalArgumentException e) { assertTrue(true); }
+    public void testCreate_pieceNull_null() {
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
+                null, DiagonalDirection.FORWARD_RIGHT);
+        assertNull(move);
     }
 
     @Test
-    public void testConstructor_dirNull_exception() {
+    public void testCreate_dirNull_null() {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(1, 0));
-        try {
-            CheckersMoveNormal.Create(piece, null);
-            fail();
-        } catch (IllegalArgumentException e) { assertTrue(true); }
+        CheckersMoveNormal move = CheckersMoveNormal.Create(piece, null);
+        assertNull(move);
     }
 
     @Test
-    public void testConstructor_piece01dirForwardLeft_exception() {
+    public void testCreate_piece01dirForwardLeft_null() {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(1, 0));
-        try {
-            CheckersMoveNormal.Create(piece, DiagonalDirection.FORWARD_LEFT);
-            fail();
-        } catch (IllegalArgumentException e) { assertTrue(true); }
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
+                piece, DiagonalDirection.FORWARD_LEFT);
+        assertNull(move);
     }
 
     @Test
@@ -69,10 +63,9 @@ public class CheckersMoveNormalTests {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(4, 5));
-        try {
-            CheckersMoveNormal.Create(piece, DiagonalDirection.BACKWARD_RIGHT);
-            assertTrue(true);
-        } catch (Exception e) { fail(); }
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
+                piece, DiagonalDirection.BACKWARD_RIGHT);
+        assertNotNull(move);
     }
 
     // --------------------------------

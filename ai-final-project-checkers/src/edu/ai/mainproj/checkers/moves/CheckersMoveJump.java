@@ -22,6 +22,8 @@ public class CheckersMoveJump extends CheckersMove {
 				|| piece.getCheckersTile() == null
 				|| piece.getCheckersTile().getNeighborAt(direction) == null
 				|| piece.getCheckersTile().getNeighborAt(direction).getNeighborAt(direction) == null) {
+			return null;
+			/*
 			String message = "";
 			if (piece == null) {
 				message = "piece cannot be null";
@@ -35,6 +37,7 @@ public class CheckersMoveJump extends CheckersMove {
 				message = "piece's second neighbor in given direction must exist";
 			}
 			throw new IllegalArgumentException(message);
+			*/
 		}
 		CheckersTile startingTile = piece.getCheckersTile();
 		CheckersTile jumpedTile = startingTile.getNeighborAt(direction);
@@ -60,6 +63,7 @@ public class CheckersMoveJump extends CheckersMove {
 														   DiagonalDirection direction) {
 		CheckersTile jumpedTile = startingTile.getNeighborAt(direction);
 		CheckersTile destination = jumpedTile.getNeighborAt(direction);
+		// TODO return null if this move is impossible
 		return new CheckersMoveJump(piece, startingTile, jumpedTile, destination, direction, startingTile.isBlank());
 	}
 

@@ -21,6 +21,7 @@ public class CheckersMoveMultiJump extends CheckersMove {
 	
 	public static CheckersMoveMultiJump Create(
 			CheckersPiece piece, Iterable<DiagonalDirection> directions) {
+		// TODO rewrite to check if the move is impossible
 		List<CheckersMoveJump> jumps = new LinkedList<CheckersMoveJump>();
 		Iterator<DiagonalDirection> dirIter = directions.iterator();
 		// tile variable is used like an iterator
@@ -40,6 +41,19 @@ public class CheckersMoveMultiJump extends CheckersMove {
 		}
 
 		return new CheckersMoveMultiJump(piece, tile, jumps);
+	}
+
+	// create a multi-jump that pre-pends the jumpBefore onto the jumps
+	public static CheckersMoveMultiJump Create(
+			CheckersMoveJump jumpBefore, CheckersMoveMultiJump jumps) {
+		// TODO
+		return null;
+	}
+
+	// create a multi-jump that is only one jump
+	public static CheckersMoveMultiJump Create(CheckersMoveJump jump) {
+		// TODO
+		return null;
 	}
 	
 	protected CheckersMoveMultiJump(CheckersPiece piece,

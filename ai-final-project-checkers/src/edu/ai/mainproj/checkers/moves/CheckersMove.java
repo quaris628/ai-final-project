@@ -20,12 +20,14 @@ import edu.ai.mainproj.checkers.CheckersTile;
  */
 public class CheckersMove extends Move {
 
-    protected final CheckersPiece piece;
-    protected final CheckersTile destination;
+    public final CheckersPiece piece;
+    public final CheckersTile destination;
 
     public CheckersMove(CheckersPiece piece, CheckersTile destination) {
         super(piece, destination);
         this.piece = piece;
         this.destination = destination;
     }
+
+    // TODO good hash function
 }

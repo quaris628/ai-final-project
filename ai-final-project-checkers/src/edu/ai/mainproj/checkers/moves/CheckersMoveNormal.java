@@ -20,6 +20,8 @@ public class CheckersMoveNormal extends CheckersMove {
 		if (piece == null || direction == null
 				|| piece.getCheckersTile() == null
 				|| piece.getCheckersTile().getNeighborAt(direction) == null) {
+			return null;
+			/*
 			String message = "";
 			if (piece == null) {
 				message = "piece cannot be null";
@@ -31,6 +33,7 @@ public class CheckersMoveNormal extends CheckersMove {
 				message = "piece's neighbor in given direction must exist";
 			}
 			throw new IllegalArgumentException(message);
+			*/
 		}
 
 		return new CheckersMoveNormal(piece, direction);

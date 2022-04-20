@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
  * Unit Tests for CheckersMoveJump class
  *
  * Tests methods:
- *  - Create (does not throw exception)
+ *  - Create
  *  - isValid
  *  - execute
  *  Also tests kinging behavior
@@ -30,33 +30,29 @@ public class CheckersMoveJumpTests {
     // --------------------------------
 
     @Test
-    public void testCreate_pieceNull_exception() {
-        try {
-            CheckersMoveJump.Create(null, DiagonalDirection.FORWARD_LEFT);
-            fail();
-        } catch (IllegalArgumentException e) { assertTrue(true); }
+    public void testCreate_pieceNull_null() {
+        CheckersMoveJump move = CheckersMoveJump.Create(
+                null, DiagonalDirection.FORWARD_LEFT);
+        assertNull(move);
     }
 
     @Test
-    public void testCreate_dirNull_exception() {
+    public void testCreate_dirNull_null() {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(1, 0));
-        try {
-            CheckersMoveJump.Create(piece, null);
-            fail();
-        } catch (IllegalArgumentException e) { assertTrue(true); }
+        CheckersMoveJump move = CheckersMoveJump.Create(piece, null);
+        assertNull(move);
     }
 
     @Test
-    public void testCreate_offBoard_exception() {
+    public void testCreate_offBoard_null() {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(1, 0));
-        try {
-            CheckersMoveJump.Create(piece, DiagonalDirection.FORWARD_LEFT);
-            fail();
-        } catch (IllegalArgumentException e) { assertTrue(true); }
+        CheckersMoveJump move = CheckersMoveJump.Create(
+                piece, DiagonalDirection.FORWARD_LEFT);
+        assertNull(move);
     }
 
     @Test
@@ -64,10 +60,9 @@ public class CheckersMoveJumpTests {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(4, 5));
-        try {
-            CheckersMoveJump.Create(piece, DiagonalDirection.BACKWARD_RIGHT);
-            assertTrue(true);
-        } catch (IllegalArgumentException e) { fail(); }
+        CheckersMoveJump move = CheckersMoveJump.Create(
+                piece, DiagonalDirection.BACKWARD_RIGHT);
+        assertNotNull(move);
     }
 
     // --------------------------------
