@@ -276,11 +276,44 @@ public class CheckersMoveMultiJumpTests {
     }
 
     @Test
-    public void testIsValid_normalConditions_true() {
+    public void testIsValid_normalConditions2_true() {
 		// TODO
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(4, 5);
-        CheckersTile jumped = board.getCheckersTile(3, 6);
+        CheckersTile start = board.getCheckersTile(6, 3);
+        CheckersTile jumped1 = board.getCheckersTile(5, 4);
+		CheckersTile midDest = board.getCheckersTile(4, 5);
+		CheckersTile jumped2 = board.getCheckersTile(3, 4);
+        CheckersTile dest = board.getCheckersTile(2, 3);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+		CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+		DiagonalDirection[] dirs = new DiagonalDirection[] {
+				DiagonalDirection.FORWARD_RIGHT,
+				DiagonalDirection.FORWARD_LEFT
+			}
+		
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+		assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(midDest.isBlank());
+		assertTrue(dest.isBlank());
+		
+		// TODO
+
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(
+                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+
+        assertFalse(move.isValid());
+    }
+
+    @Test
+    public void testIsValid_normalConditions3_true() {
+		// TODO
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(6, 5);
+        CheckersTile jumped1 = board.getCheckersTile(5, 6);
+		CheckersTile midDest = board.getCheckersTile(5, 6);
         CheckersTile dest = board.getCheckersTile(2, 7);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
         CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
