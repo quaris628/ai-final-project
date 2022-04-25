@@ -46,7 +46,7 @@ public class CheckersMoveJumpTests {
     }
 
     @Test
-    public void testCreate_offBoard_null() {
+    public void testCreate_jumpedOffBoard_null() {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(1, 0));
@@ -54,6 +54,17 @@ public class CheckersMoveJumpTests {
                 piece, DiagonalDirection.FORWARD_LEFT);
         assertNull(move);
     }
+	
+    @Test
+    public void testCreate_destOffBoard_null() {
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece piece = new CheckersPiece(
+                PlayerType.RED, board.getCheckersTile(2, 1));
+        CheckersMoveJump move = CheckersMoveJump.Create(
+                piece, DiagonalDirection.FORWARD_LEFT);
+        assertNull(move);
+    }
+
 
     @Test
     public void testCreate_normal_succeeds() {
