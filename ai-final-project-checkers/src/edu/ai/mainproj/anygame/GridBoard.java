@@ -74,8 +74,12 @@ public class GridBoard {
      */
     public String toString(String rowDelimiter) {
         StringBuilder s = new StringBuilder();
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
+        // TODO maybe refactor to use iterators
+        //  in getTilesInColumn/Row or getAllTiles ?
+        //  (since these can be overriden by children)
+        //  But this current code should work for any rectangular grid anyway so...
+        for (int i = 0; i < getNumRows(); i++) {
+            for (int j = 0; j < getNumColumns(); j++) {
                 Tile tile = this.getTile(i, j);
                 if (tile == null) {
                     s.append("#");
