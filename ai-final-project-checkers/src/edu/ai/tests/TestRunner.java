@@ -16,6 +16,7 @@ public class TestRunner {
                 PieceTests.class,
                 TileTests.class,
                 CheckersMoveJumpTests.class,
+                CheckersMoveMultiJumpTests.class,
                 CheckersMoveNormalTests.class,
                 DiagonalDirectionTests.class,
                 CheckersBoardTests.class,
