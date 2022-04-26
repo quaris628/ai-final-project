@@ -13,12 +13,11 @@ import static org.junit.Assert.*;
 /**
  * Unit Tests for CheckersMoveMultiJump class
  *
- * TODO update which are still to-dos
  * Tests methods:
  *  - Create
- *  - isValid TODO
- *  - execute TODO
- *  Also tests kinging behavior TODO
+ *  - isValid
+ *  - execute
+ *  Also tests kinging behavior
  *
  * @author Nathan Swartz
  */
@@ -35,7 +34,7 @@ public class CheckersMoveMultiJumpTests {
         DiagonalDirection[] dirs = new DiagonalDirection[] {
 				DiagonalDirection.FORWARD_LEFT,
 				DiagonalDirection.FORWARD_LEFT
-			}
+			};
 		CheckersMoveMultiJump move =
 				CheckersMoveMultiJump.Create(null, dirs);
         assertNull(move);
@@ -43,16 +42,17 @@ public class CheckersMoveMultiJumpTests {
 
     @Test
     public void testCreate_dirNull_null() {
+        DiagonalDirection[] dirs = null;
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(1, 0));
-        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, null);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);
         assertNull(move);
     }
 	
     @Test
     public void testCreate_emptyDirs_null() {
-        DiagonalDirection[] dirs = new DiagonalDirection[];
+        DiagonalDirection[] dirs = new DiagonalDirection[0];
 		CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(4, 5));
@@ -64,7 +64,7 @@ public class CheckersMoveMultiJumpTests {
     public void testCreate_oneDir_null() {
         DiagonalDirection[] dirs = new DiagonalDirection[] {
 				DiagonalDirection.FORWARD_LEFT
-			}
+			};
 		CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(4, 5));
@@ -77,7 +77,7 @@ public class CheckersMoveMultiJumpTests {
         DiagonalDirection[] dirs = new DiagonalDirection[] {
 				DiagonalDirection.FORWARD_LEFT,
 				DiagonalDirection.FORWARD_LEFT
-			}
+			};
 		CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(1, 0));
@@ -90,7 +90,7 @@ public class CheckersMoveMultiJumpTests {
         DiagonalDirection[] dirs = new DiagonalDirection[] {
 				DiagonalDirection.FORWARD_LEFT,
 				DiagonalDirection.FORWARD_LEFT
-			}
+			};
 		CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(2, 1));
@@ -103,7 +103,7 @@ public class CheckersMoveMultiJumpTests {
         DiagonalDirection[] dirs = new DiagonalDirection[] {
 				DiagonalDirection.FORWARD_LEFT,
 				DiagonalDirection.FORWARD_LEFT
-			}
+			};
 		CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(4, 5));
@@ -118,216 +118,399 @@ public class CheckersMoveMultiJumpTests {
     // normal black pieces cannot jump backwards
 
     @Test
-    public void testIsValid_normalBackward_false() {
-		// TODO
+    public void testIsValid_normalBackward1_false() {
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.BACKWARD_RIGHT,
+                DiagonalDirection.FORWARD_RIGHT
+        };
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(4, 5);
-        CheckersTile jumped = board.getCheckersTile(5, 6);
-        CheckersTile dest = board.getCheckersTile(6, 7);
+        CheckersTile start = board.getCheckersTile(4, 3);
+        CheckersTile jumped1 = board.getCheckersTile(5, 4);
+        CheckersTile destMid = board.getCheckersTile(6, 5);
+        CheckersTile jumped2 = board.getCheckersTile(5, 6);
+        CheckersTile destFinal = board.getCheckersTile(4, 7);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
-        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
 
         // check starting conditions, for my sanity
-        assertFalse(jumperPiece.isKing());
         assertEquals(jumperPiece, start.getCheckersPiece());
-        assertEquals(jumpedPiece, jumped.getCheckersPiece());
-        assertTrue(dest.isBlank());
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
 
-        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(
-                jumperPiece, DiagonalDirection.BACKWARD_RIGHT);
+        assertFalse(move.isValid());
+    }
+
+    @Test
+    public void testIsValid_normalBackward2_false() {
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.BACKWARD_RIGHT
+        };
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(4, 3);
+        CheckersTile jumped1 = board.getCheckersTile(3, 4);
+        CheckersTile destMid = board.getCheckersTile(2, 5);
+        CheckersTile jumped2 = board.getCheckersTile(3, 6);
+        CheckersTile destFinal = board.getCheckersTile(4, 7);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
+
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
 
         assertFalse(move.isValid());
     }
 
     @Test
     public void testIsValid_kingBackward_true() {
-		// TODO
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.BACKWARD_RIGHT
+        };
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(4, 5);
-        CheckersTile jumped = board.getCheckersTile(5, 6);
-        CheckersTile dest = board.getCheckersTile(6, 7);
-        // make jumper a king
+        CheckersTile start = board.getCheckersTile(4, 3);
+        CheckersTile jumped1 = board.getCheckersTile(3, 4);
+        CheckersTile destMid = board.getCheckersTile(2, 5);
+        CheckersTile jumped2 = board.getCheckersTile(3, 6);
+        CheckersTile destFinal = board.getCheckersTile(4, 7);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK,
                 board.getCheckersTile(0, 1));
         jumperPiece.moveTo(start);
-        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
 
         // check starting conditions, for my sanity
-        assertTrue(jumperPiece.isKing());
         assertEquals(jumperPiece, start.getCheckersPiece());
-        assertEquals(jumpedPiece, jumped.getCheckersPiece());
-        assertTrue(dest.isBlank());
-
-        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(
-                jumperPiece, DiagonalDirection.BACKWARD_RIGHT);
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
 
         assertTrue(move.isValid());
     }
 
-    // First neighbor has piece of opposite player
-
     @Test
     public void testIsValid_jumpBlank_false() {
-		// TODO
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.FORWARD_RIGHT
+        };
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(4, 5);
-        CheckersTile jumped = board.getCheckersTile(3, 6);
-        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersTile start = board.getCheckersTile(6, 3);
+        CheckersTile jumped1 = board.getCheckersTile(5, 4);
+        CheckersTile destMid = board.getCheckersTile(4, 5);
+        CheckersTile jumped2 = board.getCheckersTile(3, 6);
+        CheckersTile destFinal = board.getCheckersTile(2, 7);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
 
         // check starting conditions, for my sanity
         assertEquals(jumperPiece, start.getCheckersPiece());
-        assertTrue(jumped.isBlank());
-        assertTrue(dest.isBlank());
-
-        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(
-                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+        assertTrue(jumped1.isBlank());
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
 
         assertFalse(move.isValid());
     }
 
     @Test
     public void testIsValid_blackJumpBlack_false() {
-		// TODO
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.FORWARD_RIGHT
+        };
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(4, 5);
-        CheckersTile jumped = board.getCheckersTile(3, 6);
-        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersTile start = board.getCheckersTile(6, 3);
+        CheckersTile jumped1 = board.getCheckersTile(5, 4);
+        CheckersTile destMid = board.getCheckersTile(4, 5);
+        CheckersTile jumped2 = board.getCheckersTile(3, 6);
+        CheckersTile destFinal = board.getCheckersTile(2, 7);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
-        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.BLACK, jumped);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.BLACK, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.BLACK, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
 
         // check starting conditions, for my sanity
         assertEquals(jumperPiece, start.getCheckersPiece());
-        assertEquals(jumpedPiece, jumped.getCheckersPiece());
-        assertTrue(dest.isBlank());
-
-        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(
-                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
 
         assertFalse(move.isValid());
     }
 
-    // middle destinations are blank
-
     @Test
     public void testIsValid_middleDestinationNotBlank_false() {
-		// TODO
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.FORWARD_RIGHT
+        };
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(4, 5);
-        CheckersTile jumped = board.getCheckersTile(3, 6);
-        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersTile start = board.getCheckersTile(6, 3);
+        CheckersTile jumped1 = board.getCheckersTile(5, 4);
+        CheckersTile destMid = board.getCheckersTile(4, 5);
+        CheckersTile jumped2 = board.getCheckersTile(3, 6);
+        CheckersTile destFinal = board.getCheckersTile(2, 7);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
-        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
-        new CheckersPiece(PlayerType.RED, dest);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
+        new CheckersPiece(PlayerType.RED, destMid);
 
         // check starting conditions, for my sanity
         assertEquals(jumperPiece, start.getCheckersPiece());
-        assertEquals(jumpedPiece, jumped.getCheckersPiece());
-        assertFalse(dest.isBlank());
-
-        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(
-                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
 
         assertFalse(move.isValid());
     }
 
     @Test
     public void testIsValid_finalDestinationNotBlank_false() {
-		// TODO
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.FORWARD_RIGHT
+        };
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(4, 5);
-        CheckersTile jumped = board.getCheckersTile(3, 6);
-        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersTile start = board.getCheckersTile(6, 3);
+        CheckersTile jumped1 = board.getCheckersTile(5, 4);
+        CheckersTile destMid = board.getCheckersTile(4, 5);
+        CheckersTile jumped2 = board.getCheckersTile(3, 6);
+        CheckersTile destFinal = board.getCheckersTile(2, 7);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
-        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
-        new CheckersPiece(PlayerType.RED, dest);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
+        new CheckersPiece(PlayerType.RED, destFinal);
 
         // check starting conditions, for my sanity
         assertEquals(jumperPiece, start.getCheckersPiece());
-        assertEquals(jumpedPiece, jumped.getCheckersPiece());
-        assertFalse(dest.isBlank());
-
-        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(
-                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
 
         assertFalse(move.isValid());
     }
 	
     @Test
     public void testIsValid_normalInAndOutOfKingRow_false() {
-		// TODO
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.BACKWARD_RIGHT
+        };
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(4, 5);
-        CheckersTile jumped = board.getCheckersTile(3, 6);
-        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersTile start = board.getCheckersTile(2, 3);
+        CheckersTile jumped1 = board.getCheckersTile(1, 4);
+        CheckersTile destMid = board.getCheckersTile(0, 5);
+        CheckersTile jumped2 = board.getCheckersTile(1, 6);
+        CheckersTile destFinal = board.getCheckersTile(2, 7);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
-        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
-        new CheckersPiece(PlayerType.RED, dest);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
 
         // check starting conditions, for my sanity
         assertEquals(jumperPiece, start.getCheckersPiece());
-        assertEquals(jumpedPiece, jumped.getCheckersPiece());
-        assertFalse(dest.isBlank());
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
 
-        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(
-                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+        assertFalse(move.isValid());
+    }
+
+    @Test
+    public void testIsValid_revisitTile_false() {
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.BACKWARD_LEFT
+        };
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(6, 3);
+        CheckersTile jumped1 = board.getCheckersTile(5, 4);
+        CheckersTile destMid = board.getCheckersTile(4, 5);
+        CheckersTile jumped2 = board.getCheckersTile(5, 4);
+        CheckersTile destFinal = board.getCheckersTile(6, 3);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
+
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
 
         assertFalse(move.isValid());
     }
 
     @Test
     public void testIsValid_normalConditions2_true() {
-		// TODO
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.FORWARD_RIGHT
+        };
         CheckersBoard board = new CheckersBoard();
         CheckersTile start = board.getCheckersTile(6, 3);
         CheckersTile jumped1 = board.getCheckersTile(5, 4);
-		CheckersTile midDest = board.getCheckersTile(4, 5);
-		CheckersTile jumped2 = board.getCheckersTile(3, 4);
-        CheckersTile dest = board.getCheckersTile(2, 3);
+        CheckersTile destMid = board.getCheckersTile(4, 5);
+        CheckersTile jumped2 = board.getCheckersTile(3, 6);
+        CheckersTile destFinal = board.getCheckersTile(2, 7);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
         CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
-		CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
-		DiagonalDirection[] dirs = new DiagonalDirection[] {
-				DiagonalDirection.FORWARD_RIGHT,
-				DiagonalDirection.FORWARD_LEFT
-			}
-		
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
+
         // check starting conditions, for my sanity
         assertEquals(jumperPiece, start.getCheckersPiece());
         assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
-		assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
-        assertTrue(midDest.isBlank());
-		assertTrue(dest.isBlank());
-		
-		// TODO
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
 
-        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(
-                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
-
-        assertFalse(move.isValid());
+        assertTrue(move.isValid());
     }
 
     @Test
     public void testIsValid_normalConditions3_true() {
-		// TODO
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.FORWARD_LEFT,
+                DiagonalDirection.FORWARD_RIGHT
+        };
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(6, 5);
-        CheckersTile jumped1 = board.getCheckersTile(5, 6);
-		CheckersTile midDest = board.getCheckersTile(5, 6);
-        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersTile start = board.getCheckersTile(7, 3);
+        CheckersTile jumped1 = board.getCheckersTile(6, 4);
+        CheckersTile destMid1 = board.getCheckersTile(5, 5);
+        CheckersTile jumped2 = board.getCheckersTile(4, 4);
+        CheckersTile destMid2 = board.getCheckersTile(3, 3);
+        CheckersTile jumped3 = board.getCheckersTile(2, 4);
+        CheckersTile destFinal = board.getCheckersTile(1, 5);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
-        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
-        new CheckersPiece(PlayerType.RED, dest);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersPiece jumpedPiece3 = new CheckersPiece(PlayerType.RED, jumped3);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
 
         // check starting conditions, for my sanity
         assertEquals(jumperPiece, start.getCheckersPiece());
-        assertEquals(jumpedPiece, jumped.getCheckersPiece());
-        assertFalse(dest.isBlank());
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid1.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destMid2.isBlank());
+        assertEquals(jumpedPiece3, jumped3.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
 
-        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(
-                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+        assertTrue(move.isValid());
+    }
 
-        assertFalse(move.isValid());
+
+    // --------------------------------
+    // EXECUTE
+    // --------------------------------
+
+    @Test
+    public void testExecute_normalConditions2() {
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.FORWARD_LEFT
+            };
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(6, 3);
+        CheckersTile jumped1 = board.getCheckersTile(5, 4);
+        CheckersTile destMid = board.getCheckersTile(4, 5);
+        CheckersTile jumped2 = board.getCheckersTile(3, 4);
+        CheckersTile destFinal = board.getCheckersTile(2, 3);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
+
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
+        assertTrue(move.isValid());
+
+        move.execute();
+
+        assertTrue(start.isBlank());
+        assertTrue(jumped1.isBlank());
+        assertNull(jumpedPiece1.getCheckersTile());
+        assertTrue(destMid.isBlank());
+        assertTrue(jumped2.isBlank());
+        assertNull(jumpedPiece2.getCheckersTile());
+        assertFalse(destFinal.isBlank());
+        assertEquals(jumperPiece, destFinal.getCheckersPiece());
+        assertEquals(jumperPiece.getCheckersTile(), destFinal);
+    }
+
+    @Test
+    public void testExecute_normalConditions3() {
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.FORWARD_LEFT,
+                DiagonalDirection.FORWARD_RIGHT
+        };
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(7, 3);
+        CheckersTile jumped1 = board.getCheckersTile(6, 4);
+        CheckersTile destMid1 = board.getCheckersTile(5, 5);
+        CheckersTile jumped2 = board.getCheckersTile(4, 4);
+        CheckersTile destMid2 = board.getCheckersTile(3, 3);
+        CheckersTile jumped3 = board.getCheckersTile(2, 4);
+        CheckersTile destFinal = board.getCheckersTile(1, 5);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersPiece jumpedPiece3 = new CheckersPiece(PlayerType.RED, jumped3);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
+
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid1.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destMid2.isBlank());
+        assertEquals(jumpedPiece3, jumped3.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
+        assertTrue(move.isValid());
+
+        move.execute();
+
+        assertTrue(start.isBlank());
+        assertTrue(jumped1.isBlank());
+        assertNull(jumpedPiece1.getCheckersTile());
+        assertTrue(destMid1.isBlank());
+        assertTrue(jumped2.isBlank());
+        assertNull(jumpedPiece2.getCheckersTile());
+        assertTrue(destMid2.isBlank());
+        assertTrue(jumped3.isBlank());
+        assertNull(jumpedPiece3.getCheckersTile());
+        assertFalse(destFinal.isBlank());
+        assertEquals(jumperPiece, destFinal.getCheckersPiece());
+        assertEquals(jumperPiece.getCheckersTile(), destFinal);
     }
 
     // --------------------------------
@@ -336,23 +519,29 @@ public class CheckersMoveMultiJumpTests {
 
     @Test
     public void testKinging_blackDestMidBoard_false() {
-		// TODO
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.FORWARD_RIGHT
+        };
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(4, 5);
-        CheckersTile jumped = board.getCheckersTile(3, 6);
-        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersTile start = board.getCheckersTile(6, 3);
+        CheckersTile jumped1 = board.getCheckersTile(5, 4);
+        CheckersTile destMid = board.getCheckersTile(4, 5);
+        CheckersTile jumped2 = board.getCheckersTile(3, 6);
+        CheckersTile destFinal = board.getCheckersTile(2, 7);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
-        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
 
         // check starting conditions, for my sanity
         assertEquals(jumperPiece, start.getCheckersPiece());
-        assertEquals(jumpedPiece, jumped.getCheckersPiece());
-        assertTrue(dest.isBlank());
-
-        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(
-                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
-
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
         assertTrue(move.isValid());
+
         move.execute();
 
         assertFalse(jumperPiece.isKing());
@@ -360,23 +549,29 @@ public class CheckersMoveMultiJumpTests {
 
     @Test
     public void testKinging_blackDestTop_true() {
-		// TODO
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_RIGHT,
+                DiagonalDirection.FORWARD_RIGHT
+        };
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(2, 5);
-        CheckersTile jumped = board.getCheckersTile(1, 6);
-        CheckersTile dest = board.getCheckersTile(0, 7);
+        CheckersTile start = board.getCheckersTile(4, 3);
+        CheckersTile jumped1 = board.getCheckersTile(3, 4);
+        CheckersTile destMid = board.getCheckersTile(2, 5);
+        CheckersTile jumped2 = board.getCheckersTile(1, 6);
+        CheckersTile destFinal = board.getCheckersTile(0, 7);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
-        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
 
         // check starting conditions, for my sanity
         assertEquals(jumperPiece, start.getCheckersPiece());
-        assertEquals(jumpedPiece, jumped.getCheckersPiece());
-        assertTrue(dest.isBlank());
-
-        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(
-                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
-
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
         assertTrue(move.isValid());
+
         move.execute();
 
         assertTrue(jumperPiece.isKing());
@@ -384,23 +579,29 @@ public class CheckersMoveMultiJumpTests {
 
     @Test
     public void testKinging_redDestBottom_true() {
-		// TODO
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.BACKWARD_RIGHT,
+                DiagonalDirection.BACKWARD_RIGHT
+        };
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(5, 4);
-        CheckersTile jumped = board.getCheckersTile(6, 5);
-        CheckersTile dest = board.getCheckersTile(7, 6);
+        CheckersTile start = board.getCheckersTile(3, 2);
+        CheckersTile jumped1 = board.getCheckersTile(4, 3);
+        CheckersTile destMid = board.getCheckersTile(5, 4);
+        CheckersTile jumped2 = board.getCheckersTile(6, 5);
+        CheckersTile destFinal = board.getCheckersTile(7, 6);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.RED, start);
-        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.BLACK, jumped);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.BLACK, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.BLACK, jumped2);
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(jumperPiece, dirs);
 
         // check starting conditions, for my sanity
         assertEquals(jumperPiece, start.getCheckersPiece());
-        assertEquals(jumpedPiece, jumped.getCheckersPiece());
-        assertTrue(dest.isBlank());
-
-        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(
-                jumperPiece, DiagonalDirection.BACKWARD_RIGHT);
-
+        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
+        assertTrue(destMid.isBlank());
+        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
+        assertTrue(destFinal.isBlank());
         assertTrue(move.isValid());
+
         move.execute();
 
         assertTrue(jumperPiece.isKing());

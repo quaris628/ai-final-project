@@ -3,6 +3,7 @@ package edu.ai.mainproj.checkers.moves;
 import edu.ai.mainproj.checkers.CheckersPiece;
 import edu.ai.mainproj.checkers.CheckersTile;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,7 +19,12 @@ import java.util.List;
 public class CheckersMoveMultiJump extends CheckersMove {
 	
 	private final List<CheckersMoveJump> jumps;
-	
+
+	public static CheckersMoveMultiJump Create(
+			CheckersPiece piece, DiagonalDirection[] directions) {
+		return Create(piece, Arrays.asList(directions));
+	}
+
 	public static CheckersMoveMultiJump Create(
 			CheckersPiece piece, Iterable<DiagonalDirection> directions) {
 		// TODO rewrite to check if the move is impossible
