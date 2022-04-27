@@ -26,6 +26,27 @@ public class CheckersMoveMultiJump extends CheckersMove {
 	public static CheckersMoveMultiJump Create(
 			CheckersPiece piece, Iterable<DiagonalDirection> directions) {
 		// TODO rewrite to check if the move is impossible
+		// check if move is impossible
+		
+		// null checks
+		if (piece == null
+			|| directions == null
+			|| piece.getCheckersTile() == null
+			|| directions.size() <= 1) { return null; }
+		
+		// check if move goes off of the board or turns back on itself
+		// TODO check jumps do not double back over the same tile
+		Set<CheckersTile> jumpedTiles = new HashSet<CheckersTile>();
+		CheckersTile tile = piece.getCheckersTile();
+		for (DiagonalDirection dir : directions) {
+			tile = tile.getNeighborAt(dir);
+			if (tile == null || jumpedTiles.contains(tile)) { return null; }
+			jumpedTiles.add(tile);
+			tile = tile.getNeighborAt(dir);
+			if (tile == null) { return null; }
+		}
+		
+		// vvv old method, review very closely or rewrite vvv
 		List<CheckersMoveJump> jumps = new LinkedList<CheckersMoveJump>();
 		Iterator<DiagonalDirection> dirIter = directions.iterator();
 		// tile variable is used like an iterator
@@ -55,6 +76,7 @@ public class CheckersMoveMultiJump extends CheckersMove {
 	 */
 	public static CheckersMoveMultiJump Create(
 			CheckersMoveJump jumpBefore, CheckersMoveMultiJump jumps) {
+		// TODO check jumps do not double back over the same piece twice
 		// check pieces of jumpBefore and jumps are the same
 		if (jumpBefore.piece != jumps.piece) { return null; }
 		// check destination of jumpBefore is the start of the first jump of jumps
@@ -76,6 +98,7 @@ public class CheckersMoveMultiJump extends CheckersMove {
 	 */
 	public static CheckersMoveMultiJump Create(
 			CheckersMoveMultiJump jumps, CheckersMoveJump jumpAfter) {
+		// TODO check jumps do not double back over the same piece twice
 		// check pieces of jumpAfter and jumps are the same
 		if (jumps.piece != jumpAfter.piece) { return null; }
 		// check destination of last jump of jumps is the same as the starting tile of jumpAfter
@@ -96,8 +119,6 @@ public class CheckersMoveMultiJump extends CheckersMove {
 	 * @return new CheckersMoveMultiJump
 	 */
 	public static CheckersMoveMultiJump Create(CheckersMoveJump jump) {
-		// No need to check if this jump is impossible because
-		//     CheckersMoveJump should have already verified that.
 		List<CheckersMoveJump> jumps = new LinkedList<CheckersMoveJump>();
 		jumps.add(jump);
 		return new CheckersMoveMultiJump(jump.piece, jump.destination, jumps);
