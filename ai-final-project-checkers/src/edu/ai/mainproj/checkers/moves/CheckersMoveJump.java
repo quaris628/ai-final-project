@@ -16,43 +16,19 @@ public class CheckersMoveJump extends CheckersMove {
 	private final boolean multiJumpCheckStartingTileBlank; // see doc comment below
 
 	public static CheckersMoveJump Create(CheckersPiece piece, DiagonalDirection direction) {
-		// some argument checking so that exception messages for the
-		// following problems make more sense
+		// return null if the move is definitely impossible,
+		//     no matter the state of the pieces on the board
 		if (piece == null || direction == null
 				|| piece.getCheckersTile() == null
 				|| piece.getCheckersTile().getNeighborAt(direction) == null
 				|| piece.getCheckersTile().getNeighborAt(direction).getNeighborAt(direction) == null) {
 			return null;
-			/*
-			String message = "";
-			if (piece == null) {
-				message = "piece cannot be null";
-			} else if (direction == null) {
-				message = "direction cannot be null";
-			} else if (piece.getCheckersTile() == null) {
-				message = "piece must be on a tile";
-			} else if (piece.getCheckersTile().getNeighborAt(direction) == null) {
-				message = "piece's neighbor in given direction must exist";
-			} else if (piece.getCheckersTile().getNeighborAt(direction).getNeighborAt(direction) == null) {
-				message = "piece's second neighbor in given direction must exist";
-			}
-			throw new IllegalArgumentException(message);
-			*/
 		}
 		CheckersTile startingTile = piece.getCheckersTile();
 		CheckersTile jumpedTile = startingTile.getNeighborAt(direction);
 		CheckersTile destination = jumpedTile.getNeighborAt(direction);
 		return new CheckersMoveJump(piece, startingTile, jumpedTile, destination, direction, false);
 	}
-
-	/*
-	public static CheckersMoveJump Create(CheckersTile startingTile, DiagonalDirection direction) {
-		CheckersPiece piece = startingTile.getCheckersPiece();
-		CheckersTile jumpedTile = startingTile.getNeighborAt(direction);
-		CheckersTile destination = jumpedTile.getNeighborAt(direction);
-		return new CheckersMoveJump(piece, startingTile, jumpedTile, destination, direction);
-	}
-	*/
 
 	/**
 	 * Used for when this jump is part of a multi-jump sequence, where the piece
@@ -61,10 +37,14 @@ public class CheckersMoveJump extends CheckersMove {
 	 */
 	public static CheckersMoveJump CreateAsPartOfMultiJump(CheckersPiece piece, CheckersTile startingTile,
 														   DiagonalDirection direction) {
+		if (piece == null || startingTile == null || direction == null
+				|| startingTile.getNeighborAt(direction) == null
+				|| startingTile.getNeighborAt(direction).getNeighborAt(direction) == null) {
+			return null;
+		}
 		CheckersTile jumpedTile = startingTile.getNeighborAt(direction);
 		CheckersTile destination = jumpedTile.getNeighborAt(direction);
-		// TODO return null if this move is impossible
-		return new CheckersMoveJump(piece, startingTile, jumpedTile, destination, direction, startingTile.isBlank());
+		return new CheckersMoveJump(piece, startingTile, jumpedTile, destination, direction, true);
 	}
 
 	protected CheckersMoveJump(CheckersPiece piece, CheckersTile startingTile,

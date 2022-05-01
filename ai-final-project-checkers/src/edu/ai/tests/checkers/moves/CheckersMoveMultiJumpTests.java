@@ -8,6 +8,9 @@ import edu.ai.mainproj.checkers.moves.CheckersMoveMultiJump;
 import edu.ai.mainproj.checkers.moves.DiagonalDirection;
 import org.junit.Test;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 /**
@@ -26,11 +29,11 @@ public class CheckersMoveMultiJumpTests {
     public CheckersMoveMultiJumpTests() {}
 
     // --------------------------------
-    // CREATE
+    // CREATE direction array
     // --------------------------------
 
     @Test
-    public void testCreate_pieceNull_null() {
+    public void testCreateDirArray_pieceNull_null() {
         DiagonalDirection[] dirs = new DiagonalDirection[] {
 				DiagonalDirection.FORWARD_LEFT,
 				DiagonalDirection.FORWARD_LEFT
@@ -41,7 +44,7 @@ public class CheckersMoveMultiJumpTests {
     }
 
     @Test
-    public void testCreate_dirNull_null() {
+    public void testCreateDirArray_dirNull_null() {
         DiagonalDirection[] dirs = null;
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
@@ -51,7 +54,7 @@ public class CheckersMoveMultiJumpTests {
     }
 	
     @Test
-    public void testCreate_emptyDirs_null() {
+    public void testCreateDirArray_emptyDirs_null() {
         DiagonalDirection[] dirs = new DiagonalDirection[0];
 		CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
@@ -61,7 +64,7 @@ public class CheckersMoveMultiJumpTests {
     }
 	
     @Test
-    public void testCreate_oneDir_null() {
+    public void testCreateDirArray_oneDir_null() {
         DiagonalDirection[] dirs = new DiagonalDirection[] {
 				DiagonalDirection.FORWARD_LEFT
 			};
@@ -73,7 +76,7 @@ public class CheckersMoveMultiJumpTests {
     }
     
     @Test
-    public void testCreate_jumpedOffBoard_null() {
+    public void testCreateDirArray_jumpedOffBoard_null() {
         DiagonalDirection[] dirs = new DiagonalDirection[] {
 				DiagonalDirection.FORWARD_LEFT,
 				DiagonalDirection.FORWARD_LEFT
@@ -86,7 +89,7 @@ public class CheckersMoveMultiJumpTests {
     }
 	
     @Test
-    public void testCreate_destOffBoard_null() {
+    public void testCreateDirArray_destOffBoard_null() {
         DiagonalDirection[] dirs = new DiagonalDirection[] {
 				DiagonalDirection.FORWARD_LEFT,
 				DiagonalDirection.FORWARD_LEFT
@@ -99,12 +102,187 @@ public class CheckersMoveMultiJumpTests {
     }
 
     @Test
-    public void testCreate_normalConditions_succeeds() {
+    public void testCreateDirArray_normalConditions_succeeds() {
         DiagonalDirection[] dirs = new DiagonalDirection[] {
 				DiagonalDirection.FORWARD_LEFT,
 				DiagonalDirection.FORWARD_LEFT
 			};
 		CheckersBoard board = new CheckersBoard();
+        CheckersPiece piece = new CheckersPiece(
+                PlayerType.RED, board.getCheckersTile(4, 5));
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);
+        assertNotNull(move);
+    }
+
+    // --------------------------------
+    // CREATE directions iterable
+    // --------------------------------
+
+    @Test
+    public void testCreateDirIter_pieceNull_null() {
+        List<DiagonalDirection> dirs = new LinkedList<DiagonalDirection>();
+        dirs.add(DiagonalDirection.FORWARD_LEFT);
+        dirs.add(DiagonalDirection.FORWARD_LEFT);
+
+        CheckersMoveMultiJump move =
+                CheckersMoveMultiJump.Create(null, dirs);
+        assertNull(move);
+    }
+
+    @Test
+    public void testCreateDirIter_dirNull_null() {
+        List<DiagonalDirection> dirs = null;
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece piece = new CheckersPiece(
+                PlayerType.RED, board.getCheckersTile(1, 0));
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);
+        assertNull(move);
+    }
+
+    @Test
+    public void testCreateDirIter_emptyDirs_null() {
+        List<DiagonalDirection> dirs = new LinkedList<DiagonalDirection>();
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece piece = new CheckersPiece(
+                PlayerType.RED, board.getCheckersTile(4, 5));
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);
+        assertNull(move);
+    }
+
+    @Test
+    public void testCreateDirIter_oneDir_null() {
+        List<DiagonalDirection> dirs = new LinkedList<DiagonalDirection>();
+        dirs.add(DiagonalDirection.FORWARD_LEFT);
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece piece = new CheckersPiece(
+                PlayerType.RED, board.getCheckersTile(4, 5));
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);
+        assertNull(move);
+    }
+
+    @Test
+    public void testCreateDirIter_jumpedOffBoard_null() {
+        List<DiagonalDirection> dirs = new LinkedList<DiagonalDirection>();
+        dirs.add(DiagonalDirection.FORWARD_LEFT);
+        dirs.add(DiagonalDirection.FORWARD_LEFT);
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece piece = new CheckersPiece(
+                PlayerType.RED, board.getCheckersTile(1, 0));
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);
+        assertNull(move);
+    }
+
+    @Test
+    public void testCreateDirIter_destOffBoard_null() {
+        List<DiagonalDirection> dirs = new LinkedList<DiagonalDirection>();
+        dirs.add(DiagonalDirection.FORWARD_LEFT);
+        dirs.add(DiagonalDirection.FORWARD_LEFT);
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece piece = new CheckersPiece(
+                PlayerType.RED, board.getCheckersTile(2, 1));
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);
+        assertNull(move);
+    }
+
+    @Test
+    public void testCreateDirIter_normalConditions_succeeds() {
+        List<DiagonalDirection> dirs = new LinkedList<DiagonalDirection>();
+        dirs.add(DiagonalDirection.FORWARD_LEFT);
+        dirs.add(DiagonalDirection.FORWARD_LEFT);
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece piece = new CheckersPiece(
+                PlayerType.RED, board.getCheckersTile(4, 5));
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);
+        assertNotNull(move);
+    }
+
+    // --------------------------------
+    // CREATE prepend
+    // --------------------------------
+
+    // TODO
+    @Test
+    public void testCreatePrepend_pieceNull_null() {
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_LEFT,
+                DiagonalDirection.FORWARD_LEFT
+        };
+        CheckersMoveMultiJump move =
+                CheckersMoveMultiJump.Create(null, dirs);
+        assertNull(move);
+    }
+
+    // TODO
+    @Test
+    public void testCreatePrepend_dirNull_null() {
+        DiagonalDirection[] dirs = null;
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece piece = new CheckersPiece(
+                PlayerType.RED, board.getCheckersTile(1, 0));
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);
+        assertNull(move);
+    }
+
+    // TODO
+    @Test
+    public void testCreatePrepend_emptyDirs_null() {
+        DiagonalDirection[] dirs = new DiagonalDirection[0];
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece piece = new CheckersPiece(
+                PlayerType.RED, board.getCheckersTile(4, 5));
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);
+        assertNull(move);
+    }
+
+    // TODO
+    @Test
+    public void testCreatePrepend_oneDir_null() {
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_LEFT
+        };
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece piece = new CheckersPiece(
+                PlayerType.RED, board.getCheckersTile(4, 5));
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);
+        assertNull(move);
+    }
+
+    // TODO
+    @Test
+    public void testCreatePrepend_jumpedOffBoard_null() {
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_LEFT,
+                DiagonalDirection.FORWARD_LEFT
+        };
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece piece = new CheckersPiece(
+                PlayerType.RED, board.getCheckersTile(1, 0));
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);
+        assertNull(move);
+    }
+
+    // TODO
+    @Test
+    public void testCreatePrepend_destOffBoard_null() {
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_LEFT,
+                DiagonalDirection.FORWARD_LEFT
+        };
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece piece = new CheckersPiece(
+                PlayerType.RED, board.getCheckersTile(2, 1));
+        CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);
+        assertNull(move);
+    }
+
+    // TODO
+    @Test
+    public void testCreatePrepend_normalConditions_succeeds() {
+        DiagonalDirection[] dirs = new DiagonalDirection[] {
+                DiagonalDirection.FORWARD_LEFT,
+                DiagonalDirection.FORWARD_LEFT
+        };
+        CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(4, 5));
         CheckersMoveMultiJump move = CheckersMoveMultiJump.Create(piece, dirs);

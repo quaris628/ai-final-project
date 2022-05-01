@@ -3,10 +3,7 @@ package edu.ai.mainproj.checkers.moves;
 import edu.ai.mainproj.checkers.CheckersPiece;
 import edu.ai.mainproj.checkers.CheckersTile;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * For a sequence of back-to-back jumps that one piece can do in checkers
@@ -20,50 +17,38 @@ public class CheckersMoveMultiJump extends CheckersMove {
 
 	public static CheckersMoveMultiJump Create(
 			CheckersPiece piece, DiagonalDirection[] directions) {
+		if (directions == null) { return null; }
 		return Create(piece, Arrays.asList(directions));
 	}
 
 	public static CheckersMoveMultiJump Create(
 			CheckersPiece piece, Iterable<DiagonalDirection> directions) {
-		// TODO rewrite to check if the move is impossible
 		// check if move is impossible
 		
-		// null checks
-		if (piece == null
-			|| directions == null
-			|| piece.getCheckersTile() == null
-			|| directions.size() <= 1) { return null; }
-		
-		// check if move goes off of the board or turns back on itself
-		// TODO check jumps do not double back over the same tile
+		// null parameter checks
+		if (piece == null || directions == null
+			|| piece.getCheckersTile() == null) { return null; }
+
 		Set<CheckersTile> jumpedTiles = new HashSet<CheckersTile>();
+        List<CheckersMoveJump> jumps = new LinkedList<CheckersMoveJump>();
 		CheckersTile tile = piece.getCheckersTile();
 		for (DiagonalDirection dir : directions) {
-			tile = tile.getNeighborAt(dir);
-			if (tile == null || jumpedTiles.contains(tile)) { return null; }
+            // this create method will check if the next 2 tiles are off-board
+            CheckersMoveJump jump = CheckersMoveJump.CreateAsPartOfMultiJump(piece, tile, dir);
+            if (jump == null) { return null; }
+            jumps.add(jump);
+
+            tile = tile.getNeighborAt(dir);
+            // if the next jumped tile was already jumped, this jump is impossible
+			if (jumpedTiles.contains(tile)) { return null; }
 			jumpedTiles.add(tile);
+
 			tile = tile.getNeighborAt(dir);
-			if (tile == null) { return null; }
 		}
-		
-		// vvv old method, review very closely or rewrite vvv
-		List<CheckersMoveJump> jumps = new LinkedList<CheckersMoveJump>();
-		Iterator<DiagonalDirection> dirIter = directions.iterator();
-		// tile variable is used like an iterator
-		// parallel to the direction iterator
-		CheckersTile tile = piece.getCheckersTile();
+        // if there is 1 or fewer jumps, this isn't a multi-jump move
+        if (jumpedTiles.size() <= 1) { return null; }
 
-		// first jump (piece is on the starting tile)
-		DiagonalDirection dir = dirIter.next();
-		jumps.add(CheckersMoveJump.Create(piece, dir));
-		tile = tile.getNeighborAt(dir).getNeighborAt(dir);
-
-		// all subsequent jumps (piece is not on the starting tile)
-		while (dirIter.hasNext()) {
-			dir = dirIter.next();
-			jumps.add(CheckersMoveJump.CreateAsPartOfMultiJump(piece, tile, dir));
-			tile = tile.getNeighborAt(dir).getNeighborAt(dir);
-		}
+        // If the code has reached this point, the move is not impossible
 
 		return new CheckersMoveMultiJump(piece, tile, jumps);
 	}
