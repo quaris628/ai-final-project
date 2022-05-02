@@ -3,6 +3,9 @@ package edu.ai.mainproj.checkers.moves;
 import edu.ai.mainproj.checkers.CheckersPiece;
 import edu.ai.mainproj.checkers.CheckersTile;
 
+// TODO check imports
+// maybe we need to import Iterable?
+// maybe we don't need * in java.util?
 import java.util.*;
 
 /**
@@ -11,7 +14,7 @@ import java.util.*;
  *
  * @author Nathan Swartz
  */
-public class CheckersMoveMultiJump extends CheckersMove {
+public class CheckersMoveMultiJump extends CheckersMove implements Iterable<CheckersMoveJump> {
 	
 	private final List<CheckersMoveJump> jumps;
 
@@ -61,18 +64,31 @@ public class CheckersMoveMultiJump extends CheckersMove {
 	 */
 	public static CheckersMoveMultiJump Create(
 			CheckersMoveJump jumpBefore, CheckersMoveMultiJump jumps) {
-		// TODO check jumps do not double back over the same piece twice
+		if (jumpBefore == null || jumps == null) { return null; }
+		
 		// check pieces of jumpBefore and jumps are the same
 		if (jumpBefore.piece != jumps.piece) { return null; }
-		// check destination of jumpBefore is the start of the first jump of jumps
-		else if (jumpBefore.destination != jumps.jumps.get(0).startingTile) {
+		
+		// check jumpBefore destination is the starting tile of jumps
+		if (jumpBefore.destination != jumps.jumps.get(0).startingTile) {
 			return null;
 		}
+		
+		// check jumps do not double back over the same piece twice
+		Set<CheckersTile> jumpedTiles = new HashSet<CheckersTile>();
+		jumpedTiles.add(jumpBefore.jumpedTile);
+		for (CheckersMoveJump jump : jumps) {
+			if (jump == null) { return null; }
+			// if the next jumped tile was already jumped, this jump is impossible
+			if (jumpedTiles.contains(jump.jumpedTile)) { return null; }
+			jumpedTiles.add(jump.jumpedTile);
+		}
+		
 		// if we're at this point everything should be okay to create
-		List<CheckersMoveJump> deepCopyJumps = new LinkedList<CheckersMoveJump>();
-		deepCopyJumps.add(jumpBefore);
-		deepCopyJumps.addAll(jumps.jumps);
-		return new CheckersMoveMultiJump(jumpBefore.piece, jumps.destination, deepCopyJumps);
+		List<CheckersMoveJump> deepCopyJumpsList = new LinkedList<CheckersMoveJump>();
+		deepCopyJumpsList.add(jumpBefore);
+		deepCopyJumpsList.addAll(jumps.jumps);
+		return new CheckersMoveMultiJump(jumpBefore.piece, jumps.destination, deepCopyJumpsList);
 	}
 
 	/**
@@ -83,6 +99,33 @@ public class CheckersMoveMultiJump extends CheckersMove {
 	 */
 	public static CheckersMoveMultiJump Create(
 			CheckersMoveMultiJump jumps, CheckersMoveJump jumpAfter) {
+		if (jumps == null || jumpAfter == null) { return null; }
+		
+		// check pieces of jumps and jumpAfter are the same
+		if (jumps.piece != jumpAfter.piece) { return null; }
+		
+		// check destination of last jump of jumps is the same as the starting tile of jumpAfter
+		if (jumps.jumps.get(jumps.jumps.size() - 1).destination != jumpAfter.startingTile) {
+			return null;
+		}
+		
+		// check jumps do not double back over the same piece twice
+		Set<CheckersTile> jumpedTiles = new HashSet<CheckersTile>();
+		jumpedTiles.add(jumpAfter.jumpedTile);
+		for (CheckersMoveJump jump : jumps) {
+			if (jump == null) { return null; }
+			// if the next jumped tile was already jumped, this jump is impossible
+			if (jumpedTiles.contains(jump.jumpedTile)) { return null; }
+			jumpedTiles.add(jump.jumpedTile);
+		}
+		
+		// if we're at this point everything should be okay to create
+		List<CheckersMoveJump> deepCopyJumpsList = new LinkedList<CheckersMoveJump>();
+		deepCopyJumpsList.addAll(jumps.jumps);
+		deepCopyJumpsList.add(jumpAfter);
+		return new CheckersMoveMultiJump(jumpAfter.piece, jumps.destination, deepCopyJumpsList);
+		
+		
 		// TODO check jumps do not double back over the same piece twice
 		// check pieces of jumpAfter and jumps are the same
 		if (jumps.piece != jumpAfter.piece) { return null; }
@@ -133,6 +176,11 @@ public class CheckersMoveMultiJump extends CheckersMove {
 		for (CheckersMoveJump jump : jumps) {
 			jump.execute();
 		}
+	}
+	
+	@Override
+	public Iterator<CheckersMoveJump> iterator() {
+		return jumps.iterator();
 	}
 	
 }
