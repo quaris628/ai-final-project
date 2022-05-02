@@ -170,4 +170,13 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 		return jumps.iterator();
 	}
 	
+	@Override
+	public int hashCode() {
+		int hash = super.hashCode()
+		for (CheckersMoveJump jump : jumps) {
+			hash *= 953 ^ jump.jumpedTile.hashCode();
+		}
+		return hash;
+	}
+	
 }

@@ -29,6 +29,11 @@ public class Tile {
     public void removePiece() { this.piece = null; }
     public boolean isBlank() { return piece == null; }
     public Piece getPiece() { return piece; }
+	
+	@Override
+	public int hashCode() {
+		return row * 691 ^ column;
+	}
 
     @Override
     public String toString() {

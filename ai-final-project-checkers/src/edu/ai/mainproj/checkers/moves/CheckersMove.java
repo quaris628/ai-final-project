@@ -29,5 +29,8 @@ public class CheckersMove extends Move {
         this.destination = destination;
     }
 
-    // TODO good hash function
+	@Override
+	public int hashCode() {
+		return destination.hashCode() * 823 ^ piece.getTile().hashCode();
+	}
 }

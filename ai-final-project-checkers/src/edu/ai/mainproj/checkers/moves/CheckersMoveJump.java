@@ -77,4 +77,9 @@ public class CheckersMoveJump extends CheckersMove {
 		//     it does not set the removed piece's reference to null
 	}
 	
+	@Override
+	public int hashCode() {
+		return super.hashCode() * 953 ^ jumpedTile.hashCode();
+	}
+	
 }
