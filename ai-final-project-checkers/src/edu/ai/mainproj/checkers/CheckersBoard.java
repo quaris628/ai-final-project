@@ -51,9 +51,21 @@ public class CheckersBoard extends GridBoard {
         return toReturn;
     }
 
-    // NO IT WON'T
-    // TODO
-    // super.getTilesInRow will work and does not need to be overridden
+	// TODO is this needed, or is super.getTilesInRow() okay?
+	/*
+	@Override
+	public Iterable<Tile> getTilesInRow(int row) {
+		Iterable<Tile> rowTiles = super.getTilesInRow(row);
+		// filter out null tiles from the results list
+		List<Tile> toReturn = LinkedList<Tile>();
+		for (Tile tile : rowTiles) {
+			if (tile != null) {
+				toReturn.add(tile);
+			}
+		}
+		return toReturn;
+	}
+	//*/
 
     @Override
     public Iterable<Tile> getTilesInColumn(int column) {
@@ -64,9 +76,21 @@ public class CheckersBoard extends GridBoard {
         return columnTiles;
     }
 
-    // NO IT WON'T
-    // TODO
-    // super.getAllTiles will work and does not need to be overridden
+    // TODO is this needed, or is super.getAllTiles() okay?
+	/*
+	@Override
+	public Iterable<Tile> getAllTiles() {
+		Iterable<Tile> allTiles = super.getAllTiles();
+		// filter out null tiles from the results list
+		List<Tile> toReturn = LinkedList<Tile>();
+		for (Tile tile : allTiles) {
+			if (tile != null) {
+				toReturn.add(tile);
+			}
+		}
+		return toReturn;
+	}
+	//*/
 
     public CheckersTile getCheckersTile(int row, int column) {
         return (CheckersTile) getTile(row, column);
