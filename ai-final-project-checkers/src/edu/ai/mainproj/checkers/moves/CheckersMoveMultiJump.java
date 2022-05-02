@@ -124,19 +124,6 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 		deepCopyJumpsList.addAll(jumps.jumps);
 		deepCopyJumpsList.add(jumpAfter);
 		return new CheckersMoveMultiJump(jumpAfter.piece, jumps.destination, deepCopyJumpsList);
-		
-		
-		// TODO check jumps do not double back over the same piece twice
-		// check pieces of jumpAfter and jumps are the same
-		if (jumps.piece != jumpAfter.piece) { return null; }
-		// check destination of last jump of jumps is the same as the starting tile of jumpAfter
-		else if (jumps.jumps.get(jumps.jumps.size() - 1).destination != jumpAfter.startingTile) {
-			return null;
-		}
-		// if we're at this point everything should be okay to create
-		List<CheckersMoveJump> deepCopyJumps = new LinkedList<CheckersMoveJump>(jumps.jumps);
-		deepCopyJumps.add(jumpAfter);
-		return new CheckersMoveMultiJump(jumpAfter.piece, jumps.destination, deepCopyJumps);
 	}
 
 	/**
