@@ -27,7 +27,7 @@ public interface CheckersGamePlayable {
      * (for whichever player's turn it is)
      * @return list of valid moves
      */
-    List<CheckersMove> getPossibleMoves();
+    List<? extends CheckersMove> getPossibleMoves();
 
     /**
      * Checks if a move is valid or not for the current game state
@@ -65,5 +65,5 @@ public interface CheckersGamePlayable {
      * Useful for reviewing the game after it's finished
      * @return list of all moves
      */
-    List<CheckersMove> getMoveHistory();
+    List<? extends CheckersMove> getMoveHistory();
 }

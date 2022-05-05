@@ -11,9 +11,9 @@ import java.util.*;
  *
  * @author Nathan Swartz
  */
-public class CheckersMoveMultiJump extends CheckersMove implements Iterable<CheckersMoveJump> {
+public class CheckersMoveJumpMulti extends CheckersMoveJump implements Iterable<CheckersMoveJumpSingle> {
 	
-	private final List<CheckersMoveJump> jumps;
+	private final List<CheckersMoveJumpSingle> jumps;
 
 	/**
 	 * Create a multi-jump out of two jumps
@@ -21,22 +21,22 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 	 * @param jumpAfter
 	 * @return new multi-jump move
 	 */
-	public static CheckersMoveMultiJump CreateAsJoin(
-			CheckersMoveJump jumpBefore, CheckersMoveJump jumpAfter) {
+	public static CheckersMoveJumpMulti CreateAsJoin(
+			CheckersMoveJumpSingle jumpBefore, CheckersMoveJumpSingle jumpAfter) {
 		if (jumpBefore == null || jumpAfter == null || jumpBefore.piece == null
 				|| jumpBefore.piece != jumpAfter.piece
 				|| jumpBefore.destination != jumpAfter.startingTile) {
 			return null;
 		} else {
-			LinkedList<CheckersMoveJump> jumps = new LinkedList<CheckersMoveJump>();
+			LinkedList<CheckersMoveJumpSingle> jumps = new LinkedList<CheckersMoveJumpSingle>();
 			jumps.add(jumpBefore);
 			jumps.add(jumpAfter);
-			return new CheckersMoveMultiJump(jumpBefore.piece, jumpAfter.destination, jumps);
+			return new CheckersMoveJumpMulti(jumpBefore.piece, jumpAfter.destination, jumps);
 		}
 	}
 
-	private CheckersMoveMultiJump(CheckersPiece piece,
-			CheckersTile destination, List<CheckersMoveJump> jumps) {
+	private CheckersMoveJumpMulti(CheckersPiece piece,
+								  CheckersTile destination, List<CheckersMoveJumpSingle> jumps) {
 		super(piece, destination);
 		this.jumps = jumps;
 	}
@@ -48,7 +48,8 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 	 * @param jump to prepend
 	 * @return new, deep copy of this with jump prepended
 	 */
-	public CheckersMoveMultiJump prepend(CheckersMoveJump jump) {
+	@Override
+	public CheckersMoveJumpMulti prepend(CheckersMoveJumpSingle jump) {
 		// check jump != null
 		// check pieces of jump and this are the same
 		// check jump's destination is the starting tile of this
@@ -56,16 +57,16 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 			|| jump.destination != this.jumps.get(0).startingTile) { return null; }
 
 		// check jumps do not double back over the jumped tile twice
-		for (CheckersMoveJump eachJump : this.jumps) {
+		for (CheckersMoveJumpSingle eachJump : this.jumps) {
 			if (eachJump.jumpedTile == jump.jumpedTile) { return null; }
 		}
 
 		// if we're at this point everything should be okay to create
 
-		List<CheckersMoveJump> deepCopyJumpsList =
-				new LinkedList<CheckersMoveJump>(this.jumps);
+		List<CheckersMoveJumpSingle> deepCopyJumpsList =
+				new LinkedList<CheckersMoveJumpSingle>(this.jumps);
 		deepCopyJumpsList.add(0, jump);
-		return new CheckersMoveMultiJump(this.piece, this.destination, deepCopyJumpsList);
+		return new CheckersMoveJumpMulti(this.piece, this.destination, deepCopyJumpsList);
 	}
 
 	/**
@@ -75,7 +76,8 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 	 * @param jump to append
 	 * @return new, deep copy of this with jump appended
 	 */
-	public CheckersMoveMultiJump append(CheckersMoveJump jump) {
+	@Override
+	public CheckersMoveJumpMulti append(CheckersMoveJumpSingle jump) {
 		// check jump != null
 		// check pieces of jump and this are the same
 		// check jump's starting tile is the destination tile of this
@@ -83,16 +85,16 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 				|| jump.startingTile != this.destination) { return null; }
 
 		// check jumps do not double back over the jumped tile twice
-		for (CheckersMoveJump eachJump : this.jumps) {
+		for (CheckersMoveJumpSingle eachJump : this.jumps) {
 			if (eachJump.jumpedTile == jump.jumpedTile) { return null; }
 		}
 
 		// if we're at this point everything should be okay to create
 
-		List<CheckersMoveJump> deepCopyJumpsList =
-				new LinkedList<CheckersMoveJump>(this.jumps);
+		List<CheckersMoveJumpSingle> deepCopyJumpsList =
+				new LinkedList<CheckersMoveJumpSingle>(this.jumps);
 		deepCopyJumpsList.add(jump);
-		return new CheckersMoveMultiJump(this.piece, jump.destination, deepCopyJumpsList);
+		return new CheckersMoveJumpMulti(this.piece, jump.destination, deepCopyJumpsList);
 	}
 
 	@Override
@@ -100,7 +102,7 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 		if (jumps.size() <= 1) {
 			return false;
 		}
-		for (CheckersMoveJump jump : jumps) {
+		for (CheckersMoveJumpSingle jump : jumps) {
 			if (!jump.isValid()) {
 				return false;
 			}
@@ -110,20 +112,20 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 
 	@Override
 	public void execute() {
-		for (CheckersMoveJump jump : jumps) {
+		for (CheckersMoveJumpSingle jump : jumps) {
 			jump.execute();
 		}
 	}
 
 	@Override
-	public Iterator<CheckersMoveJump> iterator() {
+	public Iterator<CheckersMoveJumpSingle> iterator() {
 		return jumps.iterator();
 	}
 	
 	@Override
 	public int hashCode() {
 		int hash = super.hashCode();
-		for (CheckersMoveJump jump : jumps) {
+		for (CheckersMoveJumpSingle jump : jumps) {
 			hash *= 953 ^ jump.jumpedTile.hashCode();
 		}
 		return hash;
@@ -133,7 +135,7 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 		// necessary for CheckersMoveMultiJump constructor
 		private CheckersPiece piece;
 		private CheckersTile destination;
-		private List<CheckersMoveJump> jumps;
+		private List<CheckersMoveJumpSingle> jumps;
 
 		private boolean returnNull;
 
@@ -146,7 +148,7 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 			} else {
 				this.piece = piece;
 				this.destination = piece.getCheckersTile();
-				this.jumps = new LinkedList<CheckersMoveJump>();
+				this.jumps = new LinkedList<CheckersMoveJumpSingle>();
 
 				this.startingTile = piece.getCheckersTile();
 				returnNull = false;
@@ -159,7 +161,7 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 			} else {
 				this.piece = piece;
 				this.destination = startingTile;
-				this.jumps = new LinkedList<CheckersMoveJump>();
+				this.jumps = new LinkedList<CheckersMoveJumpSingle>();
 
 				this.startingTile = startingTile;
 				returnNull = false;
@@ -170,7 +172,7 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 			if (dir == null) { returnNull = true; }
 			if (returnNull) { return this; }
 			// create jump, starting from current destination, in direction dir
-			CheckersMoveJump jump = CheckersMoveJump.CreateAsPartOfMultiJump(
+			CheckersMoveJumpSingle jump = CheckersMoveJumpSingle.CreateAsPartOfMultiJump(
 					this.piece, this.destination, dir);
 			// update current destination
 			this.destination = jump.destination;
@@ -193,7 +195,7 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 			CheckersTile tile = piece.getCheckersTile();
 			for (DiagonalDirection dir : dirs) {
 				// CheckersMoveJump.Create will check if the next 2 tiles are off-board
-				CheckersMoveJump jump = CheckersMoveJump.CreateAsPartOfMultiJump(piece, tile, dir);
+				CheckersMoveJumpSingle jump = CheckersMoveJumpSingle.CreateAsPartOfMultiJump(piece, tile, dir);
 				if (jump == null) { returnNull = true; return this; }
 				jumps.add(jump);
 
@@ -209,9 +211,9 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 			return this;
 		}
 
-		public CheckersMoveMultiJump build() {
+		public CheckersMoveJumpMulti build() {
 			if (returnNull) { return null; }
-			return new CheckersMoveMultiJump(piece, destination, jumps);
+			return new CheckersMoveJumpMulti(piece, destination, jumps);
 		}
 
 	}
