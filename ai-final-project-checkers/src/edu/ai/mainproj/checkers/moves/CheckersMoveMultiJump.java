@@ -3,9 +3,6 @@ package edu.ai.mainproj.checkers.moves;
 import edu.ai.mainproj.checkers.CheckersPiece;
 import edu.ai.mainproj.checkers.CheckersTile;
 
-// TODO check imports
-// maybe we need to import Iterable?
-// maybe we don't need * in java.util?
 import java.util.*;
 
 /**
@@ -18,133 +15,86 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 	
 	private final List<CheckersMoveJump> jumps;
 
-	public static CheckersMoveMultiJump Create(
-			CheckersPiece piece, DiagonalDirection[] directions) {
-		if (directions == null) { return null; }
-		return Create(piece, Arrays.asList(directions));
-	}
-
-	public static CheckersMoveMultiJump Create(
-			CheckersPiece piece, Iterable<DiagonalDirection> directions) {
-		// check if move is impossible
-		
-		// null parameter checks
-		if (piece == null || directions == null
-			|| piece.getCheckersTile() == null) { return null; }
-
-		Set<CheckersTile> jumpedTiles = new HashSet<CheckersTile>();
-        List<CheckersMoveJump> jumps = new LinkedList<CheckersMoveJump>();
-		CheckersTile tile = piece.getCheckersTile();
-		for (DiagonalDirection dir : directions) {
-            // this create method will check if the next 2 tiles are off-board
-            CheckersMoveJump jump = CheckersMoveJump.CreateAsPartOfMultiJump(piece, tile, dir);
-            if (jump == null) { return null; }
-            jumps.add(jump);
-
-            tile = tile.getNeighborAt(dir);
-            // if the next jumped tile was already jumped, this jump is impossible
-			if (jumpedTiles.contains(tile)) { return null; }
-			jumpedTiles.add(tile);
-
-			tile = tile.getNeighborAt(dir);
-		}
-        // if there is 1 or fewer jumps, this isn't a multi-jump move
-        if (jumpedTiles.size() <= 1) { return null; }
-
-        // If the code has reached this point, the move is not impossible
-
-		return new CheckersMoveMultiJump(piece, tile, jumps);
-	}
-
 	/**
-	 * Create a multi-jump that pre-pends the jumpBefore onto the jumps
+	 * Create a multi-jump out of two jumps
 	 * @param jumpBefore
-	 * @param jumps
-	 * @return new CheckersMoveMultiJump
-	 */
-	public static CheckersMoveMultiJump Create(
-			CheckersMoveJump jumpBefore, CheckersMoveMultiJump jumps) {
-		if (jumpBefore == null || jumps == null) { return null; }
-		
-		// check pieces of jumpBefore and jumps are the same
-		if (jumpBefore.piece != jumps.piece) { return null; }
-		
-		// check jumpBefore destination is the starting tile of jumps
-		if (jumpBefore.destination != jumps.jumps.get(0).startingTile) {
-			return null;
-		}
-		
-		// check jumps do not double back over the same piece twice
-		Set<CheckersTile> jumpedTiles = new HashSet<CheckersTile>();
-		jumpedTiles.add(jumpBefore.jumpedTile);
-		for (CheckersMoveJump jump : jumps) {
-			if (jump == null) { return null; }
-			// if the next jumped tile was already jumped, this jump is impossible
-			if (jumpedTiles.contains(jump.jumpedTile)) { return null; }
-			jumpedTiles.add(jump.jumpedTile);
-		}
-		
-		// if we're at this point everything should be okay to create
-		List<CheckersMoveJump> deepCopyJumpsList = new LinkedList<CheckersMoveJump>();
-		deepCopyJumpsList.add(jumpBefore);
-		deepCopyJumpsList.addAll(jumps.jumps);
-		return new CheckersMoveMultiJump(jumpBefore.piece, jumps.destination, deepCopyJumpsList);
-	}
-
-	/**
-	 * Create a multi-jump that appends the jumpAfter onto the jumps
-	 * @param jumps
 	 * @param jumpAfter
-	 * @return new CheckersMoveMultiJump
+	 * @return new multi-jump move
 	 */
-	public static CheckersMoveMultiJump Create(
-			CheckersMoveMultiJump jumps, CheckersMoveJump jumpAfter) {
-		if (jumps == null || jumpAfter == null) { return null; }
-		
-		// check pieces of jumps and jumpAfter are the same
-		if (jumps.piece != jumpAfter.piece) { return null; }
-		
-		// check destination of last jump of jumps is the same as the starting tile of jumpAfter
-		if (jumps.jumps.get(jumps.jumps.size() - 1).destination != jumpAfter.startingTile) {
+	public static CheckersMoveMultiJump CreateAsJoin(
+			CheckersMoveJump jumpBefore, CheckersMoveJump jumpAfter) {
+		if (jumpBefore == null || jumpAfter == null || jumpBefore.piece == null
+				|| jumpBefore.piece != jumpAfter.piece
+				|| jumpBefore.destination != jumpAfter.startingTile) {
 			return null;
+		} else {
+			LinkedList<CheckersMoveJump> jumps = new LinkedList<CheckersMoveJump>();
+			jumps.add(jumpBefore);
+			jumps.add(jumpAfter);
+			return new CheckersMoveMultiJump(jumpBefore.piece, jumpAfter.destination, jumps);
 		}
-		
-		// check jumps do not double back over the same piece twice
-		Set<CheckersTile> jumpedTiles = new HashSet<CheckersTile>();
-		jumpedTiles.add(jumpAfter.jumpedTile);
-		for (CheckersMoveJump jump : jumps) {
-			if (jump == null) { return null; }
-			// if the next jumped tile was already jumped, this jump is impossible
-			if (jumpedTiles.contains(jump.jumpedTile)) { return null; }
-			jumpedTiles.add(jump.jumpedTile);
-		}
-		
-		// if we're at this point everything should be okay to create
-		List<CheckersMoveJump> deepCopyJumpsList = new LinkedList<CheckersMoveJump>();
-		deepCopyJumpsList.addAll(jumps.jumps);
-		deepCopyJumpsList.add(jumpAfter);
-		return new CheckersMoveMultiJump(jumpAfter.piece, jumps.destination, deepCopyJumpsList);
 	}
 
-	/**
-	 * Create a multi-jump that is only one jump
-	 * Should be used only if it is only going to be used as
-	 *     one part in a whole multi-jump sequence with 2 or more jumps
-	 * @param jump
-	 * @return new CheckersMoveMultiJump
-	 */
-	public static CheckersMoveMultiJump Create(CheckersMoveJump jump) {
-		List<CheckersMoveJump> jumps = new LinkedList<CheckersMoveJump>();
-		jumps.add(jump);
-		return new CheckersMoveMultiJump(jump.piece, jump.destination, jumps);
-	}
-	
-	protected CheckersMoveMultiJump(CheckersPiece piece,
+	private CheckersMoveMultiJump(CheckersPiece piece,
 			CheckersTile destination, List<CheckersMoveJump> jumps) {
 		super(piece, destination);
 		this.jumps = jumps;
 	}
-	
+
+	/**
+	 * Returns a deep copy of this object, where jump is added
+	 *     to the sequence of jumps at the start of the sequence
+	 * DOES NOT modify this object
+	 * @param jump to prepend
+	 * @return new, deep copy of this with jump prepended
+	 */
+	public CheckersMoveMultiJump prepend(CheckersMoveJump jump) {
+		// check jump != null
+		// check pieces of jump and this are the same
+		// check jump's destination is the starting tile of this
+		if (jump == null || jump.piece != this.piece
+			|| jump.destination != this.jumps.get(0).startingTile) { return null; }
+
+		// check jumps do not double back over the jumped tile twice
+		for (CheckersMoveJump eachJump : this.jumps) {
+			if (eachJump.jumpedTile == jump.jumpedTile) { return null; }
+		}
+
+		// if we're at this point everything should be okay to create
+
+		List<CheckersMoveJump> deepCopyJumpsList =
+				new LinkedList<CheckersMoveJump>(this.jumps);
+		deepCopyJumpsList.add(0, jump);
+		return new CheckersMoveMultiJump(this.piece, this.destination, deepCopyJumpsList);
+	}
+
+	/**
+	 * Returns a deep copy of this object, where jump is added
+	 *     to the sequence of jumps at the end of the sequence
+	 * DOES NOT modify this object
+	 * @param jump to append
+	 * @return new, deep copy of this with jump appended
+	 */
+	public CheckersMoveMultiJump append(CheckersMoveJump jump) {
+		// check jump != null
+		// check pieces of jump and this are the same
+		// check jump's starting tile is the destination tile of this
+		if (jump == null || jump.piece != this.piece
+				|| jump.startingTile != this.destination) { return null; }
+
+		// check jumps do not double back over the jumped tile twice
+		for (CheckersMoveJump eachJump : this.jumps) {
+			if (eachJump.jumpedTile == jump.jumpedTile) { return null; }
+		}
+
+		// if we're at this point everything should be okay to create
+
+		List<CheckersMoveJump> deepCopyJumpsList =
+				new LinkedList<CheckersMoveJump>(this.jumps);
+		deepCopyJumpsList.add(jump);
+		return new CheckersMoveMultiJump(this.piece, jump.destination, deepCopyJumpsList);
+	}
+
 	@Override
 	public boolean isValid() {
 		if (jumps.size() <= 1) {
@@ -157,14 +107,14 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 		}
 		return true;
 	}
-	
+
 	@Override
 	public void execute() {
 		for (CheckersMoveJump jump : jumps) {
 			jump.execute();
 		}
 	}
-	
+
 	@Override
 	public Iterator<CheckersMoveJump> iterator() {
 		return jumps.iterator();
@@ -172,11 +122,98 @@ public class CheckersMoveMultiJump extends CheckersMove implements Iterable<Chec
 	
 	@Override
 	public int hashCode() {
-		int hash = super.hashCode()
+		int hash = super.hashCode();
 		for (CheckersMoveJump jump : jumps) {
 			hash *= 953 ^ jump.jumpedTile.hashCode();
 		}
 		return hash;
 	}
-	
+
+	public static class CheckersMoveMultiJumpBuilder {
+		// necessary for CheckersMoveMultiJump constructor
+		private CheckersPiece piece;
+		private CheckersTile destination;
+		private List<CheckersMoveJump> jumps;
+
+		private boolean returnNull;
+
+		// optional
+		private CheckersTile startingTile;
+
+		public CheckersMoveMultiJumpBuilder(CheckersPiece piece) {
+			if (piece == null || piece.getCheckersTile() == null) {
+				returnNull = true;
+			} else {
+				this.piece = piece;
+				this.destination = piece.getCheckersTile();
+				this.jumps = new LinkedList<CheckersMoveJump>();
+
+				this.startingTile = piece.getCheckersTile();
+				returnNull = false;
+			}
+		}
+
+		public CheckersMoveMultiJumpBuilder(CheckersPiece piece, CheckersTile startingTile) {
+			if (piece == null || startingTile == null) {
+				returnNull = true;
+			} else {
+				this.piece = piece;
+				this.destination = startingTile;
+				this.jumps = new LinkedList<CheckersMoveJump>();
+
+				this.startingTile = startingTile;
+				returnNull = false;
+			}
+		}
+
+		public CheckersMoveMultiJumpBuilder withDirection(DiagonalDirection dir) {
+			if (dir == null) { returnNull = true; }
+			if (returnNull) { return this; }
+			// create jump, starting from current destination, in direction dir
+			CheckersMoveJump jump = CheckersMoveJump.CreateAsPartOfMultiJump(
+					this.piece, this.destination, dir);
+			// update current destination
+			this.destination = jump.destination;
+			// append this jump onto the existing list of jumps
+			this.jumps.add(jump);
+			return this;
+		}
+
+		public CheckersMoveMultiJumpBuilder withDirections(DiagonalDirection[] dirs) {
+			if (dirs == null) { returnNull = true; }
+			if (returnNull) { return this; }
+			return this.withDirections(Arrays.asList(dirs));
+		}
+
+		public CheckersMoveMultiJumpBuilder withDirections(Iterable<DiagonalDirection> dirs) {
+			if (dirs == null) { returnNull = true; }
+			if (returnNull) { return this; }
+
+			Set<CheckersTile> jumpedTiles = new HashSet<CheckersTile>();
+			CheckersTile tile = piece.getCheckersTile();
+			for (DiagonalDirection dir : dirs) {
+				// CheckersMoveJump.Create will check if the next 2 tiles are off-board
+				CheckersMoveJump jump = CheckersMoveJump.CreateAsPartOfMultiJump(piece, tile, dir);
+				if (jump == null) { returnNull = true; return this; }
+				jumps.add(jump);
+
+				tile = tile.getNeighborAt(dir);
+				// if the next jumped tile was already jumped, this jump is impossible
+				if (jumpedTiles.contains(tile)) { returnNull = true; return this; }
+				jumpedTiles.add(tile);
+
+				tile = tile.getNeighborAt(dir);
+			}
+			// if there is 1 or fewer jumps, this isn't a multi-jump move
+			if (jumpedTiles.size() <= 1) { returnNull = true; }
+			return this;
+		}
+
+		public CheckersMoveMultiJump build() {
+			if (returnNull) { return null; }
+			return new CheckersMoveMultiJump(piece, destination, jumps);
+		}
+
+	}
+
 }
