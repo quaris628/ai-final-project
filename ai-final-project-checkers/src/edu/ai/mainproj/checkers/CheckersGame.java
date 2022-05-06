@@ -22,7 +22,19 @@ public class CheckersGame implements CheckersGamePlayable {
         turn = PlayerType.BLACK;
         winner = null;
         possibleValidMoves = calculateValidMoves();
-        // TODO black and red pieces lists
+		blackPieces = new LinkedList<CheckersPiece>();
+		redPieces = new LinkedList<CheckersPiece>();
+		for (CheckersTile tile : board.getAllTiles()) {
+			if (!tile.isBlank()) {
+				CheckersPiece piece = tile.getCheckersPiece();
+				if (piece.getPlayerType() == PlayerType.BLACK) {
+					blackPieces.add(piece);
+				} else if (piece.getPlayerType() == PlayerType.RED) {
+					redPieces.add(piece);
+				}
+			}
+		}
+		
     }
 
     /**
@@ -37,10 +49,27 @@ public class CheckersGame implements CheckersGamePlayable {
      */
     @Override
     public boolean execute(CheckersMove move) {
-        // TODO
-
+        // TODO is this method missing any code for parts that need to be done?
+		
+		// check if valid
+		if (!move.isValid()) { return false; }
+		
+		// execute
+		move.execute();
+		
+		// if any pieces were removed, remove from black/red lists
+		if (move instanceof CheckersMoveJump) {
+			CheckersMoveJump jump = (CheckersMoveJump)move;
+			
+		}
+		
+		// re-calculate valid moves
         possibleValidMoves = calculateValidMoves();
-        return false;
+		
+		// record move in move history
+		moveHistory.add(move);
+		
+        return true;
     }
 
     private List<? extends CheckersMove> calculateValidMoves() {

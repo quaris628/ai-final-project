@@ -69,6 +69,12 @@ public class CheckersMoveJumpSingle extends CheckersMoveJump {
 	}
 
 	@Override
+	public List<CheckersPiece> getJumpedPieces() {
+		// TODO make a single-item list
+		return jumpedTile;
+	}
+	
+	@Override
 	public boolean isValid() {
 		return super.isValid()
 				&& this.jumpedTile != null

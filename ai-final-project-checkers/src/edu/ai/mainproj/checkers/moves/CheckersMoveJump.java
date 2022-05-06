@@ -11,4 +11,6 @@ public abstract class CheckersMoveJump extends CheckersMove {
 
     public abstract CheckersMoveJumpMulti append(CheckersMoveJumpSingle jump);
     public abstract CheckersMoveJumpMulti prepend(CheckersMoveJumpSingle jump);
+	
+	public abstract List<CheckersPiece> getJumpedPieces();
 }

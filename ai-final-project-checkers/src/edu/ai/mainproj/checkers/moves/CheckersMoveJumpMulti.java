@@ -96,6 +96,15 @@ public class CheckersMoveJumpMulti extends CheckersMoveJump implements Iterable<
 		deepCopyJumpsList.add(jump);
 		return new CheckersMoveJumpMulti(this.piece, jump.destination, deepCopyJumpsList);
 	}
+	
+	@Override
+	public List<CheckersPiece> getJumpedPieces() {
+		List<CheckersPiece> toReturn = new LinkedList<CheckersPiece>();
+		for (CheckersMoveJumpSingle jump : this.jumps) {
+			toReturn.add(jump.jumpedTile);
+		}
+		return toReturn;
+	}
 
 	@Override
 	public boolean isValid() {
