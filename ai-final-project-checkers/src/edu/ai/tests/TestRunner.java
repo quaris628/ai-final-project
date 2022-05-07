@@ -13,12 +13,15 @@ public class TestRunner {
     public static void main(String[] args) {
         Result result = JUnitCore.runClasses(
                 GridBoardTests.class,
+                MoveTests.class,
                 PieceTests.class,
                 TileTests.class,
-                CheckersMoveJumpTests.class,
-                CheckersMoveMultiJumpTests.class,
+
+                CheckersMoveJumpSingleTests.class,
+                //CheckersMoveMultiJumpTests.class,
                 CheckersMoveNormalTests.class,
                 DiagonalDirectionTests.class,
+
                 CheckersBoardTests.class,
                 CheckersPieceTests.class,
                 CheckersTileTests.class,
