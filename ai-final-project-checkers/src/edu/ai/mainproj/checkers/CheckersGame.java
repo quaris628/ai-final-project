@@ -1,5 +1,6 @@
 package edu.ai.mainproj.checkers;
 
+import edu.ai.mainproj.anygame.Tile;
 import edu.ai.mainproj.checkers.moves.*;
 
 import java.util.*;
@@ -24,15 +25,18 @@ public class CheckersGame implements CheckersGamePlayable {
         possibleValidMoves = calculateValidMoves();
 		blackPieces = new LinkedList<CheckersPiece>();
 		redPieces = new LinkedList<CheckersPiece>();
-		for (CheckersTile tile : board.getAllTiles()) {
-			if (!tile.isBlank()) {
-				CheckersPiece piece = tile.getCheckersPiece();
-				if (piece.getPlayerType() == PlayerType.BLACK) {
-					blackPieces.add(piece);
-				} else if (piece.getPlayerType() == PlayerType.RED) {
-					redPieces.add(piece);
-				}
-			}
+		for (Tile btile : board.getAllTiles()) {
+            if (btile instanceof CheckersTile) {
+                CheckersTile tile = (CheckersTile) btile;
+                if (!tile.isBlank()) {
+                    CheckersPiece piece = tile.getCheckersPiece();
+                    if (piece.getPlayer() == PlayerType.BLACK) {
+                        blackPieces.add(piece);
+                    } else if (piece.getPlayer() == PlayerType.RED) {
+                        redPieces.add(piece);
+                    }
+                }
+            }
 		}
 		
     }

@@ -101,7 +101,7 @@ public class CheckersMoveJumpMulti extends CheckersMoveJump implements Iterable<
 	public List<CheckersPiece> getJumpedPieces() {
 		List<CheckersPiece> toReturn = new LinkedList<CheckersPiece>();
 		for (CheckersMoveJumpSingle jump : this.jumps) {
-			toReturn.add(jump.jumpedTile);
+			toReturn.add(jump.jumpedTile.getCheckersPiece());
 		}
 		return toReturn;
 	}
