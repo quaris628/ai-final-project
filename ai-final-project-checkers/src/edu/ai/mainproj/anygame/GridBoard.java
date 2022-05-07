@@ -82,9 +82,11 @@ public class GridBoard {
             for (int j = 0; j < getNumColumns(); j++) {
                 Tile tile = this.getTile(i, j);
                 if (tile == null) {
-                    s.append("#");
+                    s.append("\u001B[47m \u001B[0m");
                 } else {
+                    s.append("\u001B[40m");
                     s.append(tile);
+                    s.append("\u001B[0m");
                 }
             }
             s.append(rowDelimiter);

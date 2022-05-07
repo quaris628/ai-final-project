@@ -194,7 +194,10 @@ public class CheckersGame implements CheckersGamePlayable {
     @Override
     public String toString() {
         StringBuilder ret = new StringBuilder();
+        if (getTurn() == PlayerType.BLACK) ret.append("\u001B[37m");
+        else ret.append("\u001B[31m");
         ret.append(turn);
+        ret.append("\u001B[0m");
         ret.append("\n");
         ret.append(board.toString());
         ret.append("B: ");
