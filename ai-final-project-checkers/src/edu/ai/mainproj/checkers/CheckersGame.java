@@ -190,4 +190,17 @@ public class CheckersGame implements CheckersGamePlayable {
     public PlayerType getWinner() { return winner; }
     @Override
     public List<? extends CheckersMove> getMoveHistory() { return moveHistory; }
+
+    @Override
+    public String toString() {
+        StringBuilder ret = new StringBuilder();
+        ret.append(turn);
+        ret.append("\n");
+        ret.append(board.toString());
+        ret.append("B: ");
+        ret.append(blackPieces.size());
+        ret.append(" R: ");
+        ret.append(redPieces.size());
+        return ret.toString();
+    }
 }
