@@ -66,7 +66,7 @@ public class CheckersGame implements CheckersGamePlayable {
     @Override
     public void unexecute() {
         // pop last move from list
-        CheckersMove move = moveHistory.remove(0);
+        CheckersMove move = moveHistory.remove(moveHistory.size() - 1);
 
         move.unexecute();
 

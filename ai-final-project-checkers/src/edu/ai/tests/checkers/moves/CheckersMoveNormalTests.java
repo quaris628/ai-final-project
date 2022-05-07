@@ -59,6 +59,17 @@ public class CheckersMoveNormalTests {
     }
 
     @Test
+    public void testCreate_initialBoardNormalPieceBlack50dirForwardLeft_false() {
+        CheckersBoard board = CheckersBoard.CreateInitialBoard();
+        CheckersPiece piece = board.getCheckersTile(5, 0).getCheckersPiece();
+
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
+                piece, DiagonalDirection.FORWARD_LEFT);
+
+        assertNull(move);
+    }
+
+    @Test
     public void testConstructor_piece45dirBackwardRight_succeeds() {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
@@ -120,6 +131,20 @@ public class CheckersMoveNormalTests {
 
         CheckersMoveNormal move = CheckersMoveNormal.Create(
                 piece, DiagonalDirection.BACKWARD_RIGHT);
+
+        assertTrue(move.isValid());
+    }
+
+    @Test
+    public void testIsValid_initialBoardNormalPieceBlack50dirForwardRight_true() {
+        CheckersBoard board = CheckersBoard.CreateInitialBoard();
+        CheckersPiece piece = board.getCheckersTile(5, 0).getCheckersPiece();
+
+        assertNotNull(piece);
+        assertEquals(PlayerType.BLACK, piece.getPlayer());
+
+        CheckersMoveNormal move = CheckersMoveNormal.Create(
+                piece, DiagonalDirection.FORWARD_RIGHT);
 
         assertTrue(move.isValid());
     }
