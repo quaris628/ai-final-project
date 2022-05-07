@@ -52,9 +52,19 @@ public class CheckersPiece extends Piece {
 
     @Override
     public String toString() {
-        if (player == PlayerType.BLACK) { return "B"; }
-        if (player == PlayerType.RED) { return "R"; }
-        return super.toString();
+        StringBuilder ret = new StringBuilder();
+        if (player == PlayerType.BLACK) {
+            ret.append("\u001B[37m");
+            if (isKing()) ret.append("B");
+            else ret.append("b");
+        }
+        if (player == PlayerType.RED){
+            ret.append("\u001B[31m");
+            if (isKing()) ret.append("R");
+            else ret.append("r");
+        }
+        ret.append("\u001B[0m");
+        return ret.toString();
     }
 
 }
