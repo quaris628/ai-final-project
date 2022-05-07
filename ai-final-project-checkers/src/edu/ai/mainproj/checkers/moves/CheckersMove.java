@@ -22,11 +22,30 @@ public class CheckersMove extends Move {
 
     public final CheckersPiece piece;
     public final CheckersTile destination;
+    public boolean didKing;
 
     public CheckersMove(CheckersPiece piece, CheckersTile destination) {
         super(piece, destination);
         this.piece = piece;
         this.destination = destination;
+    }
+
+    @Override
+    public void execute() {
+        super.execute();
+        didKing = !piece.isKing()
+            && destination.doesKing(piece.getPlayer());
+        if (didKing) {
+            piece.setKing(true);
+        }
+    }
+
+    @Override
+    public void unexecute() {
+        super.unexecute();
+        if (didKing) {
+            piece.setKing(false);
+        }
     }
 
 	@Override

@@ -33,9 +33,11 @@ public class CheckersPiece extends Piece {
     public void moveTo(Tile tile) {
         if (tile instanceof CheckersTile) {
             super.moveTo(tile);
+            /*
             if (((CheckersTile) tile).doesKing(player)) {
                 king = true;
             }
+            //*/
         } else {
             // not ideal to throw exception, but I don't
             // see a better way to enforce this
@@ -45,6 +47,7 @@ public class CheckersPiece extends Piece {
     }
 
     public boolean isKing() { return king; }
+    public void setKing(boolean king) { this.king = king; }
     public PlayerType getPlayer() { return player; }
     public CheckersTile getCheckersTile() {
         return (CheckersTile) getTile();
