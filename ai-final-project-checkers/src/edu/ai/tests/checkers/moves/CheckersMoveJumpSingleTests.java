@@ -4,7 +4,7 @@ import edu.ai.mainproj.checkers.CheckersBoard;
 import edu.ai.mainproj.checkers.CheckersPiece;
 import edu.ai.mainproj.checkers.CheckersTile;
 import edu.ai.mainproj.checkers.PlayerType;
-import edu.ai.mainproj.checkers.moves.CheckersMoveJump;
+import edu.ai.mainproj.checkers.moves.CheckersMoveJumpSingle;
 import edu.ai.mainproj.checkers.moves.DiagonalDirection;
 import org.junit.Test;
 
@@ -21,9 +21,9 @@ import static org.junit.Assert.*;
  *
  * @author Nathan Swartz
  */
-public class CheckersMoveJumpTests {
+public class CheckersMoveJumpSingleTests {
 
-    public CheckersMoveJumpTests() {}
+    public CheckersMoveJumpSingleTests() {}
 
     // --------------------------------
     // CREATE
@@ -31,7 +31,7 @@ public class CheckersMoveJumpTests {
 
     @Test
     public void testCreate_pieceNull_null() {
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 null, DiagonalDirection.FORWARD_LEFT);
         assertNull(move);
     }
@@ -41,7 +41,7 @@ public class CheckersMoveJumpTests {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(1, 0));
-        CheckersMoveJump move = CheckersMoveJump.Create(piece, null);
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(piece, null);
         assertNull(move);
     }
 
@@ -50,7 +50,7 @@ public class CheckersMoveJumpTests {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(1, 0));
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 piece, DiagonalDirection.FORWARD_LEFT);
         assertNull(move);
     }
@@ -60,18 +60,17 @@ public class CheckersMoveJumpTests {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(2, 1));
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 piece, DiagonalDirection.FORWARD_LEFT);
         assertNull(move);
     }
-
 
     @Test
     public void testCreate_normal_succeeds() {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece piece = new CheckersPiece(
                 PlayerType.RED, board.getCheckersTile(4, 5));
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 piece, DiagonalDirection.BACKWARD_RIGHT);
         assertNotNull(move);
     }
@@ -97,7 +96,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.BACKWARD_RIGHT);
 
         assertFalse(move.isValid());
@@ -118,7 +117,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.FORWARD_RIGHT);
         assertTrue(move.isValid());
         move.execute();
@@ -149,7 +148,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.FORWARD_RIGHT);
 
         assertFalse(move.isValid());
@@ -170,7 +169,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.BACKWARD_RIGHT);
         assertTrue(move.isValid());
         move.execute();
@@ -204,7 +203,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.FORWARD_RIGHT);
         assertTrue(move.isValid());
         move.execute();
@@ -236,7 +235,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.BACKWARD_RIGHT);
 
         assertTrue(move.isValid());
@@ -271,7 +270,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.BACKWARD_RIGHT);
         assertTrue(move.isValid());
         move.execute();
@@ -303,7 +302,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.FORWARD_RIGHT);
 
         assertTrue(move.isValid());
@@ -333,7 +332,7 @@ public class CheckersMoveJumpTests {
         assertTrue(jumped.isBlank());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.FORWARD_RIGHT);
 
         assertFalse(move.isValid());
@@ -353,7 +352,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.FORWARD_RIGHT);
 
         assertFalse(move.isValid());
@@ -373,7 +372,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.FORWARD_RIGHT);
 
         assertTrue(move.isValid());
@@ -405,7 +404,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertFalse(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.FORWARD_RIGHT);
 
         assertFalse(move.isValid());
@@ -425,7 +424,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.FORWARD_RIGHT);
 
         assertTrue(move.isValid());
@@ -458,7 +457,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.FORWARD_RIGHT);
 
         assertTrue(move.isValid());
@@ -481,7 +480,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.FORWARD_RIGHT);
 
         assertTrue(move.isValid());
@@ -504,7 +503,7 @@ public class CheckersMoveJumpTests {
         assertEquals(jumpedPiece, jumped.getCheckersPiece());
         assertTrue(dest.isBlank());
 
-        CheckersMoveJump move = CheckersMoveJump.Create(
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
                 jumperPiece, DiagonalDirection.BACKWARD_RIGHT);
 
         assertTrue(move.isValid());
