@@ -127,6 +127,15 @@ public class CheckersMoveJumpMulti extends CheckersMoveJump implements Iterable<
 	}
 
 	@Override
+	public void unexecute() {
+		// TODO maybe optimize later
+		// has probably O(n^2) time complexity
+		for (int i = jumps.size() - 1; i >= 0; i--) {
+			jumps.get(i).unexecute();
+		}
+	}
+
+	@Override
 	public Iterator<CheckersMoveJumpSingle> iterator() {
 		return jumps.iterator();
 	}

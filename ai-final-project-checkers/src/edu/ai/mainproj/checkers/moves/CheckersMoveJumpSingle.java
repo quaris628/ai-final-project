@@ -16,6 +16,7 @@ public class CheckersMoveJumpSingle extends CheckersMoveJump {
 	public final DiagonalDirection direction;
 	public final CheckersTile startingTile;
 	public final CheckersTile jumpedTile;
+	private CheckersPiece jumpedPiece;
 	private final boolean multiJumpCheckStartingTileBlank; // see doc comment below
 
 	public static CheckersMoveJumpSingle Create(CheckersPiece piece, DiagonalDirection direction) {
@@ -96,10 +97,18 @@ public class CheckersMoveJumpSingle extends CheckersMoveJump {
 		// cannot use only jumpedTile.removePiece() because
 		//     it does not set the removed piece's reference to null
 	}
+
+	@Override
+	public void unexecute() {
+		super.unexecute();
+		jumpedTile.setPiece(jumpedPiece);
+	}
 	
 	@Override
 	public int hashCode() {
 		return super.hashCode() * 953 ^ jumpedTile.hashCode();
 	}
+
+	public CheckersPiece getJumpedPiece() { return jumpedPiece; }
 	
 }

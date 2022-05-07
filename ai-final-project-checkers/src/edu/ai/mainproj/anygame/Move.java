@@ -19,6 +19,7 @@ public class Move {
 
 	public final Piece piece;
 	public final Tile destination;
+	private Tile startingTile;
 	
 	public Move(Piece piece, Tile destination) throws IllegalArgumentException {
 		if (piece == null || destination == null) {
@@ -27,6 +28,7 @@ public class Move {
 		}
 		this.piece = piece;
 		this.destination = destination;
+		this.startingTile = null;
 	}
 	
 	public boolean isValid() {
@@ -38,17 +40,21 @@ public class Move {
 			throw new IllegalStateException(
 					"Move is not valid, cannot execute.");
 		}
+		startingTile = piece.getTile();
 		piece.moveTo(destination);
 	}
 
 	/**
 	 * Un-does this move, returning the board state to what it was
 	 *     before this move was made.
-	 * Warning, does not check if unexecution is valid.
+	 * WARNING does not check if unexecution is valid!
 	 * TODO maybe make it check if unexecution is valid
 	 */
 	public void unexecute() {
-		// TODO implement, and implement all overrides
+		// TODO implement all overrides where needed
+		piece.moveTo(startingTile);
 	}
+
+	public Tile getStartingTile() { return startingTile; }
 
 }
