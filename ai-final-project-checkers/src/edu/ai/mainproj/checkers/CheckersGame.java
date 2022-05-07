@@ -72,6 +72,9 @@ public class CheckersGame implements CheckersGamePlayable {
 		
 		// record move in move history
 		moveHistory.add(move);
+
+        // change whose turn it is
+        turn = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
 		
         return true;
     }
