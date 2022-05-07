@@ -25,20 +25,7 @@ public class CheckersGame implements CheckersGamePlayable {
         possibleValidMoves = calculateValidMoves();
 		blackPieces = new LinkedList<CheckersPiece>();
 		redPieces = new LinkedList<CheckersPiece>();
-		for (Tile btile : board.getAllTiles()) {
-            if (btile instanceof CheckersTile) {
-                CheckersTile tile = (CheckersTile) btile;
-                if (!tile.isBlank()) {
-                    CheckersPiece piece = tile.getCheckersPiece();
-                    if (piece.getPlayer() == PlayerType.BLACK) {
-                        blackPieces.add(piece);
-                    } else if (piece.getPlayer() == PlayerType.RED) {
-                        redPieces.add(piece);
-                    }
-                }
-            }
-		}
-		
+        refreshBlackRedPieces();
     }
 
     /**
@@ -64,19 +51,34 @@ public class CheckersGame implements CheckersGamePlayable {
 		// if any pieces were removed, remove from black/red lists
 		if (move instanceof CheckersMoveJump) {
 			CheckersMoveJump jump = (CheckersMoveJump)move;
-			
 		}
-		
-		// re-calculate valid moves
-        possibleValidMoves = calculateValidMoves();
-		
+
 		// record move in move history
 		moveHistory.add(move);
 
         // change whose turn it is
         turn = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
-		
+
+        // re-calculate valid moves
+        possibleValidMoves = calculateValidMoves();
+
         return true;
+    }
+
+    @Override
+    public void unexecute() {
+        // pop last move from list
+        CheckersMove move = moveHistory.remove(0);
+
+        move.unexecute();
+
+        refreshBlackRedPieces();
+
+        // change whose turn it is
+        turn = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
+
+        // re-calculate valid moves
+        possibleValidMoves = calculateValidMoves();
     }
 
     private List<? extends CheckersMove> calculateValidMoves() {
@@ -154,6 +156,23 @@ public class CheckersGame implements CheckersGamePlayable {
             }
         }
         return moves;
+    }
+
+    // supporting functions (usually private)
+    private void refreshBlackRedPieces() {
+        for (Tile btile : board.getAllTiles()) {
+            if (btile instanceof CheckersTile) {
+                CheckersTile tile = (CheckersTile) btile;
+                if (!tile.isBlank()) {
+                    CheckersPiece piece = tile.getCheckersPiece();
+                    if (piece.getPlayer() == PlayerType.BLACK) {
+                        blackPieces.add(piece);
+                    } else if (piece.getPlayer() == PlayerType.RED) {
+                        redPieces.add(piece);
+                    }
+                }
+            }
+        }
     }
 
     // one-liner getters

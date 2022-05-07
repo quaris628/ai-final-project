@@ -49,6 +49,13 @@ public interface CheckersGamePlayable {
     boolean execute(CheckersMove move);
 
     /**
+     * Unexecutes the last move.
+     * Pops the move at the end of the move history list,
+     *     and unexecutes it.
+     */
+    void unexecute();
+
+    /**
      * Checks if the game is done or not
      * @return true if game is done, otherwise false
      */

@@ -41,4 +41,14 @@ public class Move {
 		piece.moveTo(destination);
 	}
 
+	/**
+	 * Un-does this move, returning the board state to what it was
+	 *     before this move was made.
+	 * Warning, does not check if unexecution is valid.
+	 * TODO maybe make it check if unexecution is valid
+	 */
+	public void unexecute() {
+		// TODO implement, and implement all overrides
+	}
+
 }
