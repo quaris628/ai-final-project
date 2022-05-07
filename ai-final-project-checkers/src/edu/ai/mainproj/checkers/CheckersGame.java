@@ -22,10 +22,8 @@ public class CheckersGame implements CheckersGamePlayable {
         moveHistory = new LinkedList<CheckersMove>();
         turn = PlayerType.BLACK;
         winner = null;
-        possibleValidMoves = calculateValidMoves();
-		blackPieces = new LinkedList<CheckersPiece>();
-		redPieces = new LinkedList<CheckersPiece>();
         refreshBlackRedPieces();
+        possibleValidMoves = calculateValidMoves();
     }
 
     /**
@@ -160,6 +158,8 @@ public class CheckersGame implements CheckersGamePlayable {
 
     // supporting functions (usually private)
     private void refreshBlackRedPieces() {
+        blackPieces = new LinkedList<CheckersPiece>();
+        redPieces = new LinkedList<CheckersPiece>();
         for (Tile btile : board.getAllTiles()) {
             if (btile instanceof CheckersTile) {
                 CheckersTile tile = (CheckersTile) btile;
