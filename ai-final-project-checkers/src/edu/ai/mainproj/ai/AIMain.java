@@ -11,8 +11,8 @@ public class AIMain {
     private static final int DEPTH_BLACK = 5;
 
     public static void main(String... args) throws InterruptedException {
-        Player red = new AIPlayer(DEPTH_RED);
-        Player black = new AIPlayer(DEPTH_BLACK);
+        Player red = new AIPlayer(PlayerType.RED, DEPTH_RED);
+        Player black = new AIPlayer(PlayerType.BLACK, DEPTH_BLACK);
         CheckersGame game = new CheckersGame();
 
         System.out.println(game);

@@ -10,6 +10,7 @@ import java.util.List;
 
 public class AIPlayer implements Player {
 
+    private final PlayerType playerColor;
     private final int depth;
 
     private static final boolean PRINT_IN_MIN_MAX = false;
@@ -32,7 +33,8 @@ public class AIPlayer implements Player {
 
     private int printMovesStartIndex = 0;
 
-    public AIPlayer(int depth) {
+    public AIPlayer(PlayerType playerType, int depth) {
+        this.playerColor = playerType;
         this.depth = depth;
     }
 
@@ -67,7 +69,7 @@ public class AIPlayer implements Player {
         float value;
         // list of best moves to return
         List<CheckersMove> bestMoves = new LinkedList<>();
-        if (player == PlayerType.BLACK) { // max player
+        if (player == playerColor) { // max player
             value = Float.NEGATIVE_INFINITY;
             for (CheckersMove move : game.getPossibleMoves()) {
                 game.execute(move);
