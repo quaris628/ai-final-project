@@ -1,6 +1,5 @@
 package edu.ai.tests.checkers;
 
-import edu.ai.mainproj.anygame.GridBoard;
 import edu.ai.mainproj.anygame.Tile;
 import edu.ai.mainproj.checkers.CheckersBoard;
 import edu.ai.mainproj.checkers.CheckersPiece;

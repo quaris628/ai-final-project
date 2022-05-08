@@ -1,14 +1,10 @@
 package edu.ai.tests.checkers;
 
-import edu.ai.mainproj.anygame.Tile;
-import edu.ai.mainproj.checkers.CheckersBoard;
 import edu.ai.mainproj.checkers.CheckersGame;
 import edu.ai.mainproj.checkers.CheckersPiece;
-import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.checkers.moves.*;
 import org.junit.Test;
 
-import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.Assert.*;
