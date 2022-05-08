@@ -27,6 +27,15 @@ public class CheckersGame implements CheckersGamePlayable {
         possibleValidMoves = calculateValidMoves();
     }
 
+    public CheckersGame(CheckersBoard initialBoard) {
+        board = initialBoard;
+        moveHistory = new LinkedList<CheckersMove>();
+        turn = PlayerType.BLACK;
+        done = false;
+        winner = null;
+        possibleValidMoves = calculateValidMoves();
+    }
+
     /**
      * Executes the given move.
      * If the move is invalid, no changes to the game state is made
