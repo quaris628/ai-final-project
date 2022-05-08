@@ -28,7 +28,7 @@ public class CheckersMoveJumpMulti extends CheckersMoveJump implements Iterable<
 				|| jumpBefore.destination != jumpAfter.startingTile) {
 			return null;
 		} else {
-			LinkedList<CheckersMoveJumpSingle> jumps = new LinkedList<CheckersMoveJumpSingle>();
+			List<CheckersMoveJumpSingle> jumps = new ArrayList<CheckersMoveJumpSingle>();
 			jumps.add(jumpBefore);
 			jumps.add(jumpAfter);
 			return new CheckersMoveJumpMulti(jumpBefore.piece, jumpAfter.destination, jumps);
@@ -61,8 +61,6 @@ public class CheckersMoveJumpMulti extends CheckersMoveJump implements Iterable<
 			if (eachJump.jumpedTile == jump.jumpedTile) { return null; }
 		}
 
-		// if we're at this point everything should be okay to create
-
 		List<CheckersMoveJumpSingle> deepCopyJumpsList =
 				new LinkedList<CheckersMoveJumpSingle>(this.jumps);
 		deepCopyJumpsList.add(0, jump);
@@ -89,21 +87,10 @@ public class CheckersMoveJumpMulti extends CheckersMoveJump implements Iterable<
 			if (eachJump.jumpedTile == jump.jumpedTile) { return null; }
 		}
 
-		// if we're at this point everything should be okay to create
-
 		List<CheckersMoveJumpSingle> deepCopyJumpsList =
-				new LinkedList<CheckersMoveJumpSingle>(this.jumps);
+				new ArrayList<CheckersMoveJumpSingle>(this.jumps);
 		deepCopyJumpsList.add(jump);
 		return new CheckersMoveJumpMulti(this.piece, jump.destination, deepCopyJumpsList);
-	}
-	
-	@Override
-	public List<CheckersPiece> getJumpedPieces() {
-		List<CheckersPiece> toReturn = new LinkedList<CheckersPiece>();
-		for (CheckersMoveJumpSingle jump : this.jumps) {
-			toReturn.add(jump.jumpedTile.getCheckersPiece());
-		}
-		return toReturn;
 	}
 
 	@Override
@@ -128,8 +115,6 @@ public class CheckersMoveJumpMulti extends CheckersMoveJump implements Iterable<
 
 	@Override
 	public void unexecute() {
-		// TODO maybe optimize later
-		// has probably O(n^2) time complexity
 		for (int i = jumps.size() - 1; i >= 0; i--) {
 			jumps.get(i).unexecute();
 		}
@@ -149,6 +134,7 @@ public class CheckersMoveJumpMulti extends CheckersMoveJump implements Iterable<
 		return hash;
 	}
 
+	// Don't worry too much about this, it isn't ever used (currently)
 	public static class CheckersMoveMultiJumpBuilder {
 		// necessary for CheckersMoveMultiJump constructor
 		private CheckersPiece piece;

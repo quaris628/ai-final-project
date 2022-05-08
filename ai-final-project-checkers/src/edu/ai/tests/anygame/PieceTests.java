@@ -3,7 +3,6 @@ package edu.ai.tests.anygame;
 import edu.ai.mainproj.anygame.GridBoard;
 import edu.ai.mainproj.anygame.Piece;
 import edu.ai.mainproj.anygame.Tile;
-import edu.ai.mainproj.checkers.*;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

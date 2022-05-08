@@ -3,9 +3,6 @@ package edu.ai.mainproj.checkers.moves;
 import edu.ai.mainproj.checkers.CheckersPiece;
 import edu.ai.mainproj.checkers.CheckersTile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * For the capturing jump move in checkers
  *
@@ -73,13 +70,6 @@ public class CheckersMoveJumpSingle extends CheckersMoveJump {
 		return CheckersMoveJumpMulti.CreateAsJoin(this, jump);
 	}
 
-	@Override
-	public List<CheckersPiece> getJumpedPieces() {
-		List<CheckersPiece> ret = new ArrayList<>();
-		ret.add(this.jumpedPiece);
-		return ret;
-	}
-	
 	@Override
 	public boolean isValid() {
 		return super.isValid()

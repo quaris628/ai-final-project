@@ -9,9 +9,6 @@ import edu.ai.mainproj.checkers.moves.CheckersMoveJumpSingle;
 import edu.ai.mainproj.checkers.moves.DiagonalDirection;
 import org.junit.Test;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import static org.junit.Assert.*;
 
 /**
