@@ -1,4 +1,6 @@
-package edu.ai.mainproj.checkers;
+package edu.ai.mainproj.ai;
+
+import edu.ai.mainproj.checkers.CheckersGamePlayable;
 
 public interface Player {
 

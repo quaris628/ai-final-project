@@ -1,20 +1,24 @@
 package edu.ai.mainproj.ai;
 
 import edu.ai.mainproj.checkers.CheckersGame;
-import edu.ai.mainproj.checkers.Player;
+import edu.ai.mainproj.checkers.PlayerType;
 
 public class AIMain {
 
     private static final boolean TIME_CONTROL = false;
     private static final int SEC_PER_TURN = 5;
+    private static final int DEPTH_RED = 5;
+    private static final int DEPTH_BLACK = 5;
 
     public static void main(String... args) throws InterruptedException {
-        CheckersGame game = new CheckersGame(new AIPlayer(5), new AIPlayer(5));
+        Player red = new AIPlayer(DEPTH_RED);
+        Player black = new AIPlayer(DEPTH_BLACK);
+        CheckersGame game = new CheckersGame();
 
         System.out.println(game);
         while (game.getWinner() == null) {
             long startTime = System.currentTimeMillis();
-            Player currentPlayer = game.getCurrentPlayer();
+            Player currentPlayer = game.getTurn() == PlayerType.RED ? red : black;
             if (game.getPossibleMoves().isEmpty()) {
                 System.out.println("DRAW");
                 return;
