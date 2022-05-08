@@ -101,6 +101,48 @@ public class CheckersMoveJumpMultiTests {
         assertNotNull(multiJump);
     }
 
+    // other
+    // TODO move vvv below method vvv to a new category
+
+    @Test
+    public void testCreationByAppend_revisitTile_null() {
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(0, 3);
+        CheckersTile jumped1 = board.getCheckersTile(1, 2);
+        CheckersTile dest1 = board.getCheckersTile(2, 1);
+        CheckersTile jumped2 = board.getCheckersTile(3, 2);
+        CheckersTile dest2 = board.getCheckersTile(4, 3);
+        CheckersTile jumped3 = board.getCheckersTile(3, 4);
+        CheckersTile dest3 = board.getCheckersTile(2, 5);
+        CheckersTile jumped4 = board.getCheckersTile(3, 4);
+        CheckersTile dest4 = start;
+        CheckersTile jumped5 = jumped1;
+        CheckersTile destFinal = dest1;
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
+        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
+        CheckersPiece jumpedPiece3 = new CheckersPiece(PlayerType.RED, jumped3);
+        CheckersPiece jumpedPiece4 = new CheckersPiece(PlayerType.RED, jumped4);
+        CheckersMoveJumpSingle jump1 = CheckersMoveJumpSingle.Create(
+                jumperPiece,DiagonalDirection.BACKWARD_LEFT);
+        CheckersMoveJumpSingle jump2 = CheckersMoveJumpSingle.CreateAsPartOfMultiJump(
+                jumperPiece, dest1, DiagonalDirection.BACKWARD_RIGHT);
+        CheckersMoveJumpSingle jump3 = CheckersMoveJumpSingle.CreateAsPartOfMultiJump(
+                jumperPiece, dest2, DiagonalDirection.FORWARD_RIGHT);
+        CheckersMoveJumpSingle jump4 = CheckersMoveJumpSingle.CreateAsPartOfMultiJump(
+                jumperPiece, dest3, DiagonalDirection.FORWARD_LEFT);
+        CheckersMoveJumpSingle jump5 = CheckersMoveJumpSingle.CreateAsPartOfMultiJump(
+                jumperPiece, dest4, DiagonalDirection.BACKWARD_LEFT);
+        CheckersMoveJumpMulti initialMultiMove = CheckersMoveJumpMulti.CreateAsJoin(jump1, jump2);
+        CheckersMoveJumpMulti move = initialMultiMove.append(jump3).append(jump4).append(jump5);
+
+        // check starting conditions, for my sanity
+        // TODO
+
+        assertNull(move);
+    }
+
+
     // --------------------------------
     // BUIDER
     // --------------------------------
@@ -529,7 +571,7 @@ public class CheckersMoveJumpMultiTests {
         // check starting conditions, for my sanity
         assertEquals(jumperPiece, start.getCheckersPiece());
         assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
-        assertTrue(destMid.isBlank());
+        assertFalse(destMid.isBlank());
         assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
         assertTrue(destFinal.isBlank());
 
@@ -559,7 +601,7 @@ public class CheckersMoveJumpMultiTests {
         assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
         assertTrue(destMid.isBlank());
         assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
-        assertTrue(destFinal.isBlank());
+        assertFalse(destFinal.isBlank());
 
         assertFalse(move.isValid());
     }
@@ -579,33 +621,6 @@ public class CheckersMoveJumpMultiTests {
                 jumperPiece,DiagonalDirection.FORWARD_RIGHT);
         CheckersMoveJumpSingle jump2 = CheckersMoveJumpSingle.CreateAsPartOfMultiJump(
                 jumperPiece, destMid, DiagonalDirection.BACKWARD_RIGHT);
-        CheckersMoveJumpMulti move = CheckersMoveJumpMulti.CreateAsJoin(jump1, jump2);
-
-        // check starting conditions, for my sanity
-        assertEquals(jumperPiece, start.getCheckersPiece());
-        assertEquals(jumpedPiece1, jumped1.getCheckersPiece());
-        assertTrue(destMid.isBlank());
-        assertEquals(jumpedPiece2, jumped2.getCheckersPiece());
-        assertTrue(destFinal.isBlank());
-
-        assertFalse(move.isValid());
-    }
-
-    @Test
-    public void testIsValid_revisitTile_false() {
-        CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(6, 3);
-        CheckersTile jumped1 = board.getCheckersTile(5, 4);
-        CheckersTile destMid = board.getCheckersTile(4, 5);
-        CheckersTile jumped2 = board.getCheckersTile(5, 4);
-        CheckersTile destFinal = board.getCheckersTile(6, 3);
-        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
-        CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
-        CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
-        CheckersMoveJumpSingle jump1 = CheckersMoveJumpSingle.Create(
-                jumperPiece,DiagonalDirection.FORWARD_RIGHT);
-        CheckersMoveJumpSingle jump2 = CheckersMoveJumpSingle.CreateAsPartOfMultiJump(
-                jumperPiece, destMid, DiagonalDirection.BACKWARD_LEFT);
         CheckersMoveJumpMulti move = CheckersMoveJumpMulti.CreateAsJoin(jump1, jump2);
 
         // check starting conditions, for my sanity
@@ -648,13 +663,13 @@ public class CheckersMoveJumpMultiTests {
     @Test
     public void testIsValid_normalConditions3_true() {
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(7, 3);
-        CheckersTile jumped1 = board.getCheckersTile(6, 4);
-        CheckersTile destMid1 = board.getCheckersTile(5, 5);
-        CheckersTile jumped2 = board.getCheckersTile(4, 4);
-        CheckersTile destMid2 = board.getCheckersTile(3, 3);
-        CheckersTile jumped3 = board.getCheckersTile(2, 4);
-        CheckersTile destFinal = board.getCheckersTile(1, 5);
+        CheckersTile start = board.getCheckersTile(7, 2);
+        CheckersTile jumped1 = board.getCheckersTile(6, 3);
+        CheckersTile destMid1 = board.getCheckersTile(5, 4);
+        CheckersTile jumped2 = board.getCheckersTile(4, 3);
+        CheckersTile destMid2 = board.getCheckersTile(3, 2);
+        CheckersTile jumped3 = board.getCheckersTile(2, 3);
+        CheckersTile destFinal = board.getCheckersTile(1, 4);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
         CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
         CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
@@ -726,13 +741,13 @@ public class CheckersMoveJumpMultiTests {
     @Test
     public void testExecute_normalConditions3() {
         CheckersBoard board = new CheckersBoard();
-        CheckersTile start = board.getCheckersTile(7, 3);
-        CheckersTile jumped1 = board.getCheckersTile(6, 4);
-        CheckersTile destMid1 = board.getCheckersTile(5, 5);
-        CheckersTile jumped2 = board.getCheckersTile(4, 4);
-        CheckersTile destMid2 = board.getCheckersTile(3, 3);
-        CheckersTile jumped3 = board.getCheckersTile(2, 4);
-        CheckersTile destFinal = board.getCheckersTile(1, 5);
+        CheckersTile start = board.getCheckersTile(7, 2);
+        CheckersTile jumped1 = board.getCheckersTile(6, 3);
+        CheckersTile destMid1 = board.getCheckersTile(5, 4);
+        CheckersTile jumped2 = board.getCheckersTile(4, 3);
+        CheckersTile destMid2 = board.getCheckersTile(3, 2);
+        CheckersTile jumped3 = board.getCheckersTile(2, 3);
+        CheckersTile destFinal = board.getCheckersTile(1, 4);
         CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
         CheckersPiece jumpedPiece1 = new CheckersPiece(PlayerType.RED, jumped1);
         CheckersPiece jumpedPiece2 = new CheckersPiece(PlayerType.RED, jumped2);
