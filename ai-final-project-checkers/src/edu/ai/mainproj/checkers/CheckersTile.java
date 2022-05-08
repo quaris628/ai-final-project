@@ -19,6 +19,10 @@ public class CheckersTile extends Tile {
         super(board, row, column);
     }
 
+    /**
+     * Gets all neighboring tiles in diagonal directions
+     * @return iterable over all neighboring tiles
+     */
     public Iterable<CheckersTile> getNeighbors() {
         List<CheckersTile> neighbors = new LinkedList<CheckersTile>();
         for (DiagonalDirection dir : DiagonalDirection.values()) {
@@ -30,6 +34,12 @@ public class CheckersTile extends Tile {
         return neighbors;
     }
 
+    /**
+     * Gets neighboring tile in specified direction
+     * Returns null if there is no tile in that direction
+     *     (if on edge of game board)
+     * @return neighboring tile in direction
+     */
     public CheckersTile getNeighborAt(DiagonalDirection direction) {
         int neighborRow = row + direction.rowDelta;
         int neighborColumn = column + direction.columnDelta;
@@ -41,6 +51,12 @@ public class CheckersTile extends Tile {
         }
     }
 
+    /**
+     * Checks whether this tile would king a player's pieces
+     *     if the piece landed on this tile
+     * @param player the hypothetical piece belongs to
+     * @return true if tile would king, otherwise false
+     */
     public boolean doesKing(PlayerType player) {
         return player == PlayerType.BLACK && row == 0
             || player == PlayerType.RED && row == board.getNumRows() - 1;

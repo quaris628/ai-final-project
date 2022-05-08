@@ -12,6 +12,7 @@ import java.util.List;
  * The board consists of a grid of tiles, where only half of the
  *     tiles, in a checkerboard pattern, are in-play. The others
  *     are never used.
+ * For example:
  * The tile at position 0,0 is out-of-play
  * The tiles at positions 0,1 and 1,0 are in-play
  *
@@ -31,6 +32,11 @@ public class CheckersBoard extends GridBoard {
         }
     }
 
+    /**
+     * Instantiates a new CheckersBoard object, with CheckersPiece's
+     *     arranged as they should be for the start of a checkers game.
+     * @return new CheckersBoard, set up for the start of the checkers game
+     */
     public static CheckersBoard CreateInitialBoard() {
         CheckersBoard toReturn = new CheckersBoard();
         // Place Red pieces
@@ -51,23 +57,6 @@ public class CheckersBoard extends GridBoard {
         return toReturn;
     }
 
-	// TODO is this needed, or is super.getTilesInRow() okay?
-    // Apparently it's okay because I'm not seeing any problems with how it is now...
-	/*
-	@Override
-	public Iterable<Tile> getTilesInRow(int row) {
-		Iterable<Tile> rowTiles = super.getTilesInRow(row);
-		// filter out null tiles from the results list
-		List<Tile> toReturn = LinkedList<Tile>();
-		for (Tile tile : rowTiles) {
-			if (tile != null) {
-				toReturn.add(tile);
-			}
-		}
-		return toReturn;
-	}
-	//*/
-
     @Override
     public Iterable<Tile> getTilesInColumn(int column) {
         List<Tile> columnTiles = new LinkedList<Tile>();
@@ -76,22 +65,6 @@ public class CheckersBoard extends GridBoard {
         }
         return columnTiles;
     }
-
-    // TODO is this needed, or is super.getAllTiles() okay?
-	/*
-	@Override
-	public Iterable<Tile> getAllTiles() {
-		Iterable<Tile> allTiles = super.getAllTiles();
-		// filter out null tiles from the results list
-		List<Tile> toReturn = LinkedList<Tile>();
-		for (Tile tile : allTiles) {
-			if (tile != null) {
-				toReturn.add(tile);
-			}
-		}
-		return toReturn;
-	}
-	//*/
 
     public CheckersTile getCheckersTile(int row, int column) {
         return (CheckersTile) getTile(row, column);
@@ -117,7 +90,9 @@ public class CheckersBoard extends GridBoard {
             return null;
         }
     }
+
     // super.getNumRows will work and does not need to be overridden
+
     @Override
     public int getNumColumns() { return SIZE; }
 
