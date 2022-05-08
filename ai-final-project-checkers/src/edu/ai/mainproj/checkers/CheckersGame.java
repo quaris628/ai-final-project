@@ -121,20 +121,7 @@ public class CheckersGame implements CheckersGamePlayable {
     public List<CheckersMoveJump> getValidJumpsFor(CheckersPiece piece) {
         Set<CheckersTile> alreadyVisited = new HashSet<CheckersTile>();
         alreadyVisited.add(piece.getCheckersTile());
-        List<CheckersMoveJump> toReturn = getValidJumpsRecursive(
-                piece.getCheckersTile(), piece, alreadyVisited);
-
-        // sloppy fix for now b/c somehow invalid moves are slipping through
-        // TODO actually find where these invalid moves are coming from, if there are any?
-        // so this can be removed as we can just return toReturn
-        LinkedList<CheckersMoveJump> objsToRemove = new LinkedList<CheckersMoveJump>();
-        for (CheckersMoveJump jump : toReturn) {
-            if (jump == null) { throw new IllegalStateException("toReturn had a null jump"); }
-            if (!jump.isValid()) { objsToRemove.add(jump); }
-        }
-        toReturn.removeAll(objsToRemove);
-        // ^^^ this is the end of the sloppy fix
-        return toReturn;
+        return getValidJumpsRecursive(piece.getCheckersTile(), piece, alreadyVisited);
     }
 
     /**
