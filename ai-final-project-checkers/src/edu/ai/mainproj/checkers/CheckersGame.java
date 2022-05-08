@@ -15,15 +15,30 @@ public class CheckersGame implements CheckersGamePlayable {
     private List<? extends CheckersMove> possibleValidMoves;
     private List<CheckersPiece> blackPieces;
     private List<CheckersPiece> redPieces;
+    private Player blackPlayer;
+    private Player redPlayer;
 
-
-    public CheckersGame() {
+    public CheckersGame(Player blackPlayer, Player redPlayer) {
+        this.blackPlayer = blackPlayer;
+        this.redPlayer = redPlayer;
         board = CheckersBoard.CreateInitialBoard();
         moveHistory = new LinkedList<CheckersMove>();
         turn = PlayerType.BLACK;
         winner = null;
         refreshBlackRedPieces();
         possibleValidMoves = calculateValidMoves();
+    }
+
+    public Player getBlackPlayer() {
+        return blackPlayer;
+    }
+
+    public Player getRedPlayer() { return redPlayer; }
+
+    public Player getCurrentPlayer() {
+        if (turn == PlayerType.RED)
+            return redPlayer;
+        return blackPlayer;
     }
 
     /**
