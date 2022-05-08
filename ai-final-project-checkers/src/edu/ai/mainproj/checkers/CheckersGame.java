@@ -87,7 +87,20 @@ public class CheckersGame implements CheckersGamePlayable {
     public List<CheckersMoveJump> getValidJumpsFor(CheckersPiece piece) {
         Set<CheckersTile> alreadyVisited = new HashSet<CheckersTile>();
         alreadyVisited.add(piece.getCheckersTile());
-        return getValidJumpsRecursive(piece.getCheckersTile(), piece, alreadyVisited);
+        List<CheckersMoveJump> toReturn = getValidJumpsRecursive(
+                piece.getCheckersTile(), piece, alreadyVisited);
+
+        // sloppy fix for now b/c somehow invalid moves are slipping through
+        // TODO actually find where these invalid moves are coming from
+        // so this can be removed as we can just return toReturn
+        LinkedList<CheckersMoveJump> objsToRemove = new LinkedList<CheckersMoveJump>();
+        for (CheckersMoveJump jump : toReturn) {
+            if (jump == null) { throw new IllegalStateException("toReturn had a null jump"); }
+            if (!jump.isValid()) { objsToRemove.add(jump); }
+        }
+        toReturn.removeAll(objsToRemove);
+        // ^^^ this is the end of the sloppy fix
+        return toReturn;
     }
 
     private List<CheckersMoveJump> getValidJumpsRecursive(
@@ -112,7 +125,10 @@ public class CheckersGame implements CheckersGamePlayable {
                         jump.destination, piece, alreadyVisited);
                 // for each one, prepend this jump onto each next jump and add it to toReturn
                 for (CheckersMoveJump nextJump : nextJumps) {
-                    toReturn.add(nextJump.prepend(jump));
+                    CheckersMoveJumpMulti prependJump = nextJump.prepend(jump);
+                    if (prependJump != null && prependJump.isValid()) {
+                        toReturn.add(prependJump);
+                    }
                 }
                 // also add this jump to toReturn if no other jumps are possible
                 if (toReturn.size() == 0) {
