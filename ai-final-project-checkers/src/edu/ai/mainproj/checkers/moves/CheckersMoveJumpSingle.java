@@ -75,7 +75,7 @@ public class CheckersMoveJumpSingle extends CheckersMoveJump {
 	@Override
 	public List<CheckersPiece> getJumpedPieces() {
 		List<CheckersPiece> ret = new ArrayList<>();
-		ret.add(this.piece);
+		ret.add(this.jumpedPiece);
 		return ret;
 	}
 	
@@ -94,6 +94,7 @@ public class CheckersMoveJumpSingle extends CheckersMoveJump {
 	public void execute() {
 		super.execute();
 		jumpedTile.getCheckersPiece().remove();
+		jumpedPiece = jumpedTile.getCheckersPiece();
 		// cannot use only jumpedTile.removePiece() because
 		//     it does not set the removed piece's reference to null
 	}

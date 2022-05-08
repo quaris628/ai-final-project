@@ -28,43 +28,37 @@ import static org.junit.Assert.*;
  */
 public class CheckersGameTests {
 
-    private static final CheckersBoard initialBoard = CheckersBoard.CreateInitialBoard();
-
     public CheckersGameTests() {}
 
     @Test
     public void getValidJumpsFor_oneJump_thatJump() {
         CheckersGame game = new CheckersGame();
-        System.out.println(game);
 
-        CheckersPiece jumper = initialBoard.getCheckersTile(5, 2).getCheckersPiece();
+        CheckersPiece jumper = game.getBoardState().getCheckersTile(5, 0).getCheckersPiece();
         CheckersMoveNormal jumperMove1 = CheckersMoveNormal.Create(
                 jumper, DiagonalDirection.FORWARD_RIGHT);
         assertNotNull(jumperMove1);
         assertTrue(jumperMove1.isValid());
         assertTrue(game.execute(jumperMove1));
-        assertEquals(1, game.getMoveHistory().size());
-        System.out.println(game);
 
-        CheckersPiece jumped = initialBoard.getCheckersTile(2, 3).getCheckersPiece();
+        CheckersPiece jumped = game.getBoardState().getCheckersTile(2, 3).getCheckersPiece();
         CheckersMoveNormal jumpedMove = CheckersMoveNormal.Create(
                 jumped, DiagonalDirection.BACKWARD_LEFT);
         assertNotNull(jumpedMove);
         assertTrue(jumpedMove.isValid());
         assertTrue(game.execute(jumpedMove));
-        assertEquals(2, game.getMoveHistory().size());
-        System.out.println(game);
 
-        List<? extends CheckersMove> possMoves =  game.getPossibleMoves();
+        List<CheckersMoveJump> possJumps =  game.getValidJumpsFor(jumper);
+        CheckersMove actualJump = possJumps.get(0);
+        assertTrue(actualJump instanceof CheckersMoveJumpSingle);
 
-        // should be the same as this jump
-        CheckersMoveJumpSingle jump = CheckersMoveJumpSingle.Create(
+        // the suggested move is this particular jump
+        CheckersMoveJumpSingle expectedJump = CheckersMoveJumpSingle.Create(
                 jumper, DiagonalDirection.FORWARD_RIGHT);
+        assertTrue(expectedJump.isValid());
 
-        assertEquals(1, possMoves.size());
-        CheckersMove move = possMoves.get(0);
-        assertEquals(move.hashCode(), jump.hashCode());
-
+        assertEquals(actualJump.hashCode(), expectedJump.hashCode());
+        // only jumps can be made
+        assertEquals(1, possJumps.size());
     }
-
 }
