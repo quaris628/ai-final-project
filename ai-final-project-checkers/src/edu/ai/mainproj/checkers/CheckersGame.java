@@ -40,7 +40,7 @@ public class CheckersGame implements CheckersGamePlayable {
     public boolean execute(CheckersMove move) {
         // TODO is this method missing any code for parts that need to be done?
 
-		if (!move.isValid()) { return false; }
+		if (!move.isValid() && !done) { return false; }
 		move.execute();
 
 		moveHistory.add(move);
@@ -56,6 +56,11 @@ public class CheckersGame implements CheckersGamePlayable {
 
     @Override
     public void unexecute() {
+        if (done) {
+            done = false;
+            winner = null;
+        }
+
         // pop last move from list
         CheckersMove move = moveHistory.remove(moveHistory.size() - 1);
 
@@ -76,7 +81,7 @@ public class CheckersGame implements CheckersGamePlayable {
             // player whose turn it isn't is the winner
             done = true;
             winner = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
-            return null;
+            return new LinkedList<CheckersMove>();
         }
         // if any pieces are off the board, remove them from the list
         pieces.removeIf(piece -> piece.getCheckersTile() == null);
