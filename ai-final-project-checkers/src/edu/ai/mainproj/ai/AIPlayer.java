@@ -46,12 +46,14 @@ public class AIPlayer implements Player {
     public static Pair<List<CheckersMove>, Float> search(CheckersGamePlayable game, int depth, float alpha, float beta) {
         visited++;
         PlayerType player = game.getTurn();
+        // bottom of the search
         if (depth == 0) {
             List<CheckersMove> ret = new LinkedList<>();
             ret.add(game.getMoveHistory().get(game.getMoveHistory().size() - 1));
             return new Pair<>(ret, calculateHerustics(game, player));
         }
         float value;
+        // list of best moves to return
         List<CheckersMove> bestMoves = new LinkedList<>();
         if (player == PlayerType.BLACK) { // max player
             value = Float.NEGATIVE_INFINITY;
@@ -64,6 +66,7 @@ public class AIPlayer implements Player {
                 Pair<List<CheckersMove>, Float> tmp = search(game, depth - 1, alpha, beta);
                 value = Math.max(value, tmp.getRight());
                 if (value == tmp.getRight()) {
+                    tmp.getLeft().remove(tmp.getLeft().size()-1);
                     tmp.getLeft().add(move);
                     bestMoves = tmp.getLeft();
                 }
@@ -85,6 +88,7 @@ public class AIPlayer implements Player {
                 Pair<List<CheckersMove>, Float> tmp = search(game, depth - 1, alpha, beta);
                 value = Math.min(value, tmp.getRight());
                 if (value == tmp.getRight()) {
+                    tmp.getLeft().remove(tmp.getLeft().size()-1);
                     tmp.getLeft().add(move);
                     bestMoves = tmp.getLeft();
                 }
@@ -102,11 +106,13 @@ public class AIPlayer implements Player {
 
     private static float calculateHerustics(CheckersGamePlayable boardP, PlayerType player) {
         CheckersBoard board = boardP.getBoardState();
+        // win condition
         if (boardP.getWinner() != null) {
             if (boardP.getWinner() == player)
                 return SELF_WIN_STATE;
             return OPP_WIN_STATE;
         }
+        // draw condition
         if (boardP.getPossibleMoves().isEmpty()) {
             List<CheckersMove> ret = new LinkedList<>();
             ret.add(boardP.getMoveHistory().get(boardP.getMoveHistory().size() - 1));
@@ -115,6 +121,7 @@ public class AIPlayer implements Player {
             else
                 return OPP_NO_MOVES_STATE;
         }
+        // calculate heuristic for the board otherwise
         int ret = 0;
         for (Tile gtile : board.getAllTiles()) {
             Piece gpiece = gtile.getPiece();
