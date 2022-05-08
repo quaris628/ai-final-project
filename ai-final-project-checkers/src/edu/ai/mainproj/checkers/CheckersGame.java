@@ -39,19 +39,10 @@ public class CheckersGame implements CheckersGamePlayable {
     @Override
     public boolean execute(CheckersMove move) {
         // TODO is this method missing any code for parts that need to be done?
-		
-		// check if valid
-		if (!move.isValid()) { return false; }
-		
-		// execute
-		move.execute();
-		
-		// if any pieces were removed, remove from black/red lists
-		if (move instanceof CheckersMoveJump) {
-			CheckersMoveJump jump = (CheckersMoveJump)move;
-		}
 
-		// record move in move history
+		if (!move.isValid()) { return false; }
+		move.execute();
+		refreshBlackRedPieces();
 		moveHistory.add(move);
 
         // change whose turn it is
@@ -96,23 +87,7 @@ public class CheckersGame implements CheckersGamePlayable {
         return getValidNormalMoves(pieces);
     }
 
-    // multi- and single, so type must be CheckersMove
-    private List<CheckersMoveJump> getValidJumpsFor(CheckersPiece piece) {
-        /*
-        List<CheckersMoveJump> moves = new LinkedList<CheckersMoveJump>();
-        for (DiagonalDirection dir : DiagonalDirection.values()) {
-            CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(piece, dir);
-            if (move != null && move.isValid()) {
-                List<CheckersMoveJumpMulti> multiJumps = getValidMultiJumpsAfter(move);
-                if (multiJumps.size() > 0) {
-                    moves.addAll(multiJumps);
-                } else {
-                    moves.add(move);
-                }
-            }
-        }
-        return moves;
-        //*/
+    public List<CheckersMoveJump> getValidJumpsFor(CheckersPiece piece) {
         Set<CheckersTile> alreadyVisited = new HashSet<CheckersTile>();
         alreadyVisited.add(piece.getCheckersTile());
         return getValidJumpsRecursive(piece.getCheckersTile(), piece, alreadyVisited);
@@ -124,7 +99,15 @@ public class CheckersGame implements CheckersGamePlayable {
         // For each direction from this tile
         for (DiagonalDirection dir : DiagonalDirection.values()) {
             // What if we jump?
-            CheckersMoveJumpSingle jump = CheckersMoveJumpSingle.CreateAsPartOfMultiJump(piece, tile, dir);
+            CheckersMoveJumpSingle jump;
+            if (piece.getCheckersTile() == tile) {
+                // if this is the first jump, it's just a single jump
+                jump = CheckersMoveJumpSingle.Create(piece, dir);
+            } else {
+                // if this is a subsequent possible jump, it'll end up as part of a multi-jump move
+                jump = CheckersMoveJumpSingle.CreateAsPartOfMultiJump(piece, tile, dir);
+            }
+
             // if it's possible, valid, and we haven't already visited this destination tile
             if (jump != null && jump.isValid() && !alreadyVisited.contains(jump.destination)) {
                 // look at all possible jumps from this location
@@ -134,6 +117,8 @@ public class CheckersGame implements CheckersGamePlayable {
                 for (CheckersMoveJump nextJump : nextJumps) {
                     toReturn.add(nextJump.prepend(jump));
                 }
+                // also add this jump to toReturn
+                toReturn.add(jump);
                 // record that we've visited this tile
                 alreadyVisited.add(jump.destination);
             }
