@@ -18,16 +18,16 @@ public class AIPlayer implements Player {
     private static long visited = 0;
 
     // constants for values of each piece type for heuristic calculation
-    private static final float OWN_PIECE_VALUE = 1f;
-    private static final float OPP_PIECE_VALUE = -2f;
-    private static final float OWN_KING_VALUE = 4f;
-    private static final float OPP_KING_VALUE = -8f;
+    private static final float OWN_PIECE_VALUE = 4f;
+    private static final float OPP_PIECE_VALUE = 1f;
+    private static final float OWN_KING_VALUE = 8f;
+    private static final float OPP_KING_VALUE = 0f;
 
-    private static final float SELF_WIN_STATE = 100.23f;
-    private static final float OPP_WIN_STATE = -100.23f;
+    private static final float SELF_WIN_STATE = 10000.23f;
+    private static final float OPP_WIN_STATE = -10000.23f;
 
-    private static final float OWN_NO_MOVES_STATE = -10000.23f;
-    private static final float OPP_NO_MOVES_STATE = 10000.23f;
+    private static final float OWN_NO_MOVES_STATE = 100.23f;
+    private static final float OPP_NO_MOVES_STATE = 100.23f;
 
     public AIPlayer(int depth) {
         this.depth = depth;
@@ -39,6 +39,7 @@ public class AIPlayer implements Player {
         if (result.getRight() == OWN_NO_MOVES_STATE) {
             System.out.println("DRAW");
         }
+        System.out.println(result.getRight());
         game.execute(result.getLeft().get(result.getLeft().size() - 1));
     }
 
@@ -48,6 +49,10 @@ public class AIPlayer implements Player {
         PlayerType player = game.getTurn();
         // bottom of the search
         if (depth == 0) {
+            System.out.println("END OF DEPTH PRINT");
+            for (CheckersMove move : game.getMoveHistory())
+                System.out.print(move + " ");
+            System.out.println(calculateHerustics(game,player));
             List<CheckersMove> ret = new LinkedList<>();
             ret.add(game.getMoveHistory().get(game.getMoveHistory().size() - 1));
             return new Pair<>(ret, calculateHerustics(game, player));
@@ -66,7 +71,8 @@ public class AIPlayer implements Player {
                 Pair<List<CheckersMove>, Float> tmp = search(game, depth - 1, alpha, beta);
                 value = Math.max(value, tmp.getRight());
                 if (value == tmp.getRight()) {
-                    tmp.getLeft().remove(tmp.getLeft().size()-1);
+                    if (!tmp.getLeft().isEmpty())
+                        tmp.getLeft().remove(tmp.getLeft().size()-1);
                     tmp.getLeft().add(move);
                     bestMoves = tmp.getLeft();
                 }
@@ -88,7 +94,8 @@ public class AIPlayer implements Player {
                 Pair<List<CheckersMove>, Float> tmp = search(game, depth - 1, alpha, beta);
                 value = Math.min(value, tmp.getRight());
                 if (value == tmp.getRight()) {
-                    tmp.getLeft().remove(tmp.getLeft().size()-1);
+                    if (!tmp.getLeft().isEmpty())
+                        tmp.getLeft().remove(tmp.getLeft().size()-1);
                     tmp.getLeft().add(move);
                     bestMoves = tmp.getLeft();
                 }
