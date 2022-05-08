@@ -53,6 +53,12 @@ public class Piece {
 	}
 
     // simple getters/setters
+
+    /**
+     * Gets the tile this piece is on.
+     * If the piece is not on a tile, returns null.
+     * @return tile this piece is on
+     */
 	public Tile getTile() { return tile; }
 
     @Override

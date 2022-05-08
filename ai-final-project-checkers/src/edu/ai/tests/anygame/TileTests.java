@@ -38,22 +38,36 @@ public class TileTests {
     }
 
     @Test
-    public void testIsBlank_AddPiece_False() {
+    public void testIsBlank_CreatePiece_False() {
         Tile tile = new Tile(blankBoard, 9, 9);
 
-        tile.setPiece(new Piece(tile));
+        new Piece(tile);
 
         assertFalse(tile.isBlank());
     }
 
     @Test
-    public void testIsBlank_AddPieceRemovePiece_True() {
+    public void testIsBlank_CreatePieceRemovePiece_True() {
         Tile tile = new Tile(blankBoard, 9, 9);
 
-        tile.setPiece(new Piece(tile));
+        new Piece(tile);
         tile.removePiece();
 
         assertTrue(tile.isBlank());
+    }
+
+    @Test
+    public void test_CreatePieceCreatePiece_illegalStateException() {
+        Tile tile = new Tile(blankBoard, 9, 9);
+
+        new Piece(tile);
+
+        try {
+            new Piece(tile);
+            fail();
+        } catch (IllegalStateException e) {
+            assertTrue(true);
+        }
     }
 
 }
