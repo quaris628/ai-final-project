@@ -11,6 +11,7 @@ public class CheckersGame implements CheckersGamePlayable {
     private final List<CheckersMove> moveHistory;
     private PlayerType turn;
     private PlayerType winner;
+    private boolean done;
     // caches
     private List<? extends CheckersMove> possibleValidMoves;
     private List<CheckersPiece> blackPieces;
@@ -21,6 +22,7 @@ public class CheckersGame implements CheckersGamePlayable {
         moveHistory = new LinkedList<CheckersMove>();
         turn = PlayerType.BLACK;
         winner = null;
+        done = false;
         possibleValidMoves = calculateValidMoves();
     }
 
@@ -70,6 +72,12 @@ public class CheckersGame implements CheckersGamePlayable {
         refreshBlackRedPieces();
         List<CheckersPiece> pieces =
                 turn == PlayerType.BLACK ? blackPieces : redPieces;
+        if (pieces.isEmpty()) {
+            // player whose turn it isn't is the winner
+            done = true;
+            winner = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
+            return null;
+        }
         // if any pieces are off the board, remove them from the list
         pieces.removeIf(piece -> piece.getCheckersTile() == null);
         // if there are any jumps, just return those
@@ -81,7 +89,13 @@ public class CheckersGame implements CheckersGamePlayable {
         if (jumps.size() > 0) {
             return jumps;
         }
-        return getValidNormalMoves(pieces);
+        List<CheckersMoveNormal> normalMoves = getValidNormalMoves(pieces);
+        if (normalMoves.isEmpty()) {
+            // Draw
+            done = true;
+            winner = null;
+        }
+        return normalMoves;
     }
 
     public List<CheckersMoveJump> getValidJumpsFor(CheckersPiece piece) {
@@ -91,7 +105,7 @@ public class CheckersGame implements CheckersGamePlayable {
                 piece.getCheckersTile(), piece, alreadyVisited);
 
         // sloppy fix for now b/c somehow invalid moves are slipping through
-        // TODO actually find where these invalid moves are coming from
+        // TODO actually find where these invalid moves are coming from, if there are any?
         // so this can be removed as we can just return toReturn
         LinkedList<CheckersMoveJump> objsToRemove = new LinkedList<CheckersMoveJump>();
         for (CheckersMoveJump jump : toReturn) {
@@ -144,8 +158,8 @@ public class CheckersGame implements CheckersGamePlayable {
 
     // return as a list of regular moves to be compatible with
     //     calculateValidMoves returning this result
-    private List<CheckersMove> getValidNormalMoves(List<CheckersPiece> pieces) {
-        List<CheckersMove> moves = new LinkedList<CheckersMove>();
+    private List<CheckersMoveNormal> getValidNormalMoves(List<CheckersPiece> pieces) {
+        List<CheckersMoveNormal> moves = new LinkedList<CheckersMoveNormal>();
         for (CheckersPiece piece : pieces) {
             for (DiagonalDirection dir : DiagonalDirection.values()) {
                 CheckersMoveNormal move = CheckersMoveNormal.Create(piece, dir);
@@ -186,7 +200,7 @@ public class CheckersGame implements CheckersGamePlayable {
     @Override
     public List<? extends CheckersMove> getPossibleMoves() { return possibleValidMoves; }
     @Override
-    public boolean isDone() { return winner != null; }
+    public boolean isDone() { return done; }
     @Override
     public PlayerType getWinner() { return winner; }
     @Override
