@@ -29,12 +29,15 @@ public class AIPlayer implements Player {
     private static final float OWN_NO_MOVES_STATE = 100.23f;
     private static final float OPP_NO_MOVES_STATE = 100.23f;
 
+    private int printMovesStartIndex = 0;
+
     public AIPlayer(int depth) {
         this.depth = depth;
     }
 
     @Override
     public void executeTurn(CheckersGamePlayable game) {
+        printMovesStartIndex = game.getMoveHistory().size();
         Pair<List<CheckersMove>, Float> result = search(game, depth, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
         if (result.getRight() == OWN_NO_MOVES_STATE) {
             System.out.println("DRAW");
@@ -44,14 +47,15 @@ public class AIPlayer implements Player {
     }
 
     // the search algorithm itself
-    public static Pair<List<CheckersMove>, Float> search(CheckersGamePlayable game, int depth, float alpha, float beta) {
+    public Pair<List<CheckersMove>, Float> search(CheckersGamePlayable game, int depth, float alpha, float beta) {
         visited++;
         PlayerType player = game.getTurn();
         // bottom of the search
         if (depth == 0) {
             System.out.println("END OF DEPTH PRINT");
-            for (CheckersMove move : game.getMoveHistory())
-                System.out.print(move + " ");
+            List<? extends CheckersMove> moveHistory = game.getMoveHistory();
+            for (int i = printMovesStartIndex; i < moveHistory.size(); i++)
+                System.out.print(moveHistory.get(i) + " ");
             System.out.println(calculateHerustics(game,player));
             List<CheckersMove> ret = new LinkedList<>();
             ret.add(game.getMoveHistory().get(game.getMoveHistory().size() - 1));
