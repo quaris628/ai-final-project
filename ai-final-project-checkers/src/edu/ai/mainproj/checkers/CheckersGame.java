@@ -21,7 +21,6 @@ public class CheckersGame implements CheckersGamePlayable {
         moveHistory = new LinkedList<CheckersMove>();
         turn = PlayerType.BLACK;
         winner = null;
-        refreshBlackRedPieces();
         possibleValidMoves = calculateValidMoves();
     }
 
@@ -41,7 +40,7 @@ public class CheckersGame implements CheckersGamePlayable {
 
 		if (!move.isValid()) { return false; }
 		move.execute();
-		refreshBlackRedPieces();
+
 		moveHistory.add(move);
 
         // change whose turn it is
@@ -60,8 +59,6 @@ public class CheckersGame implements CheckersGamePlayable {
 
         move.unexecute();
 
-        refreshBlackRedPieces();
-
         // change whose turn it is
         turn = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
 
@@ -70,6 +67,7 @@ public class CheckersGame implements CheckersGamePlayable {
     }
 
     private List<? extends CheckersMove> calculateValidMoves() {
+        refreshBlackRedPieces();
         List<CheckersPiece> pieces =
                 turn == PlayerType.BLACK ? blackPieces : redPieces;
         // if any pieces are off the board, remove them from the list
@@ -116,8 +114,10 @@ public class CheckersGame implements CheckersGamePlayable {
                 for (CheckersMoveJump nextJump : nextJumps) {
                     toReturn.add(nextJump.prepend(jump));
                 }
-                // also add this jump to toReturn
-                toReturn.add(jump);
+                // also add this jump to toReturn if no other jumps are possible
+                if (toReturn.size() == 0) {
+                    toReturn.add(jump);
+                }
                 // record that we've visited this tile
                 alreadyVisited.add(jump.destination);
             }
