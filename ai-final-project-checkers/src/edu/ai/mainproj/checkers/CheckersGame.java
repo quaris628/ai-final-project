@@ -120,6 +120,9 @@ public class CheckersGame implements CheckersGamePlayable {
 
             // if it's possible, valid, and we haven't already visited this destination tile
             if (jump != null && jump.isValid() && !alreadyVisited.contains(jump.destination)) {
+                // record that we're visiting this tile
+                alreadyVisited.add(jump.destination);
+
                 // look at all possible jumps from this location
                 List<CheckersMoveJump> nextJumps = getValidJumpsRecursive(
                         jump.destination, piece, alreadyVisited);
@@ -134,8 +137,6 @@ public class CheckersGame implements CheckersGamePlayable {
                 if (toReturn.size() == 0) {
                     toReturn.add(jump);
                 }
-                // record that we've visited this tile
-                alreadyVisited.add(jump.destination);
             }
         }
         return toReturn;
