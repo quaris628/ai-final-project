@@ -23,6 +23,7 @@ public class CheckersMove extends Move {
     public final CheckersPiece piece;
     public final CheckersTile destination;
     public boolean didKing;
+    protected String stringRepresentation;
 
     public CheckersMove(CheckersPiece piece, CheckersTile destination) {
         super(piece, destination);

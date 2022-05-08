@@ -108,6 +108,8 @@ public class CheckersMoveJumpMulti extends CheckersMoveJump implements Iterable<
 
 	@Override
 	public void execute() {
+		CheckersTile home = piece.getCheckersTile();
+		this.stringRepresentation = "JumpMove[" + home.column + "," + home.row + "->" + destination.column + "," + destination.row + "]";
 		for (CheckersMoveJumpSingle jump : jumps) {
 			jump.execute();
 		}
@@ -220,6 +222,13 @@ public class CheckersMoveJumpMulti extends CheckersMoveJump implements Iterable<
 			return new CheckersMoveJumpMulti(piece, destination, jumps);
 		}
 
+	}
+
+	@Override
+	public String toString() {
+		if (stringRepresentation != null)
+			return stringRepresentation;
+		return "MJump[]";
 	}
 
 }

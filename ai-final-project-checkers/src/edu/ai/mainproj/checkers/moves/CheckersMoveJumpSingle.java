@@ -83,6 +83,8 @@ public class CheckersMoveJumpSingle extends CheckersMoveJump {
 
 	@Override
 	public void execute() {
+		CheckersTile home = piece.getCheckersTile();
+		this.stringRepresentation = "Jump[" + home.column + "," + home.row + direction + "->" + destination.column + "," + destination.row;
 		executeRunning = true;
 		// super.execute() calls isValid, and if multiJumpCheckStartingTileBlank is true
 		//     then this isValid call must not do the multiJumpCheckStartingTileBlank check.
@@ -107,5 +109,12 @@ public class CheckersMoveJumpSingle extends CheckersMoveJump {
 	}
 
 	public CheckersPiece getJumpedPiece() { return jumpedPiece; }
+
+	@Override
+	public String toString() {
+		if (stringRepresentation != null)
+			return stringRepresentation;
+		return "Jump[]";
+	}
 	
 }

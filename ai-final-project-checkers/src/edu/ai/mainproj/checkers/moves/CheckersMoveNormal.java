@@ -1,6 +1,7 @@
 package edu.ai.mainproj.checkers.moves;
 
 import edu.ai.mainproj.checkers.CheckersPiece;
+import edu.ai.mainproj.checkers.CheckersTile;
 
 /**
  * For a normal single-tile-away move that a checkers piece can make
@@ -33,6 +34,20 @@ public class CheckersMoveNormal extends CheckersMove {
 		return super.isValid()
 				&& (piece.isKing()
 				|| direction.isForwardsFor(piece.getPlayer()));
+	}
+
+	@Override
+	public void execute() {
+		CheckersTile home = piece.getCheckersTile();
+		this.stringRepresentation = "Move[" + home.column + "," + home.row + direction + "->" + destination.column + "," + destination.row + "]";
+		super.execute();
+	}
+
+	@Override
+	public String toString() {
+		if (stringRepresentation != null)
+			return stringRepresentation;
+		return "Move[]";
 	}
 
 }
