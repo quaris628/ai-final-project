@@ -13,6 +13,7 @@ public class AIPlayer implements Player {
     private final int depth;
 
     private static final boolean PRINT_IN_MIN_MAX = false;
+    private static final boolean PRINT_MOVE_TRACE = true;
 
     // nodes visited during the search
     private static long visited = 0;
@@ -52,11 +53,13 @@ public class AIPlayer implements Player {
         PlayerType player = game.getTurn();
         // bottom of the search
         if (depth == 0) {
-            System.out.println("END OF DEPTH PRINT");
-            List<? extends CheckersMove> moveHistory = game.getMoveHistory();
-            for (int i = printMovesStartIndex; i < moveHistory.size(); i++)
-                System.out.print(moveHistory.get(i) + " ");
-            System.out.println(calculateHerustics(game,player));
+            if (PRINT_MOVE_TRACE) {
+				System.out.println("END OF DEPTH PRINT");
+				List<? extends CheckersMove> moveHistory = game.getMoveHistory();
+				for (int i = printMovesStartIndex; i < moveHistory.size(); i++)
+					System.out.print(moveHistory.get(i) + " ");
+				System.out.println(calculateHerustics(game,player));
+            }
             List<CheckersMove> ret = new LinkedList<>();
             ret.add(game.getMoveHistory().get(game.getMoveHistory().size() - 1));
             return new Pair<>(ret, calculateHerustics(game, player));

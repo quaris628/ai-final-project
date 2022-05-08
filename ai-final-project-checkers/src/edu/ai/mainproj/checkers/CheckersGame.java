@@ -8,10 +8,11 @@ import java.util.*;
 public class CheckersGame implements CheckersGamePlayable {
 
     private final CheckersBoard board;
+    // last element is most recent, first element is oldest
     private final List<CheckersMove> moveHistory;
     private PlayerType turn;
-    private PlayerType winner;
     private boolean done;
+    private PlayerType winner;
     // caches
     private List<? extends CheckersMove> possibleValidMoves;
     private List<CheckersPiece> blackPieces;
@@ -21,8 +22,17 @@ public class CheckersGame implements CheckersGamePlayable {
         board = CheckersBoard.CreateInitialBoard();
         moveHistory = new LinkedList<CheckersMove>();
         turn = PlayerType.BLACK;
-        winner = null;
         done = false;
+        winner = null;
+        possibleValidMoves = calculateValidMoves();
+    }
+
+    public CheckersGame(CheckersBoard initialBoard) {
+        board = initialBoard;
+        moveHistory = new LinkedList<CheckersMove>();
+        turn = PlayerType.BLACK;
+        done = false;
+        winner = null;
         possibleValidMoves = calculateValidMoves();
     }
 
@@ -38,41 +48,46 @@ public class CheckersGame implements CheckersGamePlayable {
      */
     @Override
     public boolean execute(CheckersMove move) {
-        // TODO is this method missing any code for parts that need to be done?
-
 		if (!move.isValid() && !done) { return false; }
 		move.execute();
-
 		moveHistory.add(move);
 
         // change whose turn it is
         turn = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
-
         // re-calculate valid moves
         possibleValidMoves = calculateValidMoves();
-
         return true;
     }
 
+    /**
+     * Unexecutes the last move made.
+     * Returns the game state to what it was before the last move.
+     * If no moves have been made yet, does nothing.
+     */
     @Override
     public void unexecute() {
         if (done) {
             done = false;
             winner = null;
         }
+        if (moveHistory.size() == 0) { return; }
 
-        // pop last move from list
+        // pop last move from list and unexecute it
         CheckersMove move = moveHistory.remove(moveHistory.size() - 1);
-
         move.unexecute();
 
         // change whose turn it is
         turn = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
-
         // re-calculate valid moves
         possibleValidMoves = calculateValidMoves();
     }
 
+    /**
+     * Calculates all valid moves for the current board state.
+     * Supporting function.
+     * Called whenever the valid moves change, i.e. Constructor and execute()
+     * @return List of all possible and valid CheckersMove's
+     */
     private List<? extends CheckersMove> calculateValidMoves() {
         refreshBlackRedPieces();
         List<CheckersPiece> pieces =
@@ -103,25 +118,30 @@ public class CheckersGame implements CheckersGamePlayable {
         return normalMoves;
     }
 
+    /**
+     * Calculates all valid jumps for one piece, given the current board state
+     * Supporting function.
+     * Called only in calculateValidMoves
+     * public only so it can be tested. Won't break anything to use it outside
+     *     of unit tests though
+     * @param piece to get jumps for
+     * @return List of possible valid jumps moves for the piece
+     */
     public List<CheckersMoveJump> getValidJumpsFor(CheckersPiece piece) {
         Set<CheckersTile> alreadyVisited = new HashSet<CheckersTile>();
         alreadyVisited.add(piece.getCheckersTile());
-        List<CheckersMoveJump> toReturn = getValidJumpsRecursive(
-                piece.getCheckersTile(), piece, alreadyVisited);
-
-        // sloppy fix for now b/c somehow invalid moves are slipping through
-        // TODO actually find where these invalid moves are coming from, if there are any?
-        // so this can be removed as we can just return toReturn
-        LinkedList<CheckersMoveJump> objsToRemove = new LinkedList<CheckersMoveJump>();
-        for (CheckersMoveJump jump : toReturn) {
-            if (jump == null) { throw new IllegalStateException("toReturn had a null jump"); }
-            if (!jump.isValid()) { objsToRemove.add(jump); }
-        }
-        toReturn.removeAll(objsToRemove);
-        // ^^^ this is the end of the sloppy fix
-        return toReturn;
+        return getValidJumpsRecursive(piece.getCheckersTile(), piece, alreadyVisited);
     }
 
+    /**
+     * Recursive part of getValidJumpsFor
+     * Supporting function
+     *
+     * @param tile to start looking for jumps from
+     * @param piece that will be making the jumps
+     * @param alreadyVisited tiles already explored, so we don't re-visit any
+     * @return list of possible jumps from the given tile
+     */
     private List<CheckersMoveJump> getValidJumpsRecursive(
             CheckersTile tile, CheckersPiece piece, Set<CheckersTile> alreadyVisited) {
         List<CheckersMoveJump> toReturn = new LinkedList<CheckersMoveJump>();
@@ -161,8 +181,13 @@ public class CheckersGame implements CheckersGamePlayable {
         return toReturn;
     }
 
-    // return as a list of regular moves to be compatible with
-    //     calculateValidMoves returning this result
+    /**
+     * Calcualte all valid normal moves, for all of the given pieces
+     * Supporting function
+     * Called only by calculateValidMoves
+     * @param pieces to calculate valid moves for
+     * @return all valid moves for the given pieces
+     */
     private List<CheckersMoveNormal> getValidNormalMoves(List<CheckersPiece> pieces) {
         List<CheckersMoveNormal> moves = new LinkedList<CheckersMoveNormal>();
         for (CheckersPiece piece : pieces) {
@@ -176,7 +201,14 @@ public class CheckersGame implements CheckersGamePlayable {
         return moves;
     }
 
-    // supporting functions (usually private)
+    /**
+     * Refreshes the blackPieces and redPieces lists
+     * Supporting function
+     * Called only by calculateValidMoves
+     * Iterates through every tile on the gameboard, and
+     *     if that tile has a peice, the piece is added to the
+     *     blackPieces or redPieces list according to its player
+     */
     private void refreshBlackRedPieces() {
         blackPieces = new LinkedList<CheckersPiece>();
         redPieces = new LinkedList<CheckersPiece>();

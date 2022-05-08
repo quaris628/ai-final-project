@@ -1,6 +1,5 @@
 package edu.ai.mainproj.checkers;
 
-import edu.ai.mainproj.anygame.Move;
 import edu.ai.mainproj.anygame.Piece;
 import edu.ai.mainproj.anygame.Tile;
 
@@ -33,14 +32,9 @@ public class CheckersPiece extends Piece {
     public void moveTo(Tile tile) {
         if (tile instanceof CheckersTile) {
             super.moveTo(tile);
-            /*
-            if (((CheckersTile) tile).doesKing(player)) {
-                king = true;
-            }
-            //*/
         } else {
             // not ideal to throw exception, but I don't
-            // see a better way to enforce this
+            // see a better way to enforce this...
             throw new IllegalArgumentException(
                     "Checkers piece cannot be placed on a non-checkers tile");
         }

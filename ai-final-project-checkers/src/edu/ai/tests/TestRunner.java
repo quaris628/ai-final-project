@@ -18,11 +18,12 @@ public class TestRunner {
                 TileTests.class,
 
                 CheckersMoveJumpSingleTests.class,
-                //CheckersMoveMultiJumpTests.class,
+                CheckersMoveJumpMultiTests.class,
                 CheckersMoveNormalTests.class,
                 DiagonalDirectionTests.class,
 
                 CheckersBoardTests.class,
+                CheckersGameTests.class,
                 CheckersPieceTests.class,
                 CheckersTileTests.class,
                 PlayerTypeTests.class);
