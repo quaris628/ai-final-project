@@ -18,6 +18,7 @@ public class CheckersMoveJumpSingle extends CheckersMoveJump {
 	public final CheckersTile jumpedTile;
 	private CheckersPiece jumpedPiece;
 	private final boolean multiJumpCheckStartingTileBlank; // see doc comment below
+	private boolean executeRunning = false;
 
 	public static CheckersMoveJumpSingle Create(CheckersPiece piece, DiagonalDirection direction) {
 		// return null if the move is definitely impossible,
@@ -87,16 +88,20 @@ public class CheckersMoveJumpSingle extends CheckersMoveJump {
 				&& this.jumpedTile.getCheckersPiece().getPlayer() != null
 				&& this.jumpedTile.getCheckersPiece().getPlayer().isOpposite(piece.getPlayer())
 				&& (piece.isKing() || direction.isForwardsFor(piece.getPlayer()))
-				&& (!multiJumpCheckStartingTileBlank || startingTile.isBlank());
+				&& (!multiJumpCheckStartingTileBlank || executeRunning || startingTile.isBlank());
 	}
 
 	@Override
 	public void execute() {
+		executeRunning = true;
+		// super.execute() calls isValid, and if multiJumpCheckStartingTileBlank is true
+		//     then this isValid call must not do the multiJumpCheckStartingTileBlank check.
 		super.execute();
 		jumpedPiece = jumpedTile.getCheckersPiece();
 		jumpedTile.getCheckersPiece().remove();
 		// cannot use only jumpedTile.removePiece() because
 		//     it does not set the removed piece's reference to null
+		executeRunning = false;
 	}
 
 	@Override
