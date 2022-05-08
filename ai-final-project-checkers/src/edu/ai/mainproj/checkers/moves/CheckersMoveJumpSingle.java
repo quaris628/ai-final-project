@@ -93,8 +93,8 @@ public class CheckersMoveJumpSingle extends CheckersMoveJump {
 	@Override
 	public void execute() {
 		super.execute();
-		jumpedTile.getCheckersPiece().remove();
 		jumpedPiece = jumpedTile.getCheckersPiece();
+		jumpedTile.getCheckersPiece().remove();
 		// cannot use only jumpedTile.removePiece() because
 		//     it does not set the removed piece's reference to null
 	}
@@ -102,7 +102,8 @@ public class CheckersMoveJumpSingle extends CheckersMoveJump {
 	@Override
 	public void unexecute() {
 		super.unexecute();
-		jumpedTile.setPiece(jumpedPiece);
+		//jumpedTile.setPiece(jumpedPiece);
+		jumpedPiece.moveTo(jumpedTile);
 	}
 	
 	@Override

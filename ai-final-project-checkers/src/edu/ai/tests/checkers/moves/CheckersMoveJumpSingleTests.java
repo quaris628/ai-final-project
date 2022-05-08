@@ -440,6 +440,48 @@ public class CheckersMoveJumpSingleTests {
     }
 
     // --------------------------------
+    // UNEXECUTE BEHAVIOR
+    // --------------------------------
+
+    @Test
+    public void unexecute_normal_movesJumperAndReplacesJumped() {
+        CheckersBoard board = new CheckersBoard();
+        CheckersTile start = board.getCheckersTile(4, 5);
+        CheckersTile jumped = board.getCheckersTile(3, 6);
+        CheckersTile dest = board.getCheckersTile(2, 7);
+        CheckersPiece jumperPiece = new CheckersPiece(PlayerType.BLACK, start);
+        CheckersPiece jumpedPiece = new CheckersPiece(PlayerType.RED, jumped);
+
+        // check starting conditions, for my sanity
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece, jumped.getCheckersPiece());
+        assertTrue(dest.isBlank());
+
+        CheckersMoveJumpSingle move = CheckersMoveJumpSingle.Create(
+                jumperPiece, DiagonalDirection.FORWARD_RIGHT);
+
+        assertTrue(move.isValid());
+        move.execute();
+
+        // sanity checks
+        // check tiles
+        assertTrue(start.isBlank());
+        assertTrue(jumped.isBlank());
+        assertEquals(jumperPiece, dest.getCheckersPiece());
+        // check pieces
+        assertNull(jumpedPiece.getCheckersTile());
+        assertEquals(dest, jumperPiece.getCheckersTile());
+
+        move.unexecute();
+
+        assertFalse(start.isBlank());
+        assertFalse(jumped.isBlank());
+        assertTrue(dest.isBlank());
+        assertEquals(jumperPiece, start.getCheckersPiece());
+        assertEquals(jumpedPiece, jumped.getCheckersPiece());
+    }
+
+    // --------------------------------
     // KINGING BEHAVIOR
     // --------------------------------
 

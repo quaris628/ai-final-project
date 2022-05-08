@@ -35,7 +35,9 @@ public class Piece {
             throw new IllegalArgumentException(
                     "Destination tile already has a piece");
         }
-        this.tile.removePiece();
+        if (this.tile != null) {
+            this.tile.removePiece();
+        }
         this.tile = tile;
         this.tile.setPiece(this);
     }
