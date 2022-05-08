@@ -114,7 +114,7 @@ public class CheckersMoveJumpMultiTests {
         CheckersTile dest2 = board.getCheckersTile(4, 3);
         CheckersTile jumped3 = board.getCheckersTile(3, 4);
         CheckersTile dest3 = board.getCheckersTile(2, 5);
-        CheckersTile jumped4 = board.getCheckersTile(3, 4);
+        CheckersTile jumped4 = board.getCheckersTile(1, 4);
         CheckersTile dest4 = start;
         CheckersTile jumped5 = jumped1;
         CheckersTile destFinal = dest1;

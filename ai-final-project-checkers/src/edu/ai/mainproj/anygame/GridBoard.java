@@ -5,16 +5,21 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * A rectangular grid board, consisting of tiles
- *
- * Also supports square boards of any even-numbered size, default 8x8.
+ * A rectangular grid board, consisting of tiles.
+ * Supports any rectangular dimensions larger than 1x1.
  *
  * @author Nathan Swartz
  */
 public class GridBoard {
 
+    // rows are first argument / outside array, columns are second argument
     protected final Tile[][] board;
 
+    /**
+     * Creates a new grid board, with all tiles blank.
+     * @param rows number of rows in the grid board
+     * @param columns number of columns in the grid board
+     */
     public GridBoard(int rows, int columns) {
         board = new Tile[rows][columns];
         for (int i = 0; i < rows; i++) {
@@ -24,10 +29,22 @@ public class GridBoard {
         }
     }
 
+    /**
+     * Get Iterable over all tiles in the specified row
+     * Tile order should start from column 0 with increasing column index
+     * @param row
+     * @return iterable of all tiles in row
+     */
     public Iterable<Tile> getTilesInRow(int row) {
         return Arrays.asList(board[row]);
     }
 
+    /**
+     * Get Iterable over all tiles in the specified column
+     * Tile order should start from row 0 with increasing row index
+     * @param column
+     * @return iterable of all tiles in column
+     */
     public Iterable<Tile> getTilesInColumn(int column) {
         List<Tile> columnTiles = new LinkedList<Tile>();
         for (int i = 0; i < board[0].length; i++) {
@@ -36,6 +53,14 @@ public class GridBoard {
         return columnTiles;
     }
 
+    /**
+     * Get Iterable over all tiles in the board
+     * Tile order should start with row 0,
+     *     iterate through all tiles in row 0 by increasing column index,
+     *     and repeat likewise for increasing row index.
+     * In other words, like english reads, if 0,0 is top left.
+     * @return iterable of all tiles in the board
+     */
     public Iterable<Tile> getAllTiles() {
         List<Tile> allTiles = new LinkedList<Tile>();
         for (Tile[] row : board) {
@@ -44,6 +69,12 @@ public class GridBoard {
         return allTiles;
     }
 
+    /**
+     * Gets tile at a row and column
+     * @param row
+     * @param column
+     * @return tile at row, column
+     */
     public Tile getTile(int row, int column) {
         if (row < 0 || board.length <= row
             || column < 0 || board[0].length <= column) {
@@ -52,7 +83,16 @@ public class GridBoard {
         return board[row][column];
     }
 
+    /**
+     * Get number of rows in the board
+     * @return number of rows
+     */
     public int getNumRows() { return board.length; }
+
+    /**
+     * Get number of columns in the board
+     * @return number of columns
+     */
     public int getNumColumns() { return board[0].length; }
 
     /**

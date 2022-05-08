@@ -35,23 +35,24 @@ public class CheckersBoard extends GridBoard {
         CheckersBoard toReturn = new CheckersBoard();
         // Place Red pieces
         for (Tile tile : toReturn.getTilesInRow(0)) {
-            tile.setPiece(new CheckersPiece(PlayerType.RED, (CheckersTile)tile));
+            new CheckersPiece(PlayerType.RED, (CheckersTile)tile);
         } for (Tile tile : toReturn.getTilesInRow(1)) {
-            tile.setPiece(new CheckersPiece(PlayerType.RED, (CheckersTile)tile));
+            new CheckersPiece(PlayerType.RED, (CheckersTile)tile);
         } for (Tile tile : toReturn.getTilesInRow(2)) {
-            tile.setPiece(new CheckersPiece(PlayerType.RED, (CheckersTile)tile));
+            new CheckersPiece(PlayerType.RED, (CheckersTile)tile);
         // Place Black pieces
         } for (Tile tile : toReturn.getTilesInRow(5)) {
-            tile.setPiece(new CheckersPiece(PlayerType.BLACK, (CheckersTile)tile));
+            new CheckersPiece(PlayerType.BLACK, (CheckersTile)tile);
         } for (Tile tile : toReturn.getTilesInRow(6)) {
-            tile.setPiece(new CheckersPiece(PlayerType.BLACK, (CheckersTile)tile));
+            new CheckersPiece(PlayerType.BLACK, (CheckersTile)tile);
         } for (Tile tile : toReturn.getTilesInRow(7)) {
-            tile.setPiece(new CheckersPiece(PlayerType.BLACK, (CheckersTile)tile));
+            new CheckersPiece(PlayerType.BLACK, (CheckersTile)tile);
         }
         return toReturn;
     }
 
 	// TODO is this needed, or is super.getTilesInRow() okay?
+    // Apparently it's okay because I'm not seeing any problems with how it is now...
 	/*
 	@Override
 	public Iterable<Tile> getTilesInRow(int row) {

@@ -33,8 +33,6 @@ import static org.junit.Assert.*;
  */
 public class CheckersBoardTests {
 
-    private static final CheckersBoard initialBoard = CheckersBoard.CreateInitialBoard();
-
     public CheckersBoardTests() {}
 
     //--------------------------------
@@ -43,6 +41,7 @@ public class CheckersBoardTests {
 
     @Test
     public void testInitialBoard_NullTilePositions() {
+        CheckersBoard initialBoard = CheckersBoard.CreateInitialBoard();
         // tiles that should be null are null
         for (int i = 0; i < CheckersBoard.SIZE; i += 2) {
             for (int j = 0; j < CheckersBoard.SIZE; j += 2) {
@@ -69,6 +68,7 @@ public class CheckersBoardTests {
 
     @Test
     public void testInitialBoard_BlankTilePositions() {
+        CheckersBoard initialBoard = CheckersBoard.CreateInitialBoard();
         for (int j = 0; j < CheckersBoard.SIZE; j += 2) {
             // first 3 rows are not blank
             assertFalse(initialBoard.getTile(0, j + 1).isBlank());
@@ -88,6 +88,7 @@ public class CheckersBoardTests {
 
     @Test
     public void testInitialBoard_RedPieces() {
+        CheckersBoard initialBoard = CheckersBoard.CreateInitialBoard();
         for (int j = 0; j < CheckersBoard.SIZE; j += 2) {
             CheckersPiece piece0 = initialBoard.getCheckersTile(0, j + 1).getCheckersPiece();
             assertEquals(PlayerType.RED, piece0.getPlayer());
@@ -101,6 +102,7 @@ public class CheckersBoardTests {
 
     @Test
     public void testInitialBoard_BlackPieces() {
+        CheckersBoard initialBoard = CheckersBoard.CreateInitialBoard();
         for (int j = 0; j < CheckersBoard.SIZE; j += 2) {
             CheckersPiece piece0 = initialBoard.getCheckersTile(5, j).getCheckersPiece();
             assertEquals(PlayerType.BLACK, piece0.getPlayer());
@@ -117,6 +119,7 @@ public class CheckersBoardTests {
 
     @Test
     public void testGetTilesInRow1() {
+        CheckersBoard initialBoard = CheckersBoard.CreateInitialBoard();
         int row = 1;
 
         Iterable<Tile> tilesInRow = initialBoard.getTilesInRow(row);
@@ -131,6 +134,7 @@ public class CheckersBoardTests {
 
     @Test
     public void testGetTilesInRow5() {
+        CheckersBoard initialBoard = CheckersBoard.CreateInitialBoard();
         int row = 5;
 
         Iterable<Tile> tilesInRow = initialBoard.getTilesInRow(row);
@@ -155,6 +159,7 @@ public class CheckersBoardTests {
     }
 
     public void testGetTilesInColumn(int column) {
+        CheckersBoard initialBoard = CheckersBoard.CreateInitialBoard();
         Iterable<Tile> tilesInColumn = initialBoard.getTilesInColumn(column);
 
         Iterator<Tile> iter = tilesInColumn.iterator();
@@ -170,6 +175,7 @@ public class CheckersBoardTests {
 
     @Test
     public void testGetAllTiles() {
+        CheckersBoard initialBoard = CheckersBoard.CreateInitialBoard();
         Iterable<Tile> allTiles = initialBoard.getAllTiles();
         int blankCount = 0;
         int redCount = 0;
