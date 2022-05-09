@@ -2,6 +2,7 @@ package edu.ai.mainproj.ai;
 
 import edu.ai.mainproj.checkers.CheckersGamePlayable;
 import edu.ai.mainproj.checkers.CheckersTile;
+import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.checkers.moves.CheckersMove;
 import edu.ai.mainproj.checkers.moves.CheckersMoveJumpMulti;
 import edu.ai.mainproj.checkers.moves.CheckersMoveJumpSingle;
@@ -85,4 +86,7 @@ public class ConsolePlayer implements Player {
         return possibleMoves;
     }
 
+    // do nothing, doesn't matter to this class
+    @Override
+    public void receiveResult(PlayerType winner) {}
 }

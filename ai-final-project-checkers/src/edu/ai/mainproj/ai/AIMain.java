@@ -20,6 +20,8 @@ public class AIMain {
             long startTime = System.currentTimeMillis();
             Player currentPlayer = game.getTurn() == PlayerType.RED ? red : black;
             if (game.getPossibleMoves().isEmpty()) {
+                red.receiveResult(null);
+                black.receiveResult(null);
                 System.out.println("DRAW");
                 return;
             }
@@ -29,6 +31,8 @@ public class AIMain {
             System.out.println(game);
         }
         System.out.println(game.getWinner() + " WINS!");
+        red.receiveResult(game.getWinner());
+        black.receiveResult(game.getWinner());
     }
 
 }

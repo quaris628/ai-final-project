@@ -10,15 +10,8 @@ import java.util.List;
 
 public class AIPlayer implements Player {
 
-    private final PlayerType playerColor;
-    private final int depth;
-
     private static final boolean PRINT_IN_MIN_MAX = false;
-    private static final boolean PRINT_MOVE_TRACE = true;
-
-    // nodes visited during the search
-    private static long visited = 0;
-
+    private static final boolean PRINT_MOVE_TRACE = false;
     // constants for values of each piece type for heuristic calculation
     private static final float OWN_PIECE_VALUE = 4f;
     private static final float OPP_PIECE_VALUE = 1f;
@@ -30,6 +23,13 @@ public class AIPlayer implements Player {
 
     private static final float OWN_NO_MOVES_STATE = 100.23f;
     private static final float OPP_NO_MOVES_STATE = 100.23f;
+
+    // nodes visited during the search
+    // TODO why is this static? -Nathan
+    private static long visited = 0;
+
+    private final PlayerType playerColor;
+    private int depth;
 
     private int printMovesStartIndex = 0;
 
@@ -159,4 +159,11 @@ public class AIPlayer implements Player {
         return ret;
     }
 
+    // do nothing, doesn't matter to this class
+    @Override
+    public void receiveResult(PlayerType winner) {}
+
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
 }
