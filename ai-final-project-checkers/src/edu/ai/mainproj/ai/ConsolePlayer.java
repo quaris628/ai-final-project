@@ -88,5 +88,5 @@ public class ConsolePlayer implements Player {
 
     // do nothing, doesn't matter to this class
     @Override
-    public void receiveResult(PlayerType winner) {}
+    public void notifyGameEnd(CheckersGamePlayable endGame) {}
 }

@@ -29,7 +29,7 @@ public class AIPlayer implements Player {
     private static long visited = 0;
 
     private final PlayerType playerColor;
-    private int depth;
+    protected int depth;
 
     private int printMovesStartIndex = 0;
 
@@ -161,9 +161,9 @@ public class AIPlayer implements Player {
 
     // do nothing, doesn't matter to this class
     @Override
-    public void receiveResult(PlayerType winner) {}
+    public void notifyGameEnd(CheckersGamePlayable endGame) {}
 
-    public void setDepth(int depth) {
-        this.depth = depth;
-    }
+    public PlayerType getPlayerColor() { return playerColor; }
+
+
 }

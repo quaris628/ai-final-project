@@ -90,14 +90,11 @@ public class CheckersGame implements CheckersGamePlayable {
      */
     private List<? extends CheckersMove> calculateValidMoves() {
         refreshBlackRedPieces();
+        // if one of the pieces lists was empty in refreshBlackRedPieces
+        if (isDone()) { return new LinkedList<CheckersMove>(); }
+
         List<CheckersPiece> pieces =
                 turn == PlayerType.BLACK ? blackPieces : redPieces;
-        if (pieces.isEmpty()) {
-            // player whose turn it isn't is the winner
-            done = true;
-            winner = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
-            return new LinkedList<CheckersMove>();
-        }
         // if any pieces are off the board, remove them from the list
         pieces.removeIf(piece -> piece.getCheckersTile() == null);
         // if there are any jumps, just return those
@@ -224,6 +221,12 @@ public class CheckersGame implements CheckersGamePlayable {
                     }
                 }
             }
+        }
+        if (blackPieces.isEmpty() || redPieces.isEmpty()) {
+            done = true;
+            if (blackPieces.isEmpty() && redPieces.isEmpty()) { winner = null; }
+            else if (blackPieces.isEmpty()) { winner = PlayerType.RED; }
+            else { winner = PlayerType.BLACK; }
         }
     }
 
