@@ -1,6 +1,5 @@
 package edu.ai.tests.ai;
 import edu.ai.mainproj.ai.AutoDifficultyAIPlayer;
-import edu.ai.mainproj.anygame.Piece;
 import edu.ai.mainproj.checkers.CheckersBoard;
 import edu.ai.mainproj.checkers.CheckersGame;
 import edu.ai.mainproj.checkers.CheckersPiece;
@@ -24,9 +23,9 @@ public class AutoDifficultyAIPlayerTests {
         AutoDifficultyAIPlayer player = new AutoDifficultyAIPlayer(PlayerType.RED);
 
         // if these asserts fail it just means re-calculate the expecteds
-        assertEquals(1, AutoDifficultyAIPlayer.MIN_DEPTH);
-        assertEquals(9, AutoDifficultyAIPlayer.MAX_DEPTH);
-        assertEquals(5, AutoDifficultyAIPlayer.START_DEPTH);
+        assertEquals(1, AutoDifficultyAIPlayer.MIN_DIFFICULTY);
+        assertEquals(9, AutoDifficultyAIPlayer.MAX_DIFFICULTY);
+        assertEquals(5, AutoDifficultyAIPlayer.START_DIFFICULTY);
 
         // expecteds for MAX_DEPTH = 9, MIN_DEPTH = 1, START_DEPTH = 5
         float[] expecteds = new float[] {
@@ -56,9 +55,9 @@ public class AutoDifficultyAIPlayerTests {
         player.notifyGameEnd(game);
 
         // if these asserts fail it just means re-calculate the expecteds
-        assertEquals(1, AutoDifficultyAIPlayer.MIN_DEPTH);
-        assertEquals(9, AutoDifficultyAIPlayer.MAX_DEPTH);
-        assertEquals(5, AutoDifficultyAIPlayer.START_DEPTH);
+        assertEquals(1, AutoDifficultyAIPlayer.MIN_DIFFICULTY);
+        assertEquals(9, AutoDifficultyAIPlayer.MAX_DIFFICULTY);
+        assertEquals(5, AutoDifficultyAIPlayer.START_DIFFICULTY);
         float delta = 0.000001f;
         assertEquals(0.5f, AutoDifficultyAIPlayer.ALPHA, delta);
 
