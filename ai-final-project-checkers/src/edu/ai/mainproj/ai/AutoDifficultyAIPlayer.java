@@ -18,7 +18,8 @@ public class AutoDifficultyAIPlayer extends AIPlayer {
 
     // for exponentially moving average. Between 0 and 1.
     // higher alpha discounts older data faster
-    public static final float ALPHA = 0.5f;
+    // (On the low side is probably good?)
+    public static final float ALPHA = 0.2f;
 
     // indexes correspond to depths, index 0 is for MIN_DEPTH
     // 1   = expect AI wins
@@ -71,11 +72,12 @@ public class AutoDifficultyAIPlayer extends AIPlayer {
         winRatios[depth - MIN_DIFFICULTY] =
                 (1.0f - ALPHA) * winRatios[depth - MIN_DIFFICULTY]
                 + ALPHA * result;
+        // TODO also have others slowly trend back towards their expected initial values
 
         // if we expect the AI to win
-        if (winRatios[depth - MIN_DIFFICULTY] < 0.5f) {
+        if (winRatios[depth - MIN_DIFFICULTY] > 0.5f) {
             // decrease depth if next-lowest depth has an expected
-            //     win ratio closer to 50/50
+            //     win ratio closer to 50/50, or any value less than 0.5
             if (depth > MIN_DIFFICULTY &&
                     Math.abs(0.5f - winRatios[depth - MIN_DIFFICULTY - 1])
                     < Math.abs(0.5f - winRatios[depth - MIN_DIFFICULTY])) {
@@ -83,7 +85,7 @@ public class AutoDifficultyAIPlayer extends AIPlayer {
             }
         }
         // if we expect the opponent to win
-        else if (winRatios[depth - MIN_DIFFICULTY] > 0.5f) {
+        else if (winRatios[depth - MIN_DIFFICULTY] < 0.5f) {
             // increase depth if next-highest depth has an expected
             //     win ratio closer to 50/50
             if (depth < MAX_DIFFICULTY - 1 &&
