@@ -1,8 +1,7 @@
-package edu.ai.mainproj.ai;
+package edu.ai.mainproj.players;
 
 import edu.ai.mainproj.checkers.CheckersGamePlayable;
 import edu.ai.mainproj.checkers.CheckersTile;
-import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.checkers.moves.CheckersMove;
 import edu.ai.mainproj.checkers.moves.CheckersMoveJumpMulti;
 import edu.ai.mainproj.checkers.moves.CheckersMoveJumpSingle;

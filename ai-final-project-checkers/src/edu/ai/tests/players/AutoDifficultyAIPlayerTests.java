@@ -1,5 +1,5 @@
-package edu.ai.tests.ai;
-import edu.ai.mainproj.ai.AutoDifficultyAIPlayer;
+package edu.ai.tests.players;
+import edu.ai.mainproj.players.AutoDifficultyAIPlayer;
 import edu.ai.mainproj.checkers.CheckersBoard;
 import edu.ai.mainproj.checkers.CheckersGame;
 import edu.ai.mainproj.checkers.CheckersPiece;
@@ -59,7 +59,7 @@ public class AutoDifficultyAIPlayerTests {
         assertEquals(9, AutoDifficultyAIPlayer.MAX_DIFFICULTY);
         assertEquals(5, AutoDifficultyAIPlayer.START_DIFFICULTY);
         float delta = 0.000001f;
-        assertEquals(0.5f, AutoDifficultyAIPlayer.ALPHA, delta);
+        assertEquals(0.2f, AutoDifficultyAIPlayer.ALPHA, delta);
 
         // expecteds for MAX_DEPTH = 9, MIN_DEPTH = 1, START_DEPTH = 5,
         //     ALPHA = 0.5f
@@ -68,7 +68,7 @@ public class AutoDifficultyAIPlayerTests {
                 0.2f,
                 0.3f,
                 0.4f,
-                0.25f,
+                0.4f,
                 0.625f,
                 0.75f,
                 0.875f

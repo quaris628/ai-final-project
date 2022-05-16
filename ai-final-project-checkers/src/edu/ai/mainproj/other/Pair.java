@@ -1,4 +1,4 @@
-package edu.ai.mainproj.ai;
+package edu.ai.mainproj.other;
 
 public class Pair<L, R> {
 

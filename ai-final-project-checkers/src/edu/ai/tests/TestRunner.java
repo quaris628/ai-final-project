@@ -1,6 +1,6 @@
 package edu.ai.tests;
 
-import edu.ai.tests.ai.AutoDifficultyAIPlayerTests;
+import edu.ai.tests.players.AutoDifficultyAIPlayerTests;
 import edu.ai.tests.anygame.*;
 import edu.ai.tests.checkers.*;
 import edu.ai.tests.checkers.moves.*;

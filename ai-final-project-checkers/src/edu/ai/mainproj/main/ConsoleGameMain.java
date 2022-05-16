@@ -1,9 +1,12 @@
-package edu.ai.mainproj.ai;
+package edu.ai.mainproj.main;
 
+import edu.ai.mainproj.players.AIPlayer;
+import edu.ai.mainproj.players.AutoDifficultyAIPlayer;
+import edu.ai.mainproj.players.Player;
 import edu.ai.mainproj.checkers.CheckersGame;
 import edu.ai.mainproj.checkers.PlayerType;
 
-public class GameMain {
+public class ConsoleGameMain {
 
     private static final boolean TIME_CONTROL = false;
     private static final int SEC_PER_TURN = 5;
@@ -11,7 +14,7 @@ public class GameMain {
     private static final int DEPTH_BLACK = 5;
 
     public static void main(String... args) {
-        Player red = new AIPlayer(PlayerType.RED, DEPTH_RED);
+        Player red = new AutoDifficultyAIPlayer(PlayerType.RED);
         Player black = new AIPlayer(PlayerType.BLACK, DEPTH_BLACK);
 
         while (true) {

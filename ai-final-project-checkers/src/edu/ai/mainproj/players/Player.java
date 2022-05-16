@@ -1,7 +1,6 @@
-package edu.ai.mainproj.ai;
+package edu.ai.mainproj.players;
 
 import edu.ai.mainproj.checkers.CheckersGamePlayable;
-import edu.ai.mainproj.checkers.PlayerType;
 
 /**
  *
