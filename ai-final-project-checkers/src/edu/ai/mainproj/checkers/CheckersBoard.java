@@ -109,7 +109,7 @@ public class CheckersBoard extends GridBoard {
         int hash = 31;
         for (CheckersTile tile : getAllCheckersTiles()) {
             hash = 17 * hash + tile.hashCode();
-            int pieceHash = tile.isBlank() ? 0 : tile.getCheckersPiece().getPlayer().hashCode();
+            int pieceHash = tile.isBlank() ? 0 : tile.getCheckersPiece().hashCode();
             hash = 19 * hash + pieceHash;
         }
         return hash;

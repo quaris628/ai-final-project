@@ -48,6 +48,15 @@ public class CheckersPiece extends Piece {
     }
 
     @Override
+    public int hashCode() {
+        int result = 73;
+        result = result * 57 + player.hashCode();
+        result = result * 57 + (king ? 0 : 1);
+        result = result * 57 + (getTile() == null ? 0 : getTile().hashCode());
+        return result;
+    }
+
+    @Override
     public String toString() {
         StringBuilder ret = new StringBuilder();
         if (player == PlayerType.BLACK) ret.append("\u001B[37m");

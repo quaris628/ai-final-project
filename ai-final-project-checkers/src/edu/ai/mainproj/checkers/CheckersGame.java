@@ -7,7 +7,10 @@ import java.util.*;
 
 public class CheckersGame implements CheckersGamePlayable {
 
+    public static final int REPETITION_MAX = 3;
+
     private final CheckersBoard board;
+    private final Map<Integer, Integer> boardHistory;
     // last element is most recent, first element is oldest
     private final List<CheckersMove> moveHistory;
     private PlayerType turn;
@@ -20,19 +23,23 @@ public class CheckersGame implements CheckersGamePlayable {
 
     public CheckersGame() {
         board = CheckersBoard.CreateInitialBoard();
+        boardHistory = new HashMap<Integer, Integer>();
         moveHistory = new LinkedList<CheckersMove>();
         turn = PlayerType.BLACK;
         done = false;
         winner = null;
+        boardHistory.put(getGameStateHash(), 1);
         possibleValidMoves = calculateValidMoves();
     }
 
     public CheckersGame(CheckersBoard initialBoard) {
         board = initialBoard;
+        boardHistory = new HashMap<Integer, Integer>();
         moveHistory = new LinkedList<CheckersMove>();
         turn = PlayerType.BLACK;
         done = false;
         winner = null;
+        boardHistory.put(getGameStateHash(), 1);
         possibleValidMoves = calculateValidMoves();
     }
 
@@ -51,6 +58,18 @@ public class CheckersGame implements CheckersGamePlayable {
 		if (!move.isValid() && !done) { return false; }
 		move.execute();
 		moveHistory.add(move);
+        // do previous board states checking for repetitions
+        int hash = board.hashCode() * 29 + turn.hashCode();
+        if (boardHistory.containsKey(hash)) {
+            int oldValue = boardHistory.get(hash);
+            boardHistory.replace(hash, oldValue + 1);
+            if (oldValue + 1 >= REPETITION_MAX) {
+                done = true;
+                winner = null;
+            }
+        } else {
+            boardHistory.put(hash, 1);
+        }
 
         // change whose turn it is
         turn = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
@@ -75,6 +94,8 @@ public class CheckersGame implements CheckersGamePlayable {
         // pop last move from list and unexecute it
         CheckersMove move = moveHistory.remove(moveHistory.size() - 1);
         move.unexecute();
+        int hash = getGameStateHash();
+        boardHistory.replace(hash, boardHistory.get(hash) - 1);
 
         // change whose turn it is
         turn = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
@@ -228,6 +249,15 @@ public class CheckersGame implements CheckersGamePlayable {
             else if (blackPieces.isEmpty()) { winner = PlayerType.RED; }
             else { winner = PlayerType.BLACK; }
         }
+    }
+
+    /**
+     * Returns a hash combining board.hashCode() and turn.hashCode()
+     * Useful for determining repetitions of the same game state
+     * @return hash combining board.hashCode() and turn.hashCode()
+     */
+    private int getGameStateHash() {
+        return board.hashCode() * 29 + turn.hashCode();
     }
 
     // one-liner getters

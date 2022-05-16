@@ -59,6 +59,14 @@ public class Tile {
      */
     public Piece getPiece() { return piece; }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Tile tile)) { return false; }
+        if (this == tile) { return true; }
+        if (this.board != tile.board) { return false; }
+        return this.hashCode() == tile.hashCode();
+    }
+
     /**
      * @return hashcode unique to row, column
      */

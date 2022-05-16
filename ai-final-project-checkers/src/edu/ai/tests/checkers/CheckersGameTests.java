@@ -1,7 +1,9 @@
 package edu.ai.tests.checkers;
 
+import edu.ai.mainproj.checkers.CheckersBoard;
 import edu.ai.mainproj.checkers.CheckersGame;
 import edu.ai.mainproj.checkers.CheckersPiece;
+import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.checkers.moves.*;
 import org.junit.Test;
 
@@ -56,5 +58,37 @@ public class CheckersGameTests {
         assertEquals(actualJump.hashCode(), expectedJump.hashCode());
         // only jumps can be made
         assertEquals(1, possJumps.size());
+    }
+
+    @Test
+    public void threefoldRepetition_draw() {
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece red = new CheckersPiece(PlayerType.RED, board.getCheckersTile(7, 6));
+        CheckersPiece black = new CheckersPiece(PlayerType.BLACK, board.getCheckersTile(0, 1));
+        CheckersGame game = new CheckersGame(board);
+
+
+
+        // destinations of the repetitive moves
+        int[] x = new int[] {1, 6, 0, 7};
+        int[] y = new int[] {0, 7, 1, 6};
+
+        for (int i = 0; i < 3 * CheckersGame.REPETITION_MAX; i++) {
+            List<? extends CheckersMove> moves = game.getPossibleMoves();
+            assertEquals(2, moves.size());
+            boolean loopCompleted = true;
+            for (CheckersMove move : moves) {
+                if (move.destination.equals(board.getCheckersTile(x[i % 4], y[i % 4]))) {
+                    assertTrue(game.execute(move));
+                    loopCompleted = false;
+                    break;
+                }
+            }
+            assertFalse(loopCompleted);
+        }
+
+        assertTrue(game.isDone());
+        assertNull(game.getWinner());
+
     }
 }

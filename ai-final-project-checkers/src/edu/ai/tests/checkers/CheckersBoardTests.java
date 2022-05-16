@@ -201,6 +201,6 @@ public class CheckersBoardTests {
         CheckersBoard blankBoard = new CheckersBoard();
 
         assertNotEquals(initialBoard.hashCode(), blankBoard.hashCode());
-        
+
     }
 }
