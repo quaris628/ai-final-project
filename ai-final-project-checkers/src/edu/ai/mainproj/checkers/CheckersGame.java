@@ -58,8 +58,11 @@ public class CheckersGame implements CheckersGamePlayable {
 		if (!move.isValid() && !done) { return false; }
 		move.execute();
 		moveHistory.add(move);
-        // do previous board states checking for repetitions
-        int hash = board.hashCode() * 29 + turn.hashCode();
+        // change whose turn it is
+        turn = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
+
+        // check current board state against previous board states for repetitions
+        int hash = getGameStateHash();
         if (boardHistory.containsKey(hash)) {
             int oldValue = boardHistory.get(hash);
             boardHistory.replace(hash, oldValue + 1);
@@ -71,8 +74,6 @@ public class CheckersGame implements CheckersGamePlayable {
             boardHistory.put(hash, 1);
         }
 
-        // change whose turn it is
-        turn = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
         // re-calculate valid moves
         possibleValidMoves = calculateValidMoves();
         return true;
@@ -91,14 +92,16 @@ public class CheckersGame implements CheckersGamePlayable {
         }
         if (moveHistory.size() == 0) { return; }
 
-        // pop last move from list and unexecute it
-        CheckersMove move = moveHistory.remove(moveHistory.size() - 1);
-        move.unexecute();
+        // decrement number of times the current state has appeared in the game
         int hash = getGameStateHash();
         boardHistory.replace(hash, boardHistory.get(hash) - 1);
 
+        // pop last move from list and unexecute it
+        CheckersMove move = moveHistory.remove(moveHistory.size() - 1);
+        move.unexecute();
         // change whose turn it is
         turn = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
+
         // re-calculate valid moves
         possibleValidMoves = calculateValidMoves();
     }

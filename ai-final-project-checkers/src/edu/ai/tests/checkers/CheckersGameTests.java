@@ -73,8 +73,11 @@ public class CheckersGameTests {
         int[] x = new int[] {1, 6, 0, 7};
         int[] y = new int[] {0, 7, 1, 6};
 
-        for (int i = 0; i < 3 * CheckersGame.REPETITION_MAX; i++) {
+        // MAX - 1 because initial state counts
+        for (int i = 0; i < 4 * (CheckersGame.REPETITION_MAX - 1); i++) {
             List<? extends CheckersMove> moves = game.getPossibleMoves();
+            System.out.println(i);
+            System.out.println(game);
             assertEquals(2, moves.size());
             boolean loopCompleted = true;
             for (CheckersMove move : moves) {
