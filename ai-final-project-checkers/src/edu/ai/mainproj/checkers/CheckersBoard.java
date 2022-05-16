@@ -96,4 +96,23 @@ public class CheckersBoard extends GridBoard {
     @Override
     public int getNumColumns() { return SIZE; }
 
+    public Iterable<CheckersTile> getAllCheckersTiles() {
+        List<CheckersTile> allCheckersTiles = new LinkedList<CheckersTile>();
+        for (Tile tile : getAllTiles()) {
+            allCheckersTiles.add((CheckersTile)tile);
+        }
+        return allCheckersTiles;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 31;
+        for (CheckersTile tile : getAllCheckersTiles()) {
+            hash = 17 * hash + tile.hashCode();
+            int pieceHash = tile.isBlank() ? 0 : tile.getCheckersPiece().getPlayer().hashCode();
+            hash = 19 * hash + pieceHash;
+        }
+        return hash;
+    }
+
 }

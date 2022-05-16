@@ -195,4 +195,12 @@ public class CheckersBoardTests {
         assertEquals(12, redCount);
     }
 
+    @Test
+    public void hashCode_dependentOnPieces() {
+        CheckersBoard initialBoard = CheckersBoard.CreateInitialBoard();
+        CheckersBoard blankBoard = new CheckersBoard();
+
+        assertNotEquals(initialBoard.hashCode(), blankBoard.hashCode());
+        
+    }
 }
