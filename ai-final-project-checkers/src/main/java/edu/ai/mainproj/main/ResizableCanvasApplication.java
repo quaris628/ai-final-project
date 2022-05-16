@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class ResizableCanvasApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Canvas canvas = new Canvas();
@@ -27,6 +27,18 @@ public class HelloApplication extends Application {
 
         VBox vbox = new VBox(canvas);
         Scene scene = new Scene(vbox);
+
+        scene.widthProperty().addListener(
+                (observableValue, oldWidth, newWidth) -> {
+                    canvas.setWidth(newWidth.doubleValue());
+                    int x; // TODO redraw elements
+                });
+        scene.heightProperty().addListener(
+                (observableValue, oldHeight, newHeight) -> {
+                    canvas.setHeight(newHeight.doubleValue());
+                    int x; // TODO redraw elements
+                });
+
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();

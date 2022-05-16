@@ -2,5 +2,8 @@
 /shelf/
 /workspace.xml
 
+# manually added by Nathan
+.name
+
 # Added by Nathan from a Stack Overflow suggestion
 /tasks.xml
