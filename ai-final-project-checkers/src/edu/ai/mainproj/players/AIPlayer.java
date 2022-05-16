@@ -9,10 +9,11 @@ import edu.ai.mainproj.other.Pair;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AIPlayer implements Player {
+public class AIPlayer implements CheckersPlayer {
 
     private static final boolean PRINT_IN_MIN_MAX = false;
     private static final boolean PRINT_MOVE_TRACE = false;
+    private static final boolean PRINT_SEARCH_RESULTS = true;
     // constants for values of each piece type for heuristic calculation
     private static final float OWN_PIECE_VALUE = 4f;
     private static final float OPP_PIECE_VALUE = 1f;
@@ -25,10 +26,6 @@ public class AIPlayer implements Player {
     private static final float OWN_NO_MOVES_STATE = 100.23f;
     private static final float OPP_NO_MOVES_STATE = 100.23f;
 
-    // nodes visited during the search
-    // TODO why is this static? -Nathan
-    private static long visited = 0;
-
     private final PlayerType playerColor;
     protected int depth;
 
@@ -40,19 +37,22 @@ public class AIPlayer implements Player {
     }
 
     @Override
-    public void executeTurn(CheckersGamePlayable game) {
+    public CheckersMove selectMove(CheckersGamePlayable game) {
         printMovesStartIndex = game.getMoveHistory().size();
         Pair<List<CheckersMove>, Float> result = search(game, depth, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
-        if (result.getRight() == OWN_NO_MOVES_STATE) {
-            System.out.println("DRAW");
+
+        if (PRINT_SEARCH_RESULTS) {
+            if (result.getRight() == OWN_NO_MOVES_STATE) {
+                System.out.println("DRAW");
+            }
+            System.out.println(result.getRight());
         }
-        System.out.println(result.getRight());
-        game.execute(result.getLeft().get(result.getLeft().size() - 1));
+
+        return result.getLeft().get(result.getLeft().size() - 1);
     }
 
     // the search algorithm itself
     public Pair<List<CheckersMove>, Float> search(CheckersGamePlayable game, int depth, float alpha, float beta) {
-        visited++;
         PlayerType player = game.getTurn();
         // bottom of the search
         if (depth == 0) {
@@ -67,6 +67,7 @@ public class AIPlayer implements Player {
             ret.add(game.getMoveHistory().get(game.getMoveHistory().size() - 1));
             return new Pair<>(ret, calculateHerustics(game, player));
         }
+
         float value;
         // list of best moves to return
         List<CheckersMove> bestMoves = new LinkedList<>();

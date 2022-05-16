@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ConsolePlayer implements Player {
+public class ConsolePlayer implements CheckersPlayer {
 
     private final Scanner scanner;
 
@@ -19,7 +19,7 @@ public class ConsolePlayer implements Player {
     }
 
     @Override
-    public void executeTurn(CheckersGamePlayable game) {
+    public CheckersMove selectMove(CheckersGamePlayable game) {
         System.out.println("Which piece do you want to move? (X,Y)");
         CheckersTile selectedTile = getPiece(game);
         List<CheckersMove> possibleMoves = getValidMoves(game, selectedTile);
@@ -35,8 +35,7 @@ public class ConsolePlayer implements Player {
                 System.out.print("Move to ");
             System.out.println((move.destination.row+1) + ", " + (move.destination.column+1));
         }
-        CheckersMove selectedMove = getMove(possibleMoves);
-        game.execute(selectedMove);
+        return getMove(possibleMoves);
     }
 
     private CheckersMove getMove(List<CheckersMove> possibleMoves) {

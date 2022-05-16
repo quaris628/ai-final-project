@@ -2,7 +2,7 @@ package edu.ai.mainproj.main;
 
 import edu.ai.mainproj.players.AIPlayer;
 import edu.ai.mainproj.players.AutoDifficultyAIPlayer;
-import edu.ai.mainproj.players.Player;
+import edu.ai.mainproj.players.CheckersPlayer;
 import edu.ai.mainproj.checkers.CheckersGame;
 import edu.ai.mainproj.checkers.PlayerType;
 
@@ -13,30 +13,74 @@ public class ConsoleGameMain {
     private static final int DEPTH_RED = 5;
     private static final int DEPTH_BLACK = 5;
 
-    public static void main(String... args) {
-        Player red = new AutoDifficultyAIPlayer(PlayerType.RED);
-        Player black = new AIPlayer(PlayerType.BLACK, DEPTH_BLACK);
+    private GameRunner gameRunner;
+    private long startTime;
 
-        while (true) {
-            runGame(red, black);
+    public ConsoleGameMain(CheckersPlayer black, CheckersPlayer red) {
+        gameRunner = new GameRunner(black, red);
+        if (TIME_CONTROL) {
+            gameRunner.getTurnStart().subscribe(
+                    () -> startTime = System.currentTimeMillis());
+            gameRunner.getTurnComplete().subscribe(this::timeControl);
         }
-
+        gameRunner.getGameComplete().subscribe(this::onGameComplete);
+        gameRunner.getTurnComplete().subscribe(this::onTurnComplete);
     }
 
-    public static void runGame(Player black, Player red) {
+    public void run() {
+        while (true) {
+            gameRunner.setGame(new CheckersGame());
+            gameRunner.run();
+        }
+    }
+
+    private void onGameComplete() {
+        System.out.println("---------------");
+        System.out.println("   GAME OVER   ");
+        System.out.print(  " Winner: ");
+        System.out.println(gameRunner.getGame().getWinner());
+        System.out.println("---------------");
+    }
+
+    private void onTurnComplete() {
+        System.out.print("\n\n\n");
+        System.out.println(gameRunner.getGame());
+    }
+
+    private void timeControl() {
+        long deltaTime = System.currentTimeMillis() - startTime;
+        long waitTime = SEC_PER_TURN * 1000 - deltaTime;
+        if (waitTime > 0) {
+            try {
+                Thread.sleep(waitTime);
+            } catch (InterruptedException e) {
+                // ?
+                // maybe TODO
+            }
+        }
+    }
+
+    public static void main(String... args) {
+        CheckersPlayer black = new AutoDifficultyAIPlayer(PlayerType.BLACK);
+        CheckersPlayer red = new AIPlayer(PlayerType.RED, DEPTH_RED);
+        new ConsoleGameMain(black, red).run();
+    }
+
+    // deprecated
+    public static void runGame(CheckersPlayer black, CheckersPlayer red) {
         CheckersGame game = new CheckersGame();
         System.out.println(game);
 
         while (game.getWinner() == null) {
             long startTime = System.currentTimeMillis();
-            Player currentPlayer = game.getTurn() == PlayerType.RED ? red : black;
+            CheckersPlayer currentPlayer = game.getTurn() == PlayerType.RED ? red : black;
             if (game.getPossibleMoves().isEmpty()) {
                 black.notifyGameEnd(game);
                 red.notifyGameEnd(game);
                 System.out.println("DRAW");
                 return;
             }
-            currentPlayer.executeTurn(game);
+            //currentPlayer.executeTurn(game);
             while (TIME_CONTROL && startTime + SEC_PER_TURN * (1000) > System.currentTimeMillis())
                 try {
                     Thread.sleep(10);
