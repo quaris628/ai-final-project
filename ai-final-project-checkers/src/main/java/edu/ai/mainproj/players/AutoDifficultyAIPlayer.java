@@ -38,18 +38,18 @@ public class AutoDifficultyAIPlayer extends AIPlayer {
         for (int i = 0; i < START_DIFFICULTY - MIN_DIFFICULTY; i++) {
             winRatios[i] = 0.5f * ((float) i + 1) / (START_DIFFICULTY - MIN_DIFFICULTY + 1);
             // for debugging
-            System.out.print(winRatios[i]);
-            System.out.print(" ");
+            //System.out.print(winRatios[i]);
+            //System.out.print(" ");
         }
         winRatios[START_DIFFICULTY - MIN_DIFFICULTY] = 0.5f;
         // for debugging
-        System.out.print(winRatios[START_DIFFICULTY - MIN_DIFFICULTY]);
-        System.out.print(" ");
+        //System.out.print(winRatios[START_DIFFICULTY - MIN_DIFFICULTY]);
+        //System.out.print(" ");
         for (int i = START_DIFFICULTY - MIN_DIFFICULTY + 1; i < MAX_DIFFICULTY - MIN_DIFFICULTY; i++) {
             winRatios[i] = 0.5f + 0.5f * ((float) i - START_DIFFICULTY + 1) / (MAX_DIFFICULTY - START_DIFFICULTY);
             // for debugging
-            System.out.print(winRatios[i]);
-            System.out.print(" ");
+            //System.out.print(winRatios[i]);
+            //System.out.print(" ");
         }
     }
 

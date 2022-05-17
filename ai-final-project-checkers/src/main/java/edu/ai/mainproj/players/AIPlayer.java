@@ -13,7 +13,7 @@ public class AIPlayer implements CheckersPlayer {
 
     private static final boolean PRINT_IN_MIN_MAX = false;
     private static final boolean PRINT_MOVE_TRACE = false;
-    private static final boolean PRINT_SEARCH_RESULTS = true;
+    private static final boolean PRINT_SEARCH_RESULTS = false;
     // constants for values of each piece type for heuristic calculation
     private static final float OWN_PIECE_VALUE = 4f;
     private static final float OPP_PIECE_VALUE = 1f;
