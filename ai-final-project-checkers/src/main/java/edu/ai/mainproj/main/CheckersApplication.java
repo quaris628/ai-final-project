@@ -1,58 +1,53 @@
 package edu.ai.mainproj.main;
 
-import edu.ai.mainproj.checkers.CheckersGame;
 import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.players.AIPlayer;
-import edu.ai.mainproj.players.AutoDifficultyAIPlayer;
 import edu.ai.mainproj.players.CheckersPlayer;
-import edu.ai.mainproj.ui.CheckersCanvasRenderer;
+import edu.ai.mainproj.players.UIPlayer;
+import edu.ai.mainproj.ui.CanvasRenderer;
+import edu.ai.mainproj.ui.PlayerControls;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class ResizableCanvasApplication extends Application {
+public class CheckersApplication extends Application {
 
     public static final double DEFAULT_BOARD_SIZE = 512;
     public static final double UIBAR_MIN_WIDTH = 128;
+    public static final int DEFAULT_AI_DIFFICULTY = 5;
 
-    private CheckersPlayer black;
-    private CheckersPlayer red;
-    private GameRunner gameRunner;
+    public GameRunner gameRunner;
 
-    private Canvas canvas;
-    private CheckersCanvasRenderer renderer;
-    private VBox uiVBox;
-    private Scene scene;
+    public Canvas canvas;
+    public CanvasRenderer renderer;
+    public VBox uiVBox;
+    public Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
         // init vars
-        black = new AIPlayer(PlayerType.BLACK, 1);
-        red = new AutoDifficultyAIPlayer(PlayerType.RED);
+        CheckersPlayer black = new UIPlayer(PlayerType.BLACK);
+        CheckersPlayer red = new AIPlayer(PlayerType.RED, DEFAULT_AI_DIFFICULTY);
         gameRunner = new GameRunner(black, red);
 
         canvas = new Canvas();
-        renderer = new CheckersCanvasRenderer(canvas, gameRunner);
+        renderer = new CanvasRenderer(canvas, gameRunner);
 
-        Button phButton = new Button();
-        uiVBox = new VBox(phButton);
+        PlayerControls playerControls = new PlayerControls();
+        uiVBox = new VBox(playerControls.getRootNode());
 
         scene = new Scene(new HBox(canvas, uiVBox));
 
         // set up canvas renderer
         gameRunner.getTurnComplete().subscribe(renderer::render);
 
-        // populate ui controls, placeholder for now
-        phButton.setOnAction((e) -> gameRunner.run());
-        phButton.setText("Run Game");
+        // initialize ui controls
+        playerControls.initialize(this);
 
         // set up arrangement of items on screen
         uiVBox.setMinWidth(UIBAR_MIN_WIDTH);
@@ -79,6 +74,7 @@ public class ResizableCanvasApplication extends Application {
 
     private void recalculateCanvasSize(double sceneWidth, double sceneHeight) {
         canvas.setHeight(Math.min(sceneWidth - UIBAR_MIN_WIDTH, sceneHeight));
+        canvas.setWidth(canvas.getHeight());
         renderer.render();
     }
 

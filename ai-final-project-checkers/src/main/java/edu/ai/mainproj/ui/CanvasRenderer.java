@@ -9,7 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class CheckersCanvasRenderer {
+public class CanvasRenderer {
 
     // fraction of the tile size that the pice is set to
     // reasonable values: 0.5 - 1.0
@@ -19,7 +19,7 @@ public class CheckersCanvasRenderer {
     private GraphicsContext gc;
     private GameRunner gameRunner;
 
-    public CheckersCanvasRenderer(Canvas canvas, GameRunner gameRunner) {
+    public CanvasRenderer(Canvas canvas, GameRunner gameRunner) {
         this.canvas = canvas;
         this.gc = canvas.getGraphicsContext2D();
         this.gameRunner = gameRunner;
