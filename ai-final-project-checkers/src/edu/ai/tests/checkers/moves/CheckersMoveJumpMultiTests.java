@@ -31,7 +31,6 @@ public class CheckersMoveJumpMultiTests {
     // --------------------------------
     // CREATE AS JOIN
     // --------------------------------
-    // TODO
 
     @Test
     public void createAsJoin_nullAndNull_null() {

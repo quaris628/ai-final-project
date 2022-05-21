@@ -61,6 +61,18 @@ public class CheckersGameTests {
     }
 
     @Test
+    public void getPossibleMoves_initialState_7NormalMoves() {
+        CheckersGame game = new CheckersGame();
+
+        List<? extends CheckersMove> possMoves =  game.getPossibleMoves();
+
+        for (CheckersMove move : possMoves) {
+            assertTrue(move instanceof CheckersMoveNormal);
+        }
+        assertEquals(7, possMoves.size());
+    }
+
+    @Test
     public void threefoldRepetition_draw() {
         CheckersBoard board = new CheckersBoard();
         CheckersPiece red = new CheckersPiece(PlayerType.RED, board.getCheckersTile(7, 6));
@@ -76,8 +88,6 @@ public class CheckersGameTests {
         // MAX - 1 because initial state counts
         for (int i = 0; i < 4 * (CheckersGame.REPETITION_MAX - 1); i++) {
             List<? extends CheckersMove> moves = game.getPossibleMoves();
-            System.out.println(i);
-            System.out.println(game);
             assertEquals(2, moves.size());
             boolean loopCompleted = true;
             for (CheckersMove move : moves) {
