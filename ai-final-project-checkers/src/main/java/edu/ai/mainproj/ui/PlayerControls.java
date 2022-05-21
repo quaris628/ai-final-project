@@ -13,12 +13,12 @@ import javafx.scene.layout.VBox;
 
 public class PlayerControls {
 
-    private Label blackLabel = new Label();
-    private Button blackButton = new Button();
-    private Label redLabel = new Label();
-    private Button redButton = new Button();
-    private Button playButton = new Button();
-    private Button endButton = new Button();
+    private Label blackLabel;
+    private Button blackButton;
+    private Label redLabel;
+    private Button redButton;
+    private Button playButton;
+    private Button endButton;
     private Node root;
 
     public PlayerControls() {
