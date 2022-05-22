@@ -1,9 +1,11 @@
-package edu.ai.mainproj.game;
+package edu.ai.mainproj.main;
 
 import edu.ai.mainproj.checkers.CheckersGame;
 import edu.ai.mainproj.checkers.CheckersGamePlayable;
 import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.checkers.moves.CheckersMove;
+import edu.ai.mainproj.events.ConsumerEvent;
+import edu.ai.mainproj.events.RunnableEvent;
 import edu.ai.mainproj.players.CheckersPlayer;
 
 public class GameRunner {
@@ -11,17 +13,19 @@ public class GameRunner {
     private CheckersGamePlayable game;
     private CheckersPlayer black;
     private CheckersPlayer red;
-    private CheckersGameEvent turnStart;
-    private CheckersGameEvent turnComplete;
-    private CheckersGameEvent gameComplete;
+    private ConsumerEvent<PlayerType> turnStart;
+    private ConsumerEvent<PlayerType> turnInvalidChoice;
+    private ConsumerEvent<PlayerType> turnComplete;
+    private RunnableEvent gameComplete;
 
     public GameRunner(CheckersPlayer black, CheckersPlayer red) {
         this.game = new CheckersGame();
         this.black = black;
         this.red = red;
-        this.turnStart = new CheckersGameEvent();
-        this.turnComplete = new CheckersGameEvent();
-        this.gameComplete = new CheckersGameEvent();
+        this.turnStart = new ConsumerEvent<PlayerType>();
+        this.turnInvalidChoice = new ConsumerEvent<PlayerType>();
+        this.turnComplete = new ConsumerEvent<PlayerType>();
+        this.gameComplete = new RunnableEvent();
         black.initialize(this);
         red.initialize(this);
     }
@@ -31,20 +35,22 @@ public class GameRunner {
         this.game = game;
         this.black = black;
         this.red = red;
-        this.turnStart = new CheckersGameEvent();
-        this.turnComplete = new CheckersGameEvent();
-        this.gameComplete = new CheckersGameEvent();
+        this.turnStart = new ConsumerEvent<PlayerType>();
+        this.turnInvalidChoice = new ConsumerEvent<PlayerType>();
+        this.turnComplete = new ConsumerEvent<PlayerType>();
+        this.gameComplete = new RunnableEvent();
         black.initialize(this);
         red.initialize(this);
     }
 
     public void run() {
         while (!game.isDone()) {
-            turnStart.broadcast();
+            turnStart.broadcast(game.getTurn());
             // Red's turn
             if (game.getTurn() == PlayerType.RED) {
                 CheckersMove move = red.selectMove(game);
                 if (!game.execute(move)) {
+                    turnInvalidChoice.broadcast(game.getTurn());
                     throw new IllegalArgumentException(
                             "Invalid move from Red: " + move.toString());
                 }
@@ -52,6 +58,7 @@ public class GameRunner {
             } else if (game.getTurn() == PlayerType.BLACK) {
                 CheckersMove move = black.selectMove(game);
                 if (!game.execute(move)) {
+                    turnInvalidChoice.broadcast(game.getTurn());
                     throw new IllegalArgumentException(
                             "Invalid move from Black: " + move.toString());
                 }
@@ -63,7 +70,7 @@ public class GameRunner {
                                 : game.getTurn().toString()));
 
             }
-            turnComplete.broadcast();
+            turnComplete.broadcast(game.getTurn());
         }
         gameComplete.broadcast();
     }
@@ -71,36 +78,27 @@ public class GameRunner {
     public CheckersGamePlayable getGame() {
         return game;
     }
-
     public CheckersPlayer getRed() {
         return red;
     }
-
     public CheckersPlayer getBlack() {
         return black;
     }
+    public void setGame(CheckersGamePlayable game) { this.game = game; }
+    public void setRed(CheckersPlayer red) { this.red = red; }
+    public void setBlack(CheckersPlayer black) { this.black = black; }
 
-    public CheckersGameEvent getTurnStart() {
+    public ConsumerEvent<PlayerType> getTurnStart() {
         return turnStart;
     }
-
-    public CheckersGameEvent getTurnComplete() {
+    public ConsumerEvent<PlayerType> getTurnInvalidChoice() {
+        return turnInvalidChoice;
+    }
+    public ConsumerEvent<PlayerType> getTurnComplete() {
         return turnComplete;
     }
-
-    public CheckersGameEvent getGameComplete() {
+    public RunnableEvent getGameComplete() {
         return gameComplete;
     }
 
-    public void setGame(CheckersGamePlayable game) {
-        this.game = game;
-    }
-
-    public void setRed(CheckersPlayer red) {
-        this.red = red;
-    }
-
-    public void setBlack(CheckersPlayer black) {
-        this.black = black;
-    }
 }

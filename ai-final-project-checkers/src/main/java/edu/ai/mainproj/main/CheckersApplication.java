@@ -1,7 +1,6 @@
 package edu.ai.mainproj.main;
 
 import edu.ai.mainproj.checkers.PlayerType;
-import edu.ai.mainproj.game.GameRunner;
 import edu.ai.mainproj.players.AIPlayer;
 import edu.ai.mainproj.players.CheckersPlayer;
 import edu.ai.mainproj.players.UIPlayer;
@@ -20,7 +19,7 @@ public class CheckersApplication extends Application {
 
     public static final double DEFAULT_BOARD_SIZE = 512;
     public static final double UIBAR_MIN_WIDTH = 128;
-    public static final int DEFAULT_AI_DIFFICULTY = 5;
+    public static final int DEFAULT_AI_DIFFICULTY = 2;
 
     public GameRunner gameRunner;
 
@@ -45,7 +44,7 @@ public class CheckersApplication extends Application {
         scene = new Scene(new HBox(canvas, uiVBox));
 
         // set up canvas renderer
-        gameRunner.getTurnComplete().subscribe(renderer::render);
+        gameRunner.getTurnComplete().subscribe((e) -> renderer.render());
 
         // initialize ui controls
         playerControls.initialize(this);

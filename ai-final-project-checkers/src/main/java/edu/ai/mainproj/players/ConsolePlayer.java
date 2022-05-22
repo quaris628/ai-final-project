@@ -5,7 +5,7 @@ import edu.ai.mainproj.checkers.CheckersTile;
 import edu.ai.mainproj.checkers.moves.CheckersMove;
 import edu.ai.mainproj.checkers.moves.CheckersMoveJumpMulti;
 import edu.ai.mainproj.checkers.moves.CheckersMoveJumpSingle;
-import edu.ai.mainproj.game.GameRunner;
+import edu.ai.mainproj.main.GameRunner;
 
 import java.util.LinkedList;
 import java.util.List;

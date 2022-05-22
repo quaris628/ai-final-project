@@ -1,6 +1,5 @@
 package edu.ai.mainproj.main;
 
-import edu.ai.mainproj.game.GameRunner;
 import edu.ai.mainproj.players.AIPlayer;
 import edu.ai.mainproj.players.AutoDifficultyAIPlayer;
 import edu.ai.mainproj.players.CheckersPlayer;
@@ -21,11 +20,11 @@ public class ConsoleGameMain {
         gameRunner = new GameRunner(black, red);
         if (TIME_CONTROL) {
             gameRunner.getTurnStart().subscribe(
-                    () -> startTime = System.currentTimeMillis());
-            gameRunner.getTurnComplete().subscribe(this::timeControl);
+                    (e) -> startTime = System.currentTimeMillis());
+            gameRunner.getTurnComplete().subscribe((e) -> timeControl());
         }
         gameRunner.getGameComplete().subscribe(this::onGameComplete);
-        gameRunner.getTurnComplete().subscribe(this::onTurnComplete);
+        gameRunner.getTurnComplete().subscribe((e) -> onTurnComplete());
     }
 
     public void run() {
