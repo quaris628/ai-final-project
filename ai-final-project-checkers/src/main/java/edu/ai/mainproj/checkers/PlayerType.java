@@ -8,8 +8,8 @@ package edu.ai.mainproj.checkers;
  * @author Nathan Swartz
  */
 public enum PlayerType {
-    RED,
-    BLACK;
+    BLACK,
+    RED;
 
     /**
      * Returns whether the passed player is the
@@ -20,5 +20,14 @@ public enum PlayerType {
      */
     public boolean isOpposite(PlayerType player) {
         return this.ordinal() != player.ordinal();
+    }
+
+    @Override
+    public String toString() {
+        if (this == BLACK) {
+            return "Black";
+        } else {
+            return "Red";
+        }
     }
 }

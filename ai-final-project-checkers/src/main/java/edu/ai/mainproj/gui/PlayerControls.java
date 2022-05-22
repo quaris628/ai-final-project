@@ -1,4 +1,4 @@
-package edu.ai.mainproj.ui;
+package edu.ai.mainproj.gui;
 
 import edu.ai.mainproj.checkers.CheckersGame;
 import edu.ai.mainproj.checkers.PlayerType;
@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+// TODO allow setting of AI difficulty
 
 public class PlayerControls {
 

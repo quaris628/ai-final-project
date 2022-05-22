@@ -13,6 +13,7 @@ public class GameRunner {
     private CheckersGamePlayable game;
     private CheckersPlayer black;
     private CheckersPlayer red;
+    private RunnableEvent gameStart;
     private ConsumerEvent<PlayerType> turnStart;
     private ConsumerEvent<PlayerType> turnInvalidChoice;
     private ConsumerEvent<PlayerType> turnComplete;
@@ -22,6 +23,7 @@ public class GameRunner {
         this.game = new CheckersGame();
         this.black = black;
         this.red = red;
+        this.gameStart = new RunnableEvent();
         this.turnStart = new ConsumerEvent<PlayerType>();
         this.turnInvalidChoice = new ConsumerEvent<PlayerType>();
         this.turnComplete = new ConsumerEvent<PlayerType>();
@@ -35,6 +37,7 @@ public class GameRunner {
         this.game = game;
         this.black = black;
         this.red = red;
+        this.gameStart = new RunnableEvent();
         this.turnStart = new ConsumerEvent<PlayerType>();
         this.turnInvalidChoice = new ConsumerEvent<PlayerType>();
         this.turnComplete = new ConsumerEvent<PlayerType>();
@@ -44,6 +47,7 @@ public class GameRunner {
     }
 
     public void run() {
+        gameStart.broadcast();
         while (!game.isDone()) {
             turnStart.broadcast(game.getTurn());
             // Red's turn
@@ -88,6 +92,9 @@ public class GameRunner {
     public void setRed(CheckersPlayer red) { this.red = red; }
     public void setBlack(CheckersPlayer black) { this.black = black; }
 
+    public RunnableEvent getGameStart() {
+        return gameStart;
+    }
     public ConsumerEvent<PlayerType> getTurnStart() {
         return turnStart;
     }

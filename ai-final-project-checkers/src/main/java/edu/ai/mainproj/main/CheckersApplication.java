@@ -4,8 +4,9 @@ import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.players.AIPlayer;
 import edu.ai.mainproj.players.CheckersPlayer;
 import edu.ai.mainproj.players.UIPlayer;
-import edu.ai.mainproj.ui.CanvasRenderer;
-import edu.ai.mainproj.ui.PlayerControls;
+import edu.ai.mainproj.gui.CanvasRenderer;
+import edu.ai.mainproj.gui.GameInfoDisplay;
+import edu.ai.mainproj.gui.PlayerControls;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -17,8 +18,12 @@ import java.io.IOException;
 
 public class CheckersApplication extends Application {
 
+    // GUI constants
     public static final double DEFAULT_BOARD_SIZE = 512;
     public static final double UIBAR_MIN_WIDTH = 128;
+    public static final double UIBAR_SPACING = 10;
+
+    // other constants
     public static final int DEFAULT_AI_DIFFICULTY = 2;
 
     public GameRunner gameRunner;
@@ -39,15 +44,18 @@ public class CheckersApplication extends Application {
         renderer = new CanvasRenderer(canvas, gameRunner);
 
         PlayerControls playerControls = new PlayerControls();
-        uiVBox = new VBox(playerControls.getRootNode());
+        GameInfoDisplay gameInfoDisplay = new GameInfoDisplay();
+        uiVBox = new VBox(playerControls.getRootNode(), gameInfoDisplay.getRootNode());
 
         scene = new Scene(new HBox(canvas, uiVBox));
 
         // set up canvas renderer
         gameRunner.getTurnComplete().subscribe((e) -> renderer.render());
 
-        // initialize ui controls
+        // initialize ui ribbon stuff
+        uiVBox.setSpacing(UIBAR_SPACING);
         playerControls.initialize(this);
+        gameInfoDisplay.initialize(this);
 
         // set up arrangement of items on screen
         uiVBox.setMinWidth(UIBAR_MIN_WIDTH);
@@ -77,6 +85,7 @@ public class CheckersApplication extends Application {
         canvas.setWidth(canvas.getHeight());
         renderer.render();
     }
+    // TODO maybe have UI bar elements scale with size too
 
     public static void main(String[] args) {
         launch();

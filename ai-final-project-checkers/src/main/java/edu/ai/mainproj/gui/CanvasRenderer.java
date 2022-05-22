@@ -1,4 +1,4 @@
-package edu.ai.mainproj.ui;
+package edu.ai.mainproj.gui;
 
 import edu.ai.mainproj.checkers.CheckersBoard;
 import edu.ai.mainproj.checkers.CheckersPiece;
