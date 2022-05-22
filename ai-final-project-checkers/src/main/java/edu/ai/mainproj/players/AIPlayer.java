@@ -4,6 +4,7 @@ import edu.ai.mainproj.anygame.Piece;
 import edu.ai.mainproj.anygame.Tile;
 import edu.ai.mainproj.checkers.*;
 import edu.ai.mainproj.checkers.moves.CheckersMove;
+import edu.ai.mainproj.game.GameRunner;
 import edu.ai.mainproj.other.Pair;
 
 import java.util.LinkedList;
@@ -163,8 +164,7 @@ public class AIPlayer implements CheckersPlayer {
 
     // do nothing, doesn't matter to this class
     @Override
-    public void notifyGameEnd(CheckersGamePlayable endGame) {
-    }
+    public void initialize(GameRunner gameRunner) {}
 
     public PlayerType getPlayerColor() {
         return playerColor;

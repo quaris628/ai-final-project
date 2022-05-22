@@ -4,7 +4,7 @@ import edu.ai.mainproj.checkers.CheckersBoard;
 import edu.ai.mainproj.checkers.CheckersPiece;
 import edu.ai.mainproj.checkers.CheckersTile;
 import edu.ai.mainproj.checkers.PlayerType;
-import edu.ai.mainproj.main.GameRunner;
+import edu.ai.mainproj.game.GameRunner;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

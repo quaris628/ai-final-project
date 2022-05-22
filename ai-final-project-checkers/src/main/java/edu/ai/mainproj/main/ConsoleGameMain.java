@@ -1,5 +1,6 @@
 package edu.ai.mainproj.main;
 
+import edu.ai.mainproj.game.GameRunner;
 import edu.ai.mainproj.players.AIPlayer;
 import edu.ai.mainproj.players.AutoDifficultyAIPlayer;
 import edu.ai.mainproj.players.CheckersPlayer;
@@ -75,8 +76,8 @@ public class ConsoleGameMain {
             long startTime = System.currentTimeMillis();
             CheckersPlayer currentPlayer = game.getTurn() == PlayerType.RED ? red : black;
             if (game.getPossibleMoves().isEmpty()) {
-                black.notifyGameEnd(game);
-                red.notifyGameEnd(game);
+                //black.notifyGameEnd(game);
+                //red.notifyGameEnd(game);
                 System.out.println("DRAW");
                 return;
             }
@@ -91,8 +92,8 @@ public class ConsoleGameMain {
             System.out.println(game);
         }
         System.out.println(game.getWinner() + " WINS!");
-        black.notifyGameEnd(game);
-        red.notifyGameEnd(game);
+        //black.notifyGameEnd(game);
+        //red.notifyGameEnd(game);
     }
 
 }

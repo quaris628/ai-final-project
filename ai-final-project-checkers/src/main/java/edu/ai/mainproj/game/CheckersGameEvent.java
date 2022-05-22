@@ -1,4 +1,4 @@
-package edu.ai.mainproj.other;
+package edu.ai.mainproj.game;
 
 import java.util.LinkedList;
 import java.util.List;

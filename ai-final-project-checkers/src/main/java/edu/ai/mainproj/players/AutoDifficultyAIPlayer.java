@@ -2,6 +2,7 @@ package edu.ai.mainproj.players;
 
 import edu.ai.mainproj.checkers.CheckersGamePlayable;
 import edu.ai.mainproj.checkers.PlayerType;
+import edu.ai.mainproj.game.GameRunner;
 
 /**
  * An AI player that automatically adjusts its difficulty
@@ -37,32 +38,28 @@ public class AutoDifficultyAIPlayer extends AIPlayer {
         winRatios = new float[MAX_DIFFICULTY - MIN_DIFFICULTY];
         for (int i = 0; i < START_DIFFICULTY - MIN_DIFFICULTY; i++) {
             winRatios[i] = 0.5f * ((float) i + 1) / (START_DIFFICULTY - MIN_DIFFICULTY + 1);
-            // for debugging
-            //System.out.print(winRatios[i]);
-            //System.out.print(" ");
         }
         winRatios[START_DIFFICULTY - MIN_DIFFICULTY] = 0.5f;
-        // for debugging
-        //System.out.print(winRatios[START_DIFFICULTY - MIN_DIFFICULTY]);
-        //System.out.print(" ");
         for (int i = START_DIFFICULTY - MIN_DIFFICULTY + 1; i < MAX_DIFFICULTY - MIN_DIFFICULTY; i++) {
             winRatios[i] = 0.5f + 0.5f * ((float) i - START_DIFFICULTY + 1) / (MAX_DIFFICULTY - START_DIFFICULTY);
-            // for debugging
-            //System.out.print(winRatios[i]);
-            //System.out.print(" ");
         }
     }
 
     @Override
-    public void notifyGameEnd(CheckersGamePlayable endGame) {
+    public void initialize(GameRunner gameRunner) {
+        gameRunner.getGameComplete().subscribe(
+                () -> onGameComplete(gameRunner.getGame()));
+    }
+
+    public void onGameComplete(CheckersGamePlayable game) {
         // record the result of this game
         // 1   = AI wins
         // 0.5 = draw
         // 0   = opponent wins
         float result;
-        if (endGame.getWinner() == null) {
+        if (game.getWinner() == null) {
             result = 0.5f;
-        } else if (endGame.getWinner() == getPlayerColor()) {
+        } else if (game.getWinner() == getPlayerColor()) {
             result = 1.0f;
         } else {
             result = 0.0f;

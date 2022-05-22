@@ -29,7 +29,7 @@ public class AutoDifficultyAIPlayerTests {
         assertEquals(5, AutoDifficultyAIPlayer.START_DIFFICULTY);
 
         // expecteds for MAX_DEPTH = 9, MIN_DEPTH = 1, START_DEPTH = 5
-        float[] expecteds = new float[]{
+        float[] expecteds = new float[] {
                 0.1f,
                 0.2f,
                 0.3f,
@@ -53,7 +53,7 @@ public class AutoDifficultyAIPlayerTests {
         CheckersGame game = new CheckersGame(board);
         assertTrue(game.isDone());
         assertEquals(PlayerType.BLACK, game.getWinner());
-        player.notifyGameEnd(game);
+        player.onGameComplete(game);
 
         // if these asserts fail it just means re-calculate the expecteds
         assertEquals(1, AutoDifficultyAIPlayer.MIN_DIFFICULTY);

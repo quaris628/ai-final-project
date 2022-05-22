@@ -1,10 +1,9 @@
-package edu.ai.mainproj.main;
+package edu.ai.mainproj.game;
 
 import edu.ai.mainproj.checkers.CheckersGame;
 import edu.ai.mainproj.checkers.CheckersGamePlayable;
 import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.checkers.moves.CheckersMove;
-import edu.ai.mainproj.other.CheckersGameEvent;
 import edu.ai.mainproj.players.CheckersPlayer;
 
 public class GameRunner {
@@ -23,8 +22,8 @@ public class GameRunner {
         this.turnStart = new CheckersGameEvent();
         this.turnComplete = new CheckersGameEvent();
         this.gameComplete = new CheckersGameEvent();
-        gameComplete.subscribe(() -> black.notifyGameEnd(this.getGame()));
-        gameComplete.subscribe(() -> red.notifyGameEnd(this.getGame()));
+        black.initialize(this);
+        red.initialize(this);
     }
 
     public GameRunner(CheckersGamePlayable game,
@@ -35,8 +34,8 @@ public class GameRunner {
         this.turnStart = new CheckersGameEvent();
         this.turnComplete = new CheckersGameEvent();
         this.gameComplete = new CheckersGameEvent();
-        gameComplete.subscribe(() -> black.notifyGameEnd(this.getGame()));
-        gameComplete.subscribe(() -> red.notifyGameEnd(this.getGame()));
+        black.initialize(this);
+        red.initialize(this);
     }
 
     public void run() {

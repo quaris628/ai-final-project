@@ -5,6 +5,7 @@ import edu.ai.mainproj.checkers.CheckersTile;
 import edu.ai.mainproj.checkers.moves.CheckersMove;
 import edu.ai.mainproj.checkers.moves.CheckersMoveJumpMulti;
 import edu.ai.mainproj.checkers.moves.CheckersMoveJumpSingle;
+import edu.ai.mainproj.game.GameRunner;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -86,6 +87,5 @@ public class ConsolePlayer implements CheckersPlayer {
 
     // do nothing, doesn't matter to this class
     @Override
-    public void notifyGameEnd(CheckersGamePlayable endGame) {
-    }
+    public void initialize(GameRunner gameRunner) {}
 }
