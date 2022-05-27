@@ -8,7 +8,7 @@ import edu.ai.mainproj.events.ConsumerEvent;
 import edu.ai.mainproj.events.RunnableEvent;
 import edu.ai.mainproj.players.CheckersPlayer;
 
-public class GameRunner {
+public class GameRunner extends Thread {
 
     private CheckersGamePlayable game;
     private CheckersPlayer black;
@@ -46,6 +46,7 @@ public class GameRunner {
         red.initialize(this);
     }
 
+    @Override
     public void run() {
         gameStart.broadcast();
         while (!game.isDone()) {

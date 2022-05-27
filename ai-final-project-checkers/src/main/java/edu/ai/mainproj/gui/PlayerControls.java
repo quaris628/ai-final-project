@@ -2,7 +2,6 @@ package edu.ai.mainproj.gui;
 
 import edu.ai.mainproj.checkers.CheckersGame;
 import edu.ai.mainproj.checkers.PlayerType;
-import edu.ai.mainproj.main.CheckersApplication;
 import edu.ai.mainproj.players.AIPlayer;
 import edu.ai.mainproj.players.UIPlayer;
 import javafx.scene.Node;
@@ -73,7 +72,9 @@ public class PlayerControls {
             playButton.setDisable(true);
             endButton.setDisable(false);
             app.gameRunner.setGame(new CheckersGame());
-            app.gameRunner.run();
+            // TODO check that this spawns new game runner thread correctly
+            app.gameRunner.setName("Game Thread");
+            app.gameRunner.start();
         });
         app.gameRunner.getGameComplete().subscribe(() -> {
             blackButton.setDisable(false);

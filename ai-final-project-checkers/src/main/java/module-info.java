@@ -9,4 +9,5 @@ module edu.ai.aifinalprojectcheckers {
     exports edu.ai.tests.players;
     //opens edu.ai.mainproj.main to javafx.fxml;
     opens edu.ai.mainproj.main to javafx.graphics;
+    opens edu.ai.mainproj.gui to javafx.graphics;
 }

@@ -1,6 +1,7 @@
-package edu.ai.mainproj.main;
+package edu.ai.mainproj.gui;
 
 import edu.ai.mainproj.checkers.PlayerType;
+import edu.ai.mainproj.main.GameRunner;
 import edu.ai.mainproj.players.AIPlayer;
 import edu.ai.mainproj.players.CheckersPlayer;
 import edu.ai.mainproj.players.UIPlayer;

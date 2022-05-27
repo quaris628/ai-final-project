@@ -1,7 +1,6 @@
 package edu.ai.mainproj.gui;
 
 import edu.ai.mainproj.checkers.PlayerType;
-import edu.ai.mainproj.main.CheckersApplication;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
