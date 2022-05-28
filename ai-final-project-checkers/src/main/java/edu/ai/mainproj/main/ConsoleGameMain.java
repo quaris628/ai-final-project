@@ -29,8 +29,7 @@ public class ConsoleGameMain {
 
     public void run() {
         while (true) {
-            gameRunner.setGame(new CheckersGame());
-            gameRunner.run();
+            gameRunner.startNewGame();
         }
     }
 

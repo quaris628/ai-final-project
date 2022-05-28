@@ -22,7 +22,7 @@ public class CheckersApplication extends Application {
     public static final double UIBAR_SPACING = 10;
 
     // other constants
-    public static final int DEFAULT_AI_DIFFICULTY = 2;
+    public static final int DEFAULT_AI_DIFFICULTY = 4;
 
     public GameRunner gameRunner;
 

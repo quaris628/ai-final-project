@@ -8,7 +8,7 @@ import edu.ai.mainproj.events.ConsumerEvent;
 import edu.ai.mainproj.events.RunnableEvent;
 import edu.ai.mainproj.players.CheckersPlayer;
 
-public class GameRunner extends Thread {
+public class GameRunner {
 
     private CheckersGamePlayable game;
     private CheckersPlayer black;
@@ -18,6 +18,7 @@ public class GameRunner extends Thread {
     private ConsumerEvent<PlayerType> turnInvalidChoice;
     private ConsumerEvent<PlayerType> turnComplete;
     private RunnableEvent gameComplete;
+    private GameThread gameThread;
 
     public GameRunner(CheckersPlayer black, CheckersPlayer red) {
         this.game = new CheckersGame();
@@ -28,6 +29,7 @@ public class GameRunner extends Thread {
         this.turnInvalidChoice = new ConsumerEvent<PlayerType>();
         this.turnComplete = new ConsumerEvent<PlayerType>();
         this.gameComplete = new RunnableEvent();
+        this.gameThread = null;
         black.initialize(this);
         red.initialize(this);
     }
@@ -42,12 +44,38 @@ public class GameRunner extends Thread {
         this.turnInvalidChoice = new ConsumerEvent<PlayerType>();
         this.turnComplete = new ConsumerEvent<PlayerType>();
         this.gameComplete = new RunnableEvent();
+        this.gameThread = null;
         black.initialize(this);
         red.initialize(this);
     }
 
-    @Override
-    public void run() {
+    public void startNewGame() {
+        game = new CheckersGame();
+        gameThread = new GameThread(this);
+        gameThread.setName("Game Thread");
+        gameThread.setPriority(Thread.NORM_PRIORITY - 1);
+        gameThread.start();
+    }
+
+    public void stopGame() {
+        // probably fine because the state of the checkers game won't matter
+        gameThread.stop();
+    }
+
+    private static class GameThread extends Thread {
+        GameRunner gameRunner;
+
+        public GameThread(GameRunner gameRunner) {
+            this.gameRunner = gameRunner;
+        }
+
+        @Override
+        public void run() {
+            gameRunner.runGameThread();
+        }
+    }
+
+    private void runGameThread() {
         gameStart.broadcast();
         while (!game.isDone()) {
             turnStart.broadcast(game.getTurn());
@@ -61,7 +89,6 @@ public class GameRunner extends Thread {
                         "Game has invalid player turn: "
                                 + (game.getTurn() == null ? "null"
                                 : game.getTurn().toString()));
-
             }
             turnComplete.broadcast(game.getTurn());
         }

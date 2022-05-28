@@ -71,9 +71,7 @@ public class PlayerControls {
             redButton.setDisable(true);
             playButton.setDisable(true);
             endButton.setDisable(false);
-            app.gameRunner.setGame(new CheckersGame());
-            app.gameRunner.setName("Game & AI Thread");
-            app.gameRunner.start();
+            app.gameRunner.startNewGame();
         });
         app.gameRunner.getGameComplete().subscribe(() -> {
             blackButton.setDisable(false);
@@ -87,9 +85,7 @@ public class PlayerControls {
             redButton.setDisable(false);
             playButton.setDisable(false);
             endButton.setDisable(true);
-            // TODO figure out how to stop gameRunner thread here
-            app.gameRunner.interrupt();
-            app.gameRunner.setGame(new CheckersGame());
+            app.gameRunner.stopGame();
         });
     }
 
