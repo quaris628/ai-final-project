@@ -4,6 +4,7 @@ import edu.ai.mainproj.checkers.CheckersGame;
 import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.players.AIPlayer;
 import edu.ai.mainproj.players.UIPlayer;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -72,8 +73,7 @@ public class PlayerControls {
             playButton.setDisable(true);
             endButton.setDisable(false);
             app.gameRunner.setGame(new CheckersGame());
-            // TODO check that this spawns new game runner thread correctly
-            app.gameRunner.setName("Game Thread");
+            app.gameRunner.setName("Game & AI Thread");
             app.gameRunner.start();
         });
         app.gameRunner.getGameComplete().subscribe(() -> {
@@ -88,6 +88,8 @@ public class PlayerControls {
             redButton.setDisable(false);
             playButton.setDisable(false);
             endButton.setDisable(true);
+            // TODO figure out how to stop gameRunner thread here
+            app.gameRunner.interrupt();
             app.gameRunner.setGame(new CheckersGame());
         });
     }

@@ -1,6 +1,7 @@
 package edu.ai.mainproj.gui;
 
 import edu.ai.mainproj.checkers.PlayerType;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -12,48 +13,68 @@ public class GameInfoDisplay {
 
     private Label turnLabel;
     private Label turnValue;
+    private PlayerType turn;
     private Label winnerLabel;
     private Label winnerValue;
     private HBox turnHBox;
     private HBox winnerHBox;
     private Node root;
 
+    private boolean updateTurnDisplayQueued;
+
     public GameInfoDisplay() {
         turnLabel = new Label();
         winnerLabel = new Label();
         turnValue = new Label();
+        turn = null;
         winnerValue = new Label();
         turnHBox = new HBox(turnLabel, turnValue);
         winnerHBox = new HBox(winnerLabel, winnerValue);
         root = new VBox(turnHBox, winnerHBox);
+        updateTurnDisplayQueued = false;
     }
 
     public void initialize(CheckersApplication app) {
-        clear();
-        turnHBox.setAlignment(Pos.CENTER);
-        winnerHBox.setAlignment(Pos.CENTER);
-
-        app.gameRunner.getGameStart().subscribe(() ->
-                turnLabel.setText("Turn: "));
-
-        app.gameRunner.getTurnStart().subscribe((turn) -> {
-            setPlayerColor(turnValue, turn);
-            turnValue.setText(turn.toString());
-        });
-
-        app.gameRunner.getGameComplete().subscribe(() -> {
-            PlayerType winner = app.gameRunner.getGame().getWinner();
-            winnerLabel.setText("Winner: ");
-            setPlayerColor(winnerValue, winner);
-            winnerValue.setText(winner == null ? "Draw" : winner.toString());
-        });
-    }
-
-    private void clear() {
         turnLabel.setText("");
         winnerLabel.setText("");
         turnValue.setText("");
         winnerValue.setText("");
+        turnHBox.setAlignment(Pos.CENTER);
+        winnerHBox.setAlignment(Pos.CENTER);
+
+        app.gameRunner.getGameStart().subscribe(() ->
+            Platform.runLater(() ->
+                    turnLabel.setText("Turn: ")
+            )
+        );
+
+        // It had some buffer overflow problems with queueing up too many
+        // tasks in Platform.runLater() b/c AIs were so quick at low difficulty,
+        // so I put protection on the turn update method so only one update
+        // method at a time can queue in Platform.runLater() but it'll still show
+        // the most up-to-date info when it runs.
+        app.gameRunner.getTurnStart().subscribe((turn) -> {
+            this.turn = turn;
+            // if an update is already queued, don't queue another one
+            if (!updateTurnDisplayQueued) {
+                Platform.runLater(this::updateTurnDisplay);
+            }
+        });
+
+        app.gameRunner.getGameComplete().subscribe(() ->
+            Platform.runLater(() -> {
+                PlayerType winner = app.gameRunner.getGame().getWinner();
+                winnerLabel.setText("Winner: ");
+                setPlayerColor(winnerValue, winner);
+                winnerValue.setText(winner == null ? "Draw" : winner.toString());
+            })
+        );
+    }
+
+    private void updateTurnDisplay() {
+        updateTurnDisplayQueued = false;
+        turnValue.setText(turn.toString());
+        setPlayerColor(winnerValue, PlayerType.BLACK);
     }
 
     private void setPlayerColor(Label label, PlayerType player) {
