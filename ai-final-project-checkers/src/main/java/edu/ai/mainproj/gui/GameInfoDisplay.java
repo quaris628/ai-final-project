@@ -75,7 +75,7 @@ public class GameInfoDisplay {
     private void updateTurnDisplay() {
         updateTurnDisplayQueued = false;
         turnValue.setText(turn.toString());
-        setPlayerColor(winnerValue, PlayerType.BLACK);
+        setPlayerColor(turnValue, turn);
     }
 
     private void setPlayerColor(Label label, PlayerType player) {
