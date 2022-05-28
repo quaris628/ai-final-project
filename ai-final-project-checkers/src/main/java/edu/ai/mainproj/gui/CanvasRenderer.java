@@ -44,7 +44,7 @@ public class CanvasRenderer {
     private void updatePiecesData() {
         List<CheckersPiece.PieceData> piecesData = new LinkedList<CheckersPiece.PieceData>();
         //this.piecesData = new LinkedList<CheckersPiece.PieceData>();
-        
+
         // executing move and updating display's copy of the pieces
         //     should not be done concurrently
         // See GameRunner.doTurn(player)

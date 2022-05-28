@@ -49,6 +49,8 @@ public class GameRunner {
         red.initialize(this);
     }
 
+    // TODO maybe move some setup to earlier
+    //     the game is noticeably slow to start
     public void startNewGame() {
         game = new CheckersGame();
         gameThread = new GameThread(this);

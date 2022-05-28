@@ -37,16 +37,18 @@ public class GameInfoDisplay {
 
     public void initialize(GameRunner gameRunner) {
         turnLabel.setText("");
-        winnerLabel.setText("");
         turnValue.setText("");
+        winnerLabel.setText("");
         winnerValue.setText("");
         turnHBox.setAlignment(Pos.CENTER);
         winnerHBox.setAlignment(Pos.CENTER);
 
         gameRunner.getGameStart().subscribe(() ->
-            Platform.runLater(() ->
-                    turnLabel.setText("Turn: ")
-            )
+            Platform.runLater(() -> {
+                turnLabel.setText("Turn: ");
+                winnerLabel.setText("");
+                winnerValue.setText("");
+            })
         );
 
         // It had some buffer overflow problems with queueing up too many
@@ -75,8 +77,9 @@ public class GameInfoDisplay {
 
     private void updateTurnDisplay() {
         updateTurnDisplayQueued = false;
-        turnValue.setText(turn.toString());
-        setPlayerColor(turnValue, turn);
+        PlayerType turnCopy = turn;
+        turnValue.setText(turnCopy.toString());
+        setPlayerColor(turnValue, turnCopy);
     }
 
     private void setPlayerColor(Label label, PlayerType player) {
