@@ -1,6 +1,7 @@
 package edu.ai.mainproj.gui;
 
 import edu.ai.mainproj.checkers.PlayerType;
+import edu.ai.mainproj.main.GameRunner;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -34,7 +35,7 @@ public class GameInfoDisplay {
         updateTurnDisplayQueued = false;
     }
 
-    public void initialize(CheckersApplication app) {
+    public void initialize(GameRunner gameRunner) {
         turnLabel.setText("");
         winnerLabel.setText("");
         turnValue.setText("");
@@ -42,7 +43,7 @@ public class GameInfoDisplay {
         turnHBox.setAlignment(Pos.CENTER);
         winnerHBox.setAlignment(Pos.CENTER);
 
-        app.gameRunner.getGameStart().subscribe(() ->
+        gameRunner.getGameStart().subscribe(() ->
             Platform.runLater(() ->
                     turnLabel.setText("Turn: ")
             )
@@ -51,9 +52,9 @@ public class GameInfoDisplay {
         // It had some buffer overflow problems with queueing up too many
         // tasks in Platform.runLater() b/c AIs were so quick at low difficulty,
         // so I put protection on the turn update method so only one update
-        // method at a time can queue in Platform.runLater() but it'll still show
-        // the most up-to-date info when it runs.
-        app.gameRunner.getTurnStart().subscribe((turn) -> {
+        // method at a time can queue in Platform.runLater().
+        // It'll still show the most up-to-date info when it runs.
+        gameRunner.getTurnStart().subscribe((turn) -> {
             this.turn = turn;
             // if an update is already queued, don't queue another one
             if (!updateTurnDisplayQueued) {
@@ -62,9 +63,9 @@ public class GameInfoDisplay {
             }
         });
 
-        app.gameRunner.getGameComplete().subscribe(() ->
+        gameRunner.getGameComplete().subscribe(() ->
             Platform.runLater(() -> {
-                PlayerType winner = app.gameRunner.getGame().getWinner();
+                PlayerType winner = gameRunner.getGame().getWinner();
                 winnerLabel.setText("Winner: ");
                 setPlayerColor(winnerValue, winner);
                 winnerValue.setText(winner == null ? "Draw" : winner.toString());

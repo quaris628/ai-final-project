@@ -16,21 +16,22 @@ public class AIPlayer implements CheckersPlayer {
     private static final boolean PRINT_MOVE_TRACE = false;
     private static final boolean PRINT_SEARCH_RESULTS = false;
     // constants for values of each piece type for heuristic calculation
-    private static final float OWN_PIECE_VALUE = 4f;
-    private static final float OPP_PIECE_VALUE = 1f;
-    private static final float OWN_KING_VALUE = 8f;
-    private static final float OPP_KING_VALUE = 0f;
+    private static final float OWN_PIECE_VALUE = 0.7f;
+    private static final float OWN_KING_VALUE = 1.0f;
+    private static final float OPP_PIECE_VALUE = -0.7f;
+    private static final float OPP_KING_VALUE = -1.0f;
+    private static final int NUM_PIECES_EACH_SIDE = 12;
 
-    private static final float SELF_WIN_STATE = 10000.23f;
-    private static final float OPP_WIN_STATE = -10000.23f;
-
-    private static final float OWN_NO_MOVES_STATE = 100.23f;
-    private static final float OPP_NO_MOVES_STATE = 100.23f;
+    private static final float SELF_WIN_STATE = 1.0f;
+    private static final float OPP_WIN_STATE = -1.0f;
+    private static final float DRAW_STATE = 0.0f;
 
     private final PlayerType playerColor;
     protected int depth;
 
     private int printMovesStartIndex = 0;
+
+    // TODO a progress indicator variable
 
     public AIPlayer(PlayerType playerType, int depth) {
         this.playerColor = playerType;
@@ -43,7 +44,7 @@ public class AIPlayer implements CheckersPlayer {
         Pair<List<CheckersMove>, Float> result = search(game, depth, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
 
         if (PRINT_SEARCH_RESULTS) {
-            if (result.getRight() == OWN_NO_MOVES_STATE) {
+            if (game.isDone() && game.getWinner() == null) {
                 System.out.println("DRAW");
             }
             System.out.println(result.getRight());
@@ -62,104 +63,91 @@ public class AIPlayer implements CheckersPlayer {
                 List<? extends CheckersMove> moveHistory = game.getMoveHistory();
                 for (int i = printMovesStartIndex; i < moveHistory.size(); i++)
                     System.out.print(moveHistory.get(i) + " ");
-                System.out.println(calculateHerustics(game, player));
+                System.out.println(calculateHeuristic(game, player));
             }
             List<CheckersMove> ret = new LinkedList<>();
             ret.add(game.getMoveHistory().get(game.getMoveHistory().size() - 1));
-            return new Pair<>(ret, calculateHerustics(game, player));
+            return new Pair<>(ret, calculateHeuristic(game, player));
         }
 
-        float value;
-        // list of best moves to return
+        float heuristicOfBestMove;
         List<CheckersMove> bestMoves = new LinkedList<>();
-        if (player == playerColor) { // max player
-            value = Float.NEGATIVE_INFINITY;
-            for (CheckersMove move : game.getPossibleMoves()) {
-                game.execute(move);
-                if (PRINT_IN_MIN_MAX) {
-                    System.out.println(game);
-                    System.out.println(calculateHerustics(game, player));
-                }
-                Pair<List<CheckersMove>, Float> tmp = search(game, depth - 1, alpha, beta);
-                value = Math.max(value, tmp.getRight());
-                if (value == tmp.getRight()) {
-                    if (!tmp.getLeft().isEmpty())
-                        tmp.getLeft().remove(tmp.getLeft().size() - 1);
-                    tmp.getLeft().add(move);
-                    bestMoves = tmp.getLeft();
-                }
-                if (!game.getMoveHistory().get(game.getMoveHistory().size() - 1).equals(move))
-                    throw new IllegalStateException("attempting to undo the wrong move");
-                game.unexecute();
-                if (PRINT_IN_MIN_MAX) System.out.println("UNDO");
-                if (value >= beta)
-                    break; // cutoff
+
+        boolean maxNode = player == playerColor;
+        heuristicOfBestMove = maxNode ? Float.NEGATIVE_INFINITY : Float.POSITIVE_INFINITY;
+        for (CheckersMove move : game.getPossibleMoves()) {
+            game.execute(move);
+            if (PRINT_IN_MIN_MAX) {
+                System.out.println(game);
+                System.out.println(calculateHeuristic(game, player));
             }
-        } else { // min player
-            value = Float.POSITIVE_INFINITY;
-            for (CheckersMove move : game.getPossibleMoves()) {
-                game.execute(move);
-                if (PRINT_IN_MIN_MAX) {
-                    System.out.println(game);
-                    System.out.println(calculateHerustics(game, player));
-                }
-                Pair<List<CheckersMove>, Float> tmp = search(game, depth - 1, alpha, beta);
-                value = Math.min(value, tmp.getRight());
-                if (value == tmp.getRight()) {
-                    if (!tmp.getLeft().isEmpty())
-                        tmp.getLeft().remove(tmp.getLeft().size() - 1);
-                    tmp.getLeft().add(move);
-                    bestMoves = tmp.getLeft();
-                }
-                if (!game.getMoveHistory().get(game.getMoveHistory().size() - 1).equals(move))
-                    throw new IllegalStateException("attempting to undo the wrong move");
-                game.unexecute();
-                if (PRINT_IN_MIN_MAX) System.out.println("UNDO");
-                if (value <= alpha)
-                    break; // cutoff
+
+            // do search
+            Pair<List<CheckersMove>, Float> tmp = search(game, depth - 1, alpha, beta);
+            List<CheckersMove> futureMoves = tmp.getLeft();
+            float futureMovesHeuristic = tmp.getRight();
+
+            if (maxNode) {
+                heuristicOfBestMove = Math.max(heuristicOfBestMove, futureMovesHeuristic);
+            } else {
+                heuristicOfBestMove = Math.min(heuristicOfBestMove, futureMovesHeuristic);
             }
+
+            // if these future moves are the best found so far
+            if (heuristicOfBestMove == futureMovesHeuristic) {
+                // ??? v
+                if (!futureMoves.isEmpty())
+                    futureMoves.remove(futureMoves.size() - 1);
+
+                futureMoves.add(move);
+                bestMoves = futureMoves;
+            }
+
+            if (!game.getLastMove().equals(move))
+                throw new IllegalStateException("attempting to undo the wrong move");
+            game.unexecute();
+            if (PRINT_IN_MIN_MAX) System.out.println("UNDO");
+            if ((maxNode && heuristicOfBestMove >= beta)
+                || (!maxNode && heuristicOfBestMove <= alpha))
+                break; // prune
         }
 
-        return new Pair<>(bestMoves, value);
+        return new Pair<>(bestMoves, heuristicOfBestMove);
     }
 
-    private static float calculateHerustics(CheckersGamePlayable boardP, PlayerType player) {
-        CheckersBoard board = boardP.getBoardState();
-        // win condition
-        if (boardP.getWinner() != null) {
-            if (boardP.getWinner() == player)
+    private static float calculateHeuristic(CheckersGamePlayable game, PlayerType player) {
+        CheckersBoard board = game.getBoardState();
+        // if game is over
+        if (game.isDone()) {
+            // return values under certainty
+            if (game.getWinner() == player)
                 return SELF_WIN_STATE;
-            return OPP_WIN_STATE;
-        }
-        // draw condition
-        if (boardP.getPossibleMoves().isEmpty()) {
-            List<CheckersMove> ret = new LinkedList<>();
-            ret.add(boardP.getMoveHistory().get(boardP.getMoveHistory().size() - 1));
-            if (boardP.getTurn() == player)
-                return OWN_NO_MOVES_STATE;
-            else
-                return OPP_NO_MOVES_STATE;
-        }
-        // calculate heuristic for the board otherwise
-        int ret = 0;
-        for (Tile gtile : board.getAllTiles()) {
-            Piece gpiece = gtile.getPiece();
-            if (gpiece instanceof CheckersPiece) {
-                CheckersPiece piece = (CheckersPiece) gpiece;
-                if (piece.isKing()) {
-                    if (piece.getPlayer() == player)
-                        ret += OWN_KING_VALUE;
-                    else
-                        ret += OPP_KING_VALUE;
-                } else {
-                    if (piece.getPlayer() == player)
-                        ret += OWN_PIECE_VALUE;
-                    else
-                        ret += OPP_PIECE_VALUE;
+            else if (game.getWinner() != null) {
+                return OPP_WIN_STATE;
+            } else {
+                return DRAW_STATE;
+            }
+        // if game is in progress
+        } else {
+            // return heuristic
+            int ret = 0;
+            for (Tile tile : board.getAllTiles()) {
+                if (tile.getPiece() instanceof CheckersPiece piece) {
+                    if (piece.isKing()) {
+                        if (piece.getPlayer() == player)
+                            ret += OWN_KING_VALUE;
+                        else
+                            ret += OPP_KING_VALUE;
+                    } else {
+                        if (piece.getPlayer() == player)
+                            ret += OWN_PIECE_VALUE;
+                        else
+                            ret += OPP_PIECE_VALUE;
+                    }
                 }
             }
+            return ret / (1.0f + NUM_PIECES_EACH_SIDE);
         }
-        return ret;
     }
 
     // do nothing, doesn't matter to this class

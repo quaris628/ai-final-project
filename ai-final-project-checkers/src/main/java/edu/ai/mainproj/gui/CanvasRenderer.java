@@ -20,6 +20,7 @@ public class CanvasRenderer {
     private GameRunner gameRunner;
     private boolean renderIsQueued;
     private List<CheckersPiece.PieceData> piecesData;
+    private final Object piecesDataGatekeeper = new Object();
 
     // convenience reference
     private GraphicsContext gc;
@@ -41,7 +42,9 @@ public class CanvasRenderer {
     }
 
     private void updatePiecesData() {
-        this.piecesData = new LinkedList<CheckersPiece.PieceData>();
+        List<CheckersPiece.PieceData> piecesData = new LinkedList<CheckersPiece.PieceData>();
+        //this.piecesData = new LinkedList<CheckersPiece.PieceData>();
+        
         // executing move and updating display's copy of the pieces
         //     should not be done concurrently
         // See GameRunner.doTurn(player)
@@ -49,9 +52,12 @@ public class CanvasRenderer {
             List<CheckersPiece> pieces = ((CheckersGame)(gameRunner.getGame())).getPieces();
             // deep copy each piece
             for (CheckersPiece piece : pieces) {
-                this.piecesData.add(piece.getData());
+                piecesData.add(piece.getData());
             }
         }
+        //synchronized (piecesDataGatekeeper) {
+            this.piecesData = piecesData;
+        //}
     }
 
     public void render() {
@@ -66,6 +72,15 @@ public class CanvasRenderer {
                 double tileSize = Math.min(canvas.getHeight() / board.getNumRows(),
                         canvas.getWidth() / board.getNumColumns());
                 drawTiles(board, tileSize);
+
+                /*
+                Iterable<CheckersPiece.PieceData> piecesDataToIter;
+                //synchronized (piecesDataGatekeeper) {
+                    piecesDataToIter = piecesData;
+                //}
+                */
+                // TODO there once be a spooky concurrent modification exception here
+                // I've tried to reproduce it but I can't *shrug*
                 for (CheckersPiece.PieceData pieceData : piecesData) {
                     drawPiece(pieceData, tileSize);
                 }

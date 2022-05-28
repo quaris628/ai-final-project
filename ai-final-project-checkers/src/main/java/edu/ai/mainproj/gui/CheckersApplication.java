@@ -34,8 +34,8 @@ public class CheckersApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // init vars
-        CheckersPlayer black = new UIPlayer(PlayerType.BLACK);
-        CheckersPlayer red = new AIPlayer(PlayerType.RED, DEFAULT_AI_DIFFICULTY);
+        CheckersPlayer black = new AIPlayer(PlayerType.BLACK, 3);
+        CheckersPlayer red = new AIPlayer(PlayerType.RED, 4);
         gameRunner = new GameRunner(black, red);
 
         /*
@@ -64,8 +64,8 @@ public class CheckersApplication extends Application {
 
         // initialize ui ribbon stuff
         uiVBox.setSpacing(UIBAR_SPACING);
-        playerControls.initialize(this);
-        gameInfoDisplay.initialize(this);
+        playerControls.initialize(gameRunner);
+        gameInfoDisplay.initialize(gameRunner);
 
         // set up arrangement of items on screen
         uiVBox.setMinWidth(UIBAR_MIN_WIDTH);

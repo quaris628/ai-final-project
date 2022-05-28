@@ -82,4 +82,10 @@ public interface CheckersGamePlayable {
      * @return list of all moves
      */
     List<? extends CheckersMove> getMoveHistory();
+
+    /**
+     * Gets the last move that was played
+     * @return last move that was played
+     */
+    CheckersMove getLastMove();
 }

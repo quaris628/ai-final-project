@@ -339,6 +339,11 @@ public class CheckersGame implements CheckersGamePlayable {
     }
 
     @Override
+    public CheckersMove getLastMove() {
+        return moveHistory.get(moveHistory.size() - 1);
+    }
+
+    @Override
     public String toString() {
         StringBuilder ret = new StringBuilder();
         if (getTurn() == PlayerType.BLACK) ret.append("\u001B[37m");

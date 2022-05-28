@@ -58,8 +58,14 @@ public class GameRunner {
     }
 
     public void stopGame() {
-        // probably fine because the state of the checkers game won't matter
-        gameThread.stop();
+        // probably fine because the integrity of the
+        //     state of the checkers game won't matter
+        // we're starting over anyway
+        // TODO do more checks on the thread's state so
+        //     that stop never raises an exception
+        if (gameThread != null && gameThread.getState() != Thread.State.TERMINATED) {
+            gameThread.stop();
+        }
     }
 
     private static class GameThread extends Thread {
