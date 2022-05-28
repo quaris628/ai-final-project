@@ -4,7 +4,6 @@ import edu.ai.mainproj.checkers.CheckersGame;
 import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.players.AIPlayer;
 import edu.ai.mainproj.players.UIPlayer;
-import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

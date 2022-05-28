@@ -57,6 +57,7 @@ public class GameInfoDisplay {
             this.turn = turn;
             // if an update is already queued, don't queue another one
             if (!updateTurnDisplayQueued) {
+                updateTurnDisplayQueued = true;
                 Platform.runLater(this::updateTurnDisplay);
             }
         });

@@ -5,9 +5,6 @@ import edu.ai.mainproj.main.GameRunner;
 import edu.ai.mainproj.players.AIPlayer;
 import edu.ai.mainproj.players.CheckersPlayer;
 import edu.ai.mainproj.players.UIPlayer;
-import edu.ai.mainproj.gui.CanvasRenderer;
-import edu.ai.mainproj.gui.GameInfoDisplay;
-import edu.ai.mainproj.gui.PlayerControls;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -41,6 +38,17 @@ public class CheckersApplication extends Application {
         CheckersPlayer red = new AIPlayer(PlayerType.RED, DEFAULT_AI_DIFFICULTY);
         gameRunner = new GameRunner(black, red);
 
+        /*
+        // time control
+        gameRunner.getTurnComplete().subscribe((turn) -> {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        //*/
+
         canvas = new Canvas();
         renderer = new CanvasRenderer(canvas, gameRunner);
 
@@ -51,6 +59,7 @@ public class CheckersApplication extends Application {
         scene = new Scene(new HBox(canvas, uiVBox));
 
         // set up canvas renderer
+        renderer.initialize();
         gameRunner.getTurnComplete().subscribe((e) -> renderer.render());
 
         // initialize ui ribbon stuff

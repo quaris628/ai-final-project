@@ -77,4 +77,25 @@ public class CheckersPiece extends Piece {
         return ret.toString();
     }
 
+    /**
+     * An alternative to .clone()
+     * returns deep copy of current object's state
+     * @return object containing all data on this piece
+     */
+    public PieceData getData() {
+        return new PieceData(getTile().row, getTile().column, player, king);
+    }
+
+    public static class PieceData {
+        public final int row;
+        public final int column;
+        public final PlayerType player;
+        public final boolean isKing;
+        protected PieceData(int row, int column, PlayerType player, boolean isKing) {
+            this.row = row;
+            this.column = column;
+            this.player = player;
+            this.isKing = isKing;
+        }
+    }
 }

@@ -29,7 +29,7 @@ public class CheckersGame implements CheckersGamePlayable {
         done = false;
         winner = null;
         boardHistory.put(getGameStateHash(), 1);
-        possibleValidMoves = calculateValidMoves();
+        calculateValidMoves();
     }
 
     public CheckersGame(CheckersBoard initialBoard) {
@@ -40,7 +40,7 @@ public class CheckersGame implements CheckersGamePlayable {
         done = false;
         winner = null;
         boardHistory.put(getGameStateHash(), 1);
-        possibleValidMoves = calculateValidMoves();
+        calculateValidMoves();
     }
 
     /**
@@ -55,6 +55,17 @@ public class CheckersGame implements CheckersGamePlayable {
      */
     @Override
     public boolean execute(CheckersMove move) {
+        boolean success = executeLite(move);
+        // re-calculate valid moves
+        calculateValidMoves();
+        return success;
+    }
+
+    /**
+     * ONLY USE IF YOU KNOW WHAT YOU'RE DOING
+     * Immediately call calculateValidMoves afterwards!
+     */
+    public boolean executeLite(CheckersMove move) {
         if (!move.isValid() && !done) {
             return false;
         }
@@ -75,9 +86,6 @@ public class CheckersGame implements CheckersGamePlayable {
         } else {
             boardHistory.put(hash, 1);
         }
-
-        // re-calculate valid moves
-        possibleValidMoves = calculateValidMoves();
         return true;
     }
 
@@ -107,7 +115,7 @@ public class CheckersGame implements CheckersGamePlayable {
         turn = turn == PlayerType.RED ? PlayerType.BLACK : PlayerType.RED;
 
         // re-calculate valid moves
-        possibleValidMoves = calculateValidMoves();
+        calculateValidMoves();
     }
 
     /**
@@ -117,11 +125,12 @@ public class CheckersGame implements CheckersGamePlayable {
      *
      * @return List of all possible and valid CheckersMove's
      */
-    private List<? extends CheckersMove> calculateValidMoves() {
+    public List<? extends CheckersMove> calculateValidMoves() {
         refreshBlackRedPieces();
         // if one of the pieces lists was empty in refreshBlackRedPieces
         if (isDone()) {
-            return new LinkedList<CheckersMove>();
+            possibleValidMoves = new LinkedList<CheckersMove>();
+            return possibleValidMoves;
         }
 
         List<CheckersPiece> pieces =
@@ -135,15 +144,17 @@ public class CheckersGame implements CheckersGamePlayable {
         }
 
         if (jumps.size() > 0) {
-            return jumps;
+            possibleValidMoves = jumps;
+        } else {
+            List<CheckersMoveNormal> normalMoves = getValidNormalMoves(pieces);
+            if (normalMoves.isEmpty()) {
+                // Draw
+                done = true;
+                winner = null;
+            }
+            possibleValidMoves = normalMoves;
         }
-        List<CheckersMoveNormal> normalMoves = getValidNormalMoves(pieces);
-        if (normalMoves.isEmpty()) {
-            // Draw
-            done = true;
-            winner = null;
-        }
-        return normalMoves;
+        return possibleValidMoves;
     }
 
     /**
@@ -277,7 +288,21 @@ public class CheckersGame implements CheckersGamePlayable {
         return board.hashCode() * 29 + turn.hashCode();
     }
 
-    // one-liner getters
+    public Iterable<CheckersPiece> getRedPieces() { return redPieces; }
+    public Iterable<CheckersPiece> getBlackPieces() { return blackPieces; }
+
+    /**
+     * Returns all pieces currently on the board
+     * List is a deep copy--Piece elements are still shallow copies
+     * @return list of all checkers pieces on the board
+     */
+    public List<CheckersPiece> getPieces() {
+        List<CheckersPiece> pieces = new LinkedList<CheckersPiece>();
+        pieces.addAll(redPieces);
+        pieces.addAll(blackPieces);
+        return pieces;
+    }
+
     @Override
     public boolean isValid(CheckersMove move) {
         return possibleValidMoves.contains(move);

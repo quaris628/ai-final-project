@@ -1,13 +1,14 @@
 package edu.ai.mainproj.gui;
 
-import edu.ai.mainproj.checkers.CheckersBoard;
-import edu.ai.mainproj.checkers.CheckersPiece;
-import edu.ai.mainproj.checkers.CheckersTile;
-import edu.ai.mainproj.checkers.PlayerType;
+import edu.ai.mainproj.checkers.*;
 import edu.ai.mainproj.main.GameRunner;
+import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class CanvasRenderer {
 
@@ -16,85 +17,102 @@ public class CanvasRenderer {
     public static final double PIECE_SIZE_FRAC = .8;
 
     private Canvas canvas;
-    private GraphicsContext gc;
     private GameRunner gameRunner;
+    private boolean renderIsQueued;
+    private List<CheckersPiece.PieceData> piecesData;
+
+    // convenience reference
+    private GraphicsContext gc;
 
     public CanvasRenderer(Canvas canvas, GameRunner gameRunner) {
         this.canvas = canvas;
-        this.gc = canvas.getGraphicsContext2D();
         this.gameRunner = gameRunner;
+        this.renderIsQueued = false;
+
+        this.gc = canvas.getGraphicsContext2D();
+    }
+
+    public void initialize() {
+        // board state is changed mid-turn by AI players via execute() and unexecute()
+        //     and render() may be called during this time if the screen size changes
+        // so, at the beginning of each turn, get a deep copy of each piece on the board
+        gameRunner.getTurnComplete().subscribe((e) -> updatePiecesData());
+        updatePiecesData();
+    }
+
+    private void updatePiecesData() {
+        this.piecesData = new LinkedList<CheckersPiece.PieceData>();
+        // executing move and updating display's copy of the pieces
+        //     should not be done concurrently
+        // See GameRunner.doTurn(player)
+        synchronized (gameRunner.getGame()) {
+            List<CheckersPiece> pieces = ((CheckersGame)(gameRunner.getGame())).getPieces();
+            // deep copy each piece
+            for (CheckersPiece piece : pieces) {
+                this.piecesData.add(piece.getData());
+            }
+        }
     }
 
     public void render() {
-        CheckersBoard board = gameRunner.getGame().getBoardState();
+        // it's fine if this if isn't quite thread-safe
+        // worst case 2 renders get queued
+        if (!renderIsQueued) {
+            renderIsQueued = true;
+            Platform.runLater(() -> {
+                CheckersBoard board = gameRunner.getGame().getBoardState();
 
-        // update each render b/c canvas is resizable
-        double tileSize = Math.min(canvas.getHeight()  / board.getNumRows(),
-                canvas.getWidth() / board.getNumColumns());
+                // update each render b/c canvas is resizable
+                double tileSize = Math.min(canvas.getHeight() / board.getNumRows(),
+                        canvas.getWidth() / board.getNumColumns());
+                drawTiles(board, tileSize);
+                for (CheckersPiece.PieceData pieceData : piecesData) {
+                    drawPiece(pieceData, tileSize);
+                }
+
+                // if empty space b/c scaling stuff, overwrite with white
+                if (canvas.getHeight() > canvas.getWidth()) {
+                    double x = 0;
+                    double y = board.getNumRows() * tileSize;
+                    double width = canvas.getWidth();
+                    double height = canvas.getHeight() - board.getNumRows() * tileSize;
+                    gc.setFill(Color.WHITE);
+                    gc.fillRect(x, y, width, height);
+                }
+                renderIsQueued = false;
+            });
+        }
+    }
+
+    private void drawTiles(CheckersBoard board, double tileSize) {
         for (int i = 0; i < board.getNumRows(); i++) {
             for (int j = 0; j < board.getNumColumns(); j++) {
                 CheckersTile tile = board.getCheckersTile(i, j);
-                // calculate x/y position
-                double y = i * tileSize;
-                double x = j * tileSize;
                 if (tile == null) {
-                    // draw null tile
-                    drawNullTile(x, y, tileSize);
+                    gc.setFill(Color.RED);
                 } else {
-                    // draw non-null tile
-                    drawNonNullTile(x, y, tileSize);
-                    if (!tile.isBlank()) {
-                        // draw piece
-                        drawPiece(x, y, tileSize, tile.getCheckersPiece());
-                    }
+                    gc.setFill(Color.BLACK);
                 }
+                gc.fillRect(j * tileSize, i * tileSize, tileSize, tileSize);
             }
         }
-
-        // if empty space b/c scaling stuff, overwrite with white
-        //     in case something was there before this frame
-        if (canvas.getHeight() > canvas.getWidth()) {
-            double x = 0;
-            double y = board.getNumRows() * tileSize;
-            double width = canvas.getWidth();
-            double height = canvas.getHeight() - board.getNumRows() * tileSize;
-            gc.setFill(Color.WHITE);
-            gc.fillRect(x, y, width, height);
-        }
-
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-
-        }
     }
 
-    private void drawNullTile(double x, double y, double tileSize) {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.RED);
-        gc.fillRect(x, y, tileSize, tileSize);
-    }
-
-    private void drawNonNullTile(double x, double y, double tileSize) {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Color.BLACK);
-        gc.fillRect(x, y, tileSize, tileSize);
-    }
-
-    private void drawPiece(double x, double y, double tileSize, CheckersPiece piece) {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        if (piece.getPlayer() == PlayerType.RED) {
+    private void drawPiece(CheckersPiece.PieceData pieceData, double tileSize) {
+        if (pieceData.player == PlayerType.RED) {
             gc.setFill(Color.valueOf("#d00000"));
-        } else if (piece.getPlayer() == PlayerType.BLACK) {
+        } else if (pieceData.player == PlayerType.BLACK) {
             gc.setFill(Color.valueOf("#404040"));
         }
+        double x = pieceData.column * tileSize;
+        double y = pieceData.row * tileSize;
         double circleDiameter = tileSize * PIECE_SIZE_FRAC;
         double circleCornerOffset = tileSize * (1.0 - PIECE_SIZE_FRAC) / 2.0;
         gc.fillOval(x + circleCornerOffset, y + circleCornerOffset, circleDiameter, circleDiameter);
-        if (piece.isKing()) {
-            if (piece.getPlayer() == PlayerType.RED) {
+        if (pieceData.isKing) {
+            if (pieceData.player == PlayerType.RED) {
                 gc.setFill(Color.valueOf("#600000"));
-            } else if (piece.getPlayer() == PlayerType.BLACK) {
+            } else if (pieceData.player == PlayerType.BLACK) {
                 gc.setFill(Color.BLACK);
             }
             drawKing(x + tileSize / 2, y + tileSize / 2, circleDiameter / 2);
@@ -118,5 +136,4 @@ public class CanvasRenderer {
         }
         gc.fillPolygon(xPoints, yPoints, numPoints);
     }
-
 }
