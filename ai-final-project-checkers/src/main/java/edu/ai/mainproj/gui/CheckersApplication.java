@@ -22,7 +22,7 @@ public class CheckersApplication extends Application {
     public static final double UIBAR_SPACING = 10;
 
     // other constants
-    public static final int DEFAULT_AI_DIFFICULTY = 4;
+    public static final int DEFAULT_AI_DIFFICULTY = 3;
 
     public GameRunner gameRunner;
 
@@ -96,6 +96,12 @@ public class CheckersApplication extends Application {
         renderer.render();
     }
     // TODO maybe have UI bar elements scale with size too
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        gameRunner.stopGame();
+    }
 
     public static void main(String[] args) {
         launch();
