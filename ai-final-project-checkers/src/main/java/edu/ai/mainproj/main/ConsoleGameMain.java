@@ -1,6 +1,6 @@
 package edu.ai.mainproj.main;
 
-import edu.ai.mainproj.players.AIPlayer;
+import edu.ai.mainproj.players.aiplayer.AIPlayer;
 import edu.ai.mainproj.players.AutoDifficultyAIPlayer;
 import edu.ai.mainproj.players.CheckersPlayer;
 import edu.ai.mainproj.checkers.CheckersGame;

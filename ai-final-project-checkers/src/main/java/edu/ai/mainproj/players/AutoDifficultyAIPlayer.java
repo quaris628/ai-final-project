@@ -3,6 +3,7 @@ package edu.ai.mainproj.players;
 import edu.ai.mainproj.checkers.CheckersGamePlayable;
 import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.main.GameRunner;
+import edu.ai.mainproj.players.aiplayer.AIPlayer;
 
 /**
  * An AI player that automatically adjusts its difficulty

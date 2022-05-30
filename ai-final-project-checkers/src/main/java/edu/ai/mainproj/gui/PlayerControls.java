@@ -2,7 +2,7 @@ package edu.ai.mainproj.gui;
 
 import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.main.GameRunner;
-import edu.ai.mainproj.players.AIPlayer;
+import edu.ai.mainproj.players.aiplayer.AIPlayer;
 import edu.ai.mainproj.players.UIPlayer;
 import javafx.scene.Node;
 import javafx.scene.control.Button;

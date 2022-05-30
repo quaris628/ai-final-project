@@ -344,6 +344,11 @@ public class CheckersGame implements CheckersGamePlayable {
     }
 
     @Override
+    public int hashCode() {
+        return 17 * getGameStateHash() + boardHistory.hashCode();
+    }
+
+    @Override
     public String toString() {
         StringBuilder ret = new StringBuilder();
         if (getTurn() == PlayerType.BLACK) ret.append("\u001B[37m");

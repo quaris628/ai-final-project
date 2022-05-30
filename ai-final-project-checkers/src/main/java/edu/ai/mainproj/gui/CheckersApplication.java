@@ -2,7 +2,7 @@ package edu.ai.mainproj.gui;
 
 import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.main.GameRunner;
-import edu.ai.mainproj.players.AIPlayer;
+import edu.ai.mainproj.players.aiplayer.AIPlayer;
 import edu.ai.mainproj.players.CheckersPlayer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -33,7 +33,7 @@ public class CheckersApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // init vars
-        CheckersPlayer black = new AIPlayer(PlayerType.BLACK, 5);
+        CheckersPlayer black = new AIPlayer(PlayerType.BLACK, 7);
         CheckersPlayer red = new AIPlayer(PlayerType.RED, 1);
         gameRunner = new GameRunner(black, red);
 

@@ -47,6 +47,8 @@ public class BoardCanvasRenderer {
         //     and render() may be called during this time if the screen size changes
         // so, at the beginning of each turn, get a deep copy of each piece on the board
         gameRunner.getTurnComplete().subscribe((e) -> updatePiecesData());
+        renderIsQueued = false; // TODO shouldn't be needed? but may fix game not re-rendering
+        //     ... when a second game is started after a first one until a piece is moved
         updatePiecesData();
     }
 
