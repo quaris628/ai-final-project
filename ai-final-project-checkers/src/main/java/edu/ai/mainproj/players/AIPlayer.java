@@ -1,6 +1,5 @@
 package edu.ai.mainproj.players;
 
-import edu.ai.mainproj.anygame.Piece;
 import edu.ai.mainproj.anygame.Tile;
 import edu.ai.mainproj.checkers.*;
 import edu.ai.mainproj.checkers.moves.CheckersMove;
@@ -9,6 +8,7 @@ import edu.ai.mainproj.other.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class AIPlayer implements CheckersPlayer {
 
@@ -29,8 +29,6 @@ public class AIPlayer implements CheckersPlayer {
     private final PlayerType playerColor;
     protected int depth;
 
-    private int printMovesStartIndex = 0;
-
     // TODO a progress indicator variable
 
     public AIPlayer(PlayerType playerType, int depth) {
@@ -40,34 +38,27 @@ public class AIPlayer implements CheckersPlayer {
 
     @Override
     public CheckersMove selectMove(CheckersGamePlayable game) {
-        printMovesStartIndex = game.getMoveHistory().size();
-        Pair<List<CheckersMove>, Float> result = search(game, depth, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
-
+        Pair<CheckersMove, Float> result = search(game, depth,
+                Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
         if (PRINT_SEARCH_RESULTS) {
-            if (game.isDone() && game.getWinner() == null) {
-                System.out.println("DRAW");
-            }
-            System.out.println(result.getRight());
+            System.out.print(result.getLeft().toString()
+                    + " " + result.getRight().toString());
         }
-
-        return result.getLeft().get(result.getLeft().size() - 1);
+        return result.getLeft();
     }
 
     // the search algorithm itself
-    public Pair<List<CheckersMove>, Float> search(CheckersGamePlayable game, int depth, float alpha, float beta) {
+    public Pair<CheckersMove, Float> search(CheckersGamePlayable game, int depth, float alpha, float beta) {
         PlayerType player = game.getTurn();
         // bottom of the search
         if (depth == 0) {
-            if (PRINT_MOVE_TRACE) {
-                System.out.println("END OF DEPTH PRINT");
-                List<? extends CheckersMove> moveHistory = game.getMoveHistory();
-                for (int i = printMovesStartIndex; i < moveHistory.size(); i++)
-                    System.out.print(moveHistory.get(i) + " ");
-                System.out.println(calculateHeuristic(game, player));
-            }
-            List<CheckersMove> ret = new LinkedList<>();
-            ret.add(game.getMoveHistory().get(game.getMoveHistory().size() - 1));
-            return new Pair<>(ret, calculateHeuristic(game, player));
+            // TODO if heuristic value is with certainty (win/loss/draw),
+            //     store results in hashmap of <game state hash, heuristic value>
+            //     (for performance improvement)
+            //     ?: make hashmap static so both black and red AI players can access?
+            //        would have to have oppositely signed heuristic value result tho
+            //        maybe assign - to red and + to black
+            return new Pair<>(game.getLastMove(), calculateHeuristic(game, player));
         }
 
         float heuristicOfBestMove;
@@ -77,14 +68,9 @@ public class AIPlayer implements CheckersPlayer {
         heuristicOfBestMove = maxNode ? Float.NEGATIVE_INFINITY : Float.POSITIVE_INFINITY;
         for (CheckersMove move : game.getPossibleMoves()) {
             game.execute(move);
-            if (PRINT_IN_MIN_MAX) {
-                System.out.println(game);
-                System.out.println(calculateHeuristic(game, player));
-            }
 
             // do search
-            Pair<List<CheckersMove>, Float> tmp = search(game, depth - 1, alpha, beta);
-            List<CheckersMove> futureMoves = tmp.getLeft();
+            Pair<CheckersMove, Float> tmp = search(game, depth - 1, alpha, beta);
             float futureMovesHeuristic = tmp.getRight();
 
             if (maxNode) {
@@ -95,24 +81,23 @@ public class AIPlayer implements CheckersPlayer {
 
             // if these future moves are the best found so far
             if (heuristicOfBestMove == futureMovesHeuristic) {
-                // ??? v
-                if (!futureMoves.isEmpty())
-                    futureMoves.remove(futureMoves.size() - 1);
-
-                futureMoves.add(move);
-                bestMoves = futureMoves;
+                bestMoves.add(move);
             }
 
-            if (!game.getLastMove().equals(move))
-                throw new IllegalStateException("attempting to undo the wrong move");
+            assert game.getLastMove().equals(move);
             game.unexecute();
-            if (PRINT_IN_MIN_MAX) System.out.println("UNDO");
+
+            // alphabeta pruning
             if ((maxNode && heuristicOfBestMove >= beta)
                 || (!maxNode && heuristicOfBestMove <= alpha))
-                break; // prune
+                break;
         }
 
-        return new Pair<>(bestMoves, heuristicOfBestMove);
+        CheckersMove chosenMove = null;
+        if (bestMoves.size() != 0) {
+            chosenMove = bestMoves.get(new Random().nextInt(bestMoves.size()));
+        }
+        return new Pair<>(chosenMove, heuristicOfBestMove);
     }
 
     private static float calculateHeuristic(CheckersGamePlayable game, PlayerType player) {
@@ -157,6 +142,5 @@ public class AIPlayer implements CheckersPlayer {
     public PlayerType getPlayerColor() {
         return playerColor;
     }
-
 
 }

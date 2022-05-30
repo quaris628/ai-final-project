@@ -4,7 +4,6 @@ import edu.ai.mainproj.checkers.PlayerType;
 import edu.ai.mainproj.main.GameRunner;
 import edu.ai.mainproj.players.AIPlayer;
 import edu.ai.mainproj.players.CheckersPlayer;
-import edu.ai.mainproj.players.UIPlayer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -27,15 +26,15 @@ public class CheckersApplication extends Application {
     public GameRunner gameRunner;
 
     public Canvas canvas;
-    public CanvasRenderer renderer;
+    public BoardCanvasRenderer renderer;
     public VBox uiVBox;
     public Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
         // init vars
-        CheckersPlayer black = new AIPlayer(PlayerType.BLACK, 3);
-        CheckersPlayer red = new AIPlayer(PlayerType.RED, 4);
+        CheckersPlayer black = new AIPlayer(PlayerType.BLACK, 5);
+        CheckersPlayer red = new AIPlayer(PlayerType.RED, 1);
         gameRunner = new GameRunner(black, red);
 
         /*
@@ -50,7 +49,7 @@ public class CheckersApplication extends Application {
         //*/
 
         canvas = new Canvas();
-        renderer = new CanvasRenderer(canvas, gameRunner);
+        renderer = new BoardCanvasRenderer(canvas, gameRunner);
 
         PlayerControls playerControls = new PlayerControls();
         GameInfoDisplay gameInfoDisplay = new GameInfoDisplay();
@@ -60,7 +59,7 @@ public class CheckersApplication extends Application {
 
         // set up canvas renderer
         renderer.initialize();
-        gameRunner.getTurnComplete().subscribe((e) -> renderer.render());
+        gameRunner.getTurnComplete().subscribe((e) -> renderer.queueRender());
 
         // initialize ui ribbon stuff
         uiVBox.setSpacing(UIBAR_SPACING);
@@ -84,7 +83,7 @@ public class CheckersApplication extends Application {
                 });
 
         // finalize things
-        renderer.render();
+        renderer.queueRender();
         stage.setTitle("Checkers");
         stage.setScene(scene);
         stage.show();
@@ -93,7 +92,7 @@ public class CheckersApplication extends Application {
     private void recalculateCanvasSize(double sceneWidth, double sceneHeight) {
         canvas.setHeight(Math.min(sceneWidth - UIBAR_MIN_WIDTH, sceneHeight));
         canvas.setWidth(canvas.getHeight());
-        renderer.render();
+        renderer.queueRender();
     }
     // TODO maybe have UI bar elements scale with size too
 

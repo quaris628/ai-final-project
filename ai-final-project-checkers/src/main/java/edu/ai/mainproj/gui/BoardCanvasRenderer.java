@@ -7,25 +7,34 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-public class CanvasRenderer {
+// TODO draw a separate canvas in the sidebar that flashes
+//      the board states that the AI is searching through!
 
-    // fraction of the tile size that the pice is set to
+public class BoardCanvasRenderer {
+
+    // fraction of the tile size that the piece is set to
     // reasonable values: 0.5 - 1.0
     public static final double PIECE_SIZE_FRAC = .8;
+    // vertices of the crown-shaped polygon that denotes kinged pieces
+    // coordinates are rectangular, 0,0 is the center of the piece circle,
+    //     these points are for circle radius = 1 (and scaling is done later dynamically)
+    public static final double[] KING_POINTS_X = new double[] {
+            -0.7, -0.35, 0, 0.35, 0.7, 0.6, -0.6};
+    public static final double[] KING_POINTS_Y = new double[] {
+            -0.35, -0.15, -0.35, -0.15, -0.35, 0.35, 0.35};
 
-    private Canvas canvas;
-    private GameRunner gameRunner;
+    private final Canvas canvas;
+    private final GameRunner gameRunner;
     private boolean renderIsQueued;
     private List<CheckersPiece.PieceData> piecesData;
-    private final Object piecesDataGatekeeper = new Object();
-
     // convenience reference
     private GraphicsContext gc;
 
-    public CanvasRenderer(Canvas canvas, GameRunner gameRunner) {
+    public BoardCanvasRenderer(Canvas canvas, GameRunner gameRunner) {
         this.canvas = canvas;
         this.gameRunner = gameRunner;
         this.renderIsQueued = false;
@@ -43,59 +52,64 @@ public class CanvasRenderer {
 
     private void updatePiecesData() {
         List<CheckersPiece.PieceData> piecesData = new LinkedList<CheckersPiece.PieceData>();
-        //this.piecesData = new LinkedList<CheckersPiece.PieceData>();
 
         // executing move and updating display's copy of the pieces
         //     should not be done concurrently
         // See GameRunner.doTurn(player)
         synchronized (gameRunner.getGame()) {
             List<CheckersPiece> pieces = ((CheckersGame)(gameRunner.getGame())).getPieces();
-            // deep copy each piece
+            // deep copy each piece's data
             for (CheckersPiece piece : pieces) {
                 piecesData.add(piece.getData());
             }
         }
-        //synchronized (piecesDataGatekeeper) {
+        // updating piecesData to reference a new object should not be done
+        //     at the same time as grabbing the object that is
+        synchronized (this) {
             this.piecesData = piecesData;
-        //}
+            queueRender();
+        }
     }
 
-    public void render() {
-        // it's fine if this if isn't quite thread-safe
-        // worst case 2 renders get queued
+    public synchronized void queueRender() {
         if (!renderIsQueued) {
             renderIsQueued = true;
-            Platform.runLater(() -> {
-                CheckersBoard board = gameRunner.getGame().getBoardState();
+            Platform.runLater(this::render);
+        }
+    }
 
-                // update each render b/c canvas is resizable
-                double tileSize = Math.min(canvas.getHeight() / board.getNumRows(),
-                        canvas.getWidth() / board.getNumColumns());
-                drawTiles(board, tileSize);
+    private void render() {
+        // TODO? if size doesn't change, only re-render (changes in?) pieces (leaving tiles)
+        //       for performance optimization
+        double size = Math.min(canvas.getHeight(), canvas.getWidth());
 
-                /*
-                Iterable<CheckersPiece.PieceData> piecesDataToIter;
-                //synchronized (piecesDataGatekeeper) {
-                    piecesDataToIter = piecesData;
-                //}
-                */
-                // TODO there once be a spooky concurrent modification exception here
-                // I've tried to reproduce it but I can't *shrug*
-                for (CheckersPiece.PieceData pieceData : piecesData) {
-                    drawPiece(pieceData, tileSize);
-                }
+        // if empty space b/c scaling stuff, overwrite with white
+        if (canvas.getHeight() > canvas.getWidth()) {
+            gc.setFill(Color.WHITE);
+            gc.fillRect(0, size, canvas.getWidth(), canvas.getHeight() - size);
+        }
 
-                // if empty space b/c scaling stuff, overwrite with white
-                if (canvas.getHeight() > canvas.getWidth()) {
-                    double x = 0;
-                    double y = board.getNumRows() * tileSize;
-                    double width = canvas.getWidth();
-                    double height = canvas.getHeight() - board.getNumRows() * tileSize;
-                    gc.setFill(Color.WHITE);
-                    gc.fillRect(x, y, width, height);
-                }
-                renderIsQueued = false;
-            });
+        drawBoard(gameRunner.getGame().getBoardState(), size);
+    }
+
+    private void drawBoard(CheckersBoard board, double size) {
+        // update each render b/c canvas is resizable
+        double tileSize = Math.min(size / board.getNumRows(), size / board.getNumColumns());
+        drawTiles(board, tileSize);
+
+        // draw pieces last so that there's the most time given for an
+        //     update to the pieces list to happen before they're drawn
+        Iterable<CheckersPiece.PieceData> piecesDataToIter;
+        synchronized (this) {
+            piecesDataToIter = piecesData;
+            // allow more renders to queue after this point
+            //     in case pieces are updated
+            // TODO? iff pieces are updated
+            renderIsQueued = false;
+        }
+
+        for (CheckersPiece.PieceData pieceData : piecesDataToIter) {
+            drawPiece(pieceData, tileSize);
         }
     }
 
@@ -130,18 +144,14 @@ public class CanvasRenderer {
             } else if (pieceData.player == PlayerType.BLACK) {
                 gc.setFill(Color.BLACK);
             }
-            drawKing(x + tileSize / 2, y + tileSize / 2, circleDiameter / 2);
+            drawKingSymbol(x + tileSize / 2, y + tileSize / 2, circleDiameter / 2);
         }
     }
 
-    private void drawKing(double centerX, double centerY, double circleRadius) {
-        // these points are for circle radius = 1
-        int numPoints = 7;
-        double[] xPoints = new double[] {
-                -0.7, -0.35, 0, 0.35, 0.7, 0.6, -0.6};
-        double[] yPoints = new double[] {
-                -0.35, -0.15, -0.35, -0.15, -0.35, 0.35, 0.35};
-        for (int i = 0; i < numPoints; i++) {
+    private void drawKingSymbol(double centerX, double centerY, double circleRadius) {
+        double[] xPoints = Arrays.copyOf(KING_POINTS_X, KING_POINTS_X.length);
+        double[] yPoints = Arrays.copyOf(KING_POINTS_Y, KING_POINTS_Y.length);
+        for (int i = 0; i < KING_POINTS_X.length; i++) {
             // scale the points according to the circle radius
             xPoints[i] *= circleRadius;
             yPoints[i] *= circleRadius;
@@ -149,6 +159,6 @@ public class CanvasRenderer {
             xPoints[i] += centerX;
             yPoints[i] += centerY;
         }
-        gc.fillPolygon(xPoints, yPoints, numPoints);
+        gc.fillPolygon(xPoints, yPoints, KING_POINTS_X.length);
     }
 }
