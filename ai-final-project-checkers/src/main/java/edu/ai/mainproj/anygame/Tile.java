@@ -49,13 +49,9 @@ public class Tile {
      * If this tile doesn't have a piece, runs and changes nothing.
      * Does not update Piece's reference to its tile.
      */
-    public void removePiece() {
-        this.piece = null;
-    }
+    public void removePiece() { this.piece = null; }
 
-    public boolean isBlank() {
-        return piece == null;
-    }
+    public boolean isBlank() { return piece == null; }
 
     /**
      * Gets the piece on this tile
@@ -69,15 +65,9 @@ public class Tile {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Tile tile)) {
-            return false;
-        }
-        if (this == tile) {
-            return true;
-        }
-        if (this.board != tile.board) {
-            return false;
-        }
+        if (!(o instanceof Tile tile)) { return false; }
+        if (this == tile) { return true; }
+        if (this.board != tile.board) { return false; }
         return this.hashCode() == tile.hashCode();
     }
 

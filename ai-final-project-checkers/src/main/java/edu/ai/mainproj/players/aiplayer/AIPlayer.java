@@ -1,45 +1,37 @@
 package edu.ai.mainproj.players.aiplayer;
 
-import edu.ai.mainproj.anygame.Tile;
 import edu.ai.mainproj.checkers.*;
 import edu.ai.mainproj.checkers.moves.CheckersMove;
 import edu.ai.mainproj.main.GameRunner;
-import edu.ai.mainproj.other.Pair;
 import edu.ai.mainproj.players.CheckersPlayer;
 
 import java.util.*;
 
 public class AIPlayer implements CheckersPlayer {
 
-    private static final boolean PRINT_IN_MIN_MAX = false;
-    private static final boolean PRINT_MOVE_TRACE = false;
     private static final boolean PRINT_SEARCH_RESULTS = false;
-    // constants for values of each piece type for heuristic calculation
-    private static final float NORMAL_PIECE_HEURISTIC_FRAC_OF_KING = 0.7f;
-    private static final int NUM_PIECES_EACH_SIDE = 12;
-
-    private static final float SELF_WIN_STATE = 1.0f;
-    private static final float OPP_WIN_STATE = -1.0f;
-    private static final float DRAW_STATE = 0.0f;
+    private static final long RAND_SEED = 10249712912L;
 
     // positive means in favor of black, negative in favor of red
-    private static final Map<Integer, Float> gameStateResultsMap =
-            new HashMap<Integer, Float>();
+    private static final Map<Integer, Heuristic> gameStateResultsMap =
+            new HashMap<Integer, Heuristic>();
 
     private final PlayerType playerColor;
     protected int depth;
+    private final Random random;
 
     // TODO a progress indicator variable
 
     public AIPlayer(PlayerType playerType, int depth) {
         this.playerColor = playerType;
         this.depth = depth;
+        this.random = new Random(RAND_SEED);
     }
 
     @Override
     public CheckersMove selectMove(CheckersGamePlayable game) {
-        SearchResult result = search(game, depth,
-                Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY);
+        assert game.getTurn() == playerColor;
+        SearchResult result = search(game, depth, null, null);
         if (PRINT_SEARCH_RESULTS) {
             System.out.println(result);
         }
@@ -47,127 +39,76 @@ public class AIPlayer implements CheckersPlayer {
     }
 
     // the search algorithm itself
-    private SearchResult search(CheckersGamePlayable game, int depth, float alpha, float beta) {
-        PlayerType player = game.getTurn();
-
-        boolean maxNode = player == playerColor;
-        List<SearchResult> bestResults = new LinkedList<>();
-        float heuristicOfBestMove = maxNode ? Float.NEGATIVE_INFINITY : Float.POSITIVE_INFINITY;
+    protected SearchResult search(CheckersGamePlayable game, int depth,
+                                  Heuristic alpha_myBestPathValue,
+                                  Heuristic beta_theirBestPathValue) {
+        List<CheckersMove> bestMoves = new LinkedList<>();
+        Heuristic heuristicOfBestMove = null;
         for (CheckersMove move : game.getPossibleMoves()) {
             game.execute(move);
 
-            SearchResult result;
+            Heuristic moveHeuristic;
             // if game is done
             if (game.isDone()) {
-                float heuristicValue = calcualteHeuristicGameDone(game, player);
-                gameStateResultsMap.put(game.hashCode(), heuristicValue);
-                result = new SearchResult(heuristicValue, true, null);
+                moveHeuristic = Heuristic.valueOf(game);
+                gameStateResultsMap.put(game.hashCode(), moveHeuristic);
             // if maximum depth reached
             } else if (depth == 0) {
-                float heuristicValue = calculateHeuristic(game, player);
-                result = new SearchResult(heuristicValue, false, null);
-            // if result is already known
+                moveHeuristic = Heuristic.valueOf(game);
+            // if result is already known (with certainty)
             } else if (gameStateResultsMap.containsKey(game.hashCode())) {
-                float heuristicValue = gameStateResultsMap.get(game.hashCode());
-                result = new SearchResult(heuristicValue, true, null);
+                moveHeuristic = gameStateResultsMap.get(game.hashCode());
             // otherwise, recursively search
             } else {
-                result = search(game, depth - 1, alpha, beta);
+                SearchResult result = search(game, depth - 1, alpha_myBestPathValue, beta_theirBestPathValue);
+                moveHeuristic = result.heuristic;
             }
 
             assert game.getLastMove().equals(move);
             game.unexecute();
 
+            int compareResult = moveHeuristic.isBetterThan(heuristicOfBestMove, game.getTurn());
             // if result is better than others found so far
-            if (maxNode && heuristicOfBestMove < result.heuristic
-                || !maxNode && heuristicOfBestMove > result.heuristic) {
-                heuristicOfBestMove = heuristicIfMoveTaken;
-            // if result is the same as others found so far
-            } else if (maxNode && heuristicOfBestMove == result.heuristic
-                    || !maxNode && heuristicOfBestMove == result.heuristic) {
-                heuristicOfBestMove = heuristicIfMoveTaken;
+            if (compareResult == 1) {
+                heuristicOfBestMove = moveHeuristic;
+                bestMoves = new LinkedList<CheckersMove>();
+                bestMoves.add(move);
+            // if result is the same as the others found so far
+            } else if (compareResult == 0) {
+                bestMoves.add(move);
             }
 
+            // TODO test that the alphabeta pruning is implemented correctly
             // alphabeta pruning
-            // TODO fix, currently no pruning happens b/c alpha and beta are never updated
-            if ((maxNode && heuristicOfBestMove >= beta)
-                || (!maxNode && heuristicOfBestMove <= alpha))
+            if (game.getTurn() == playerColor
+                    && 1 == heuristicOfBestMove.isBetterThan(alpha_myBestPathValue, game.getTurn())) {
+                alpha_myBestPathValue = heuristicOfBestMove;
+            } else if (game.getTurn() != playerColor
+                    && 1 == heuristicOfBestMove.isBetterThan(beta_theirBestPathValue, game.getTurn())) {
+                beta_theirBestPathValue = heuristicOfBestMove;
+            }
+
+            if (beta_theirBestPathValue != null && 1 == beta_theirBestPathValue.isBetterThan(alpha_myBestPathValue, PlayerType.BLACK))
                 break;
         }
 
+        // if best move has certain heuristic value, add to hashmap
+        if (heuristicOfBestMove.isCertain) {
+            gameStateResultsMap.put(game.hashCode(), heuristicOfBestMove);
+        }
+
         CheckersMove chosenMove = bestMoves.get(0);
-        // if more than one, make a random pick
+        // or if more than one, make a random pick
         if (bestMoves.size() > 1) {
-            chosenMove = bestMoves.get(new Random().nextInt(bestMoves.size()));
+            chosenMove = bestMoves.get(random.nextInt(bestMoves.size()));
         }
-        return new SearchResult(heuristicOfBestMove, isCertain, chosenMove);
-    }
-
-    // TODO utilize new Heuristic class!
-    private static float calcualteHeuristicGameDone(CheckersGamePlayable game, PlayerType player) {
-        assert game.isDone();
-        if (game.getWinner() == player)
-            return SELF_WIN_STATE;
-        else if (game.getWinner() != null) {
-            return OPP_WIN_STATE;
-        } else {
-            return DRAW_STATE;
-        }
-    }
-
-    private static float calculateHeuristic(CheckersGamePlayable game, PlayerType player) {
-        int heuristic = 0;
-        for (CheckersTile tile : game.getBoardState().getAllCheckersTiles()) {
-            if (!tile.isBlank()) {
-                CheckersPiece piece = tile.getCheckersPiece();
-
-                float pieceHeuristic; // anywhere b/t 0.0 to 1.0
-                if (piece.isKing()) {
-                    pieceHeuristic = 1.0f;
-                } else {
-                    // distance moved across board
-                    float distanceHeuristic;
-                    int numRows = game.getBoardState().getNumRows();
-                    if (piece.getPlayer() == PlayerType.BLACK) {
-                        distanceHeuristic = (numRows - piece.getCheckersTile().row) / (float) numRows;
-                    } else {
-                        distanceHeuristic = piece.getCheckersTile().row / (float) numRows;
-                    }
-                    pieceHeuristic = distanceHeuristic * NORMAL_PIECE_HEURISTIC_FRAC_OF_KING;
-                }
-
-                if (piece.getPlayer() == player)
-                    heuristic += pieceHeuristic;
-                else
-                    heuristic -= pieceHeuristic;
-            }
-        }
-        return heuristic / (1.0f + NUM_PIECES_EACH_SIDE);
+        return new SearchResult(heuristicOfBestMove, chosenMove);
     }
 
     // do nothing, doesn't matter to this class
     @Override
     public void initialize(GameRunner gameRunner) {}
 
-    public PlayerType getPlayerColor() {
-        return playerColor;
-    }
-
-    private static class SearchResult {
-        public final float heuristic;
-        public final boolean isCertain;
-        public final CheckersMove move;
-        public SearchResult(float heuristic, boolean isCertain, CheckersMove move) {
-            this.heuristic = heuristic;
-            this.isCertain = isCertain;
-            this.move = move;
-        }
-        @Override
-        public String toString() {
-            return move.toString()
-                    + " (" + String.format("%.02f", heuristic)
-                    + ", " + (isCertain ? "Certain" : "Uncertain") + ")";
-        }
-    }
+    public PlayerType getPlayerColor() { return playerColor; }
 
 }

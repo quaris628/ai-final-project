@@ -85,12 +85,6 @@ public class BoardCanvasRenderer {
         //       for performance optimization
         double size = Math.min(canvas.getHeight(), canvas.getWidth());
 
-        // if empty space b/c scaling stuff, overwrite with white
-        if (canvas.getHeight() > canvas.getWidth()) {
-            gc.setFill(Color.WHITE);
-            gc.fillRect(0, size, canvas.getWidth(), canvas.getHeight() - size);
-        }
-
         drawBoard(gameRunner.getGame().getBoardState(), size);
     }
 

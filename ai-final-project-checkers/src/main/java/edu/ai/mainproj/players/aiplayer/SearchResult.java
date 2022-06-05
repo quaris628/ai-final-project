@@ -2,6 +2,7 @@ package edu.ai.mainproj.players.aiplayer;
 
 import edu.ai.mainproj.checkers.moves.CheckersMove;
 
+// immutable
 public class SearchResult {
     public final Heuristic heuristic;
     public final CheckersMove move;

@@ -33,8 +33,8 @@ public class CheckersApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         // init vars
-        CheckersPlayer black = new AIPlayer(PlayerType.BLACK, 7);
-        CheckersPlayer red = new AIPlayer(PlayerType.RED, 1);
+        CheckersPlayer black = new AIPlayer(PlayerType.BLACK, 3);
+        CheckersPlayer red = new AIPlayer(PlayerType.RED, 5);
         gameRunner = new GameRunner(black, red);
 
         /*

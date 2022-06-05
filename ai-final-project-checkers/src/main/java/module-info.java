@@ -7,6 +7,7 @@ module edu.ai.aifinalprojectcheckers {
     exports edu.ai.tests.checkers;
     exports edu.ai.tests.checkers.moves;
     exports edu.ai.tests.players;
+    exports edu.ai.tests.players.aiplayer;
     //opens edu.ai.mainproj.main to javafx.fxml;
     opens edu.ai.mainproj.main to javafx.graphics;
     opens edu.ai.mainproj.gui to javafx.graphics;

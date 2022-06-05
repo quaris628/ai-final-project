@@ -1,9 +1,6 @@
 package edu.ai.tests.checkers;
 
-import edu.ai.mainproj.checkers.CheckersBoard;
-import edu.ai.mainproj.checkers.CheckersGame;
-import edu.ai.mainproj.checkers.CheckersPiece;
-import edu.ai.mainproj.checkers.PlayerType;
+import edu.ai.mainproj.checkers.*;
 import edu.ai.mainproj.checkers.moves.*;
 import org.junit.Test;
 
@@ -26,8 +23,7 @@ import static org.junit.Assert.*;
  */
 public class CheckersGameTests {
 
-    public CheckersGameTests() {
-    }
+    public CheckersGameTests() {}
 
     @Test
     public void getValidJumpsFor_oneJump_thatJump() {
@@ -80,7 +76,6 @@ public class CheckersGameTests {
         CheckersPiece black = new CheckersPiece(PlayerType.BLACK, board.getCheckersTile(0, 1));
         CheckersGame game = new CheckersGame(board);
 
-
         // destinations of the repetitive moves
         int[] x = new int[]{1, 6, 0, 7};
         int[] y = new int[]{0, 7, 1, 6};
@@ -102,6 +97,53 @@ public class CheckersGameTests {
 
         assertTrue(game.isDone());
         assertNull(game.getWinner());
+    }
 
+    @Test
+    public void getPossibleMoves_JumpNormalOrJumpKing_bothJumps() {
+        // illustration (upper left quadrant of board):
+        //   # # # ...
+        //    #r#R#
+        //   # #b#
+        //    # # #
+        //   ...
+        // all other squares are empty
+        // it's black's turn
+        // lowercase = normal piece, uppercase = king
+        //
+        // result should be:
+        //  - jump move left
+        //  - jump move right
+
+        // setup
+        CheckersBoard board = new CheckersBoard();
+        CheckersPiece blackPiece = new CheckersPiece(
+                PlayerType.BLACK,
+                board.getCheckersTile(2, 3));
+        CheckersPiece normalRedPiece = new CheckersPiece(
+                PlayerType.RED,
+                board.getCheckersTile(1, 2));
+        CheckersPiece kingRedPiece = new CheckersPiece(
+                PlayerType.RED,
+                board.getCheckersTile(1, 4));
+        kingRedPiece.setKing(true);
+        CheckersGamePlayable game = new CheckersGame(board);
+
+        System.out.println(game);
+
+        // first move (black)
+        List<? extends CheckersMove> moves = game.getPossibleMoves();
+
+        assertEquals(2, moves.size());
+        assertTrue(moves.get(0) instanceof CheckersMoveJumpSingle);
+        assertTrue(moves.get(1) instanceof CheckersMoveJumpSingle);
+        CheckersMoveJumpSingle move1 = (CheckersMoveJumpSingle)(moves.get(0));
+        CheckersMoveJumpSingle move2 = (CheckersMoveJumpSingle)(moves.get(1));
+        assertEquals(blackPiece, move1.piece);
+        assertEquals(blackPiece, move2.piece);
+        assertTrue((DiagonalDirection.FORWARD_RIGHT == move1.direction
+                && DiagonalDirection.FORWARD_LEFT == move2.direction)
+                || (DiagonalDirection.FORWARD_LEFT == move1.direction
+                && DiagonalDirection.FORWARD_RIGHT == move2.direction));
     }
 }

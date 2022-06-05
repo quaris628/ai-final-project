@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 
 /**
  * Unit Tests for CheckersTile class
- * <p>
+ *
  * Tests methods:
  * - getNeighbors
  * - doesKing

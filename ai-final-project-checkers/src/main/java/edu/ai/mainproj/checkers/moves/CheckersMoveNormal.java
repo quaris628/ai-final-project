@@ -13,7 +13,7 @@ import edu.ai.mainproj.checkers.CheckersTile;
  */
 public class CheckersMoveNormal extends CheckersMove {
 
-    private final DiagonalDirection direction;
+    public final DiagonalDirection direction;
 
     public static CheckersMoveNormal Create(CheckersPiece piece, DiagonalDirection direction) {
         if (piece == null || direction == null

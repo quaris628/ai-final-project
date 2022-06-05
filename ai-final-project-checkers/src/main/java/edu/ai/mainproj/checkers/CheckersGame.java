@@ -254,8 +254,7 @@ public class CheckersGame implements CheckersGamePlayable {
         blackPieces = new LinkedList<CheckersPiece>();
         redPieces = new LinkedList<CheckersPiece>();
         for (Tile btile : board.getAllTiles()) {
-            if (btile instanceof CheckersTile) {
-                CheckersTile tile = (CheckersTile) btile;
+            if (btile instanceof CheckersTile tile) {
                 if (!tile.isBlank()) {
                     CheckersPiece piece = tile.getCheckersPiece();
                     if (piece.getPlayer() == PlayerType.BLACK) {

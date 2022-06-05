@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 
 /**
  * Unit Tests for PlayerType enum
- * <p>
+ *
  * Tests methods:
  * - isOpposite
  *
